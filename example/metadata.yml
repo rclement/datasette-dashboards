@@ -1,0 +1,29 @@
+title: Datasette Dashboard Example
+plugins:
+  datasette-dashboards:
+    job_offers_stats:
+      title: Job offers statistics
+      description: Gather metrics about job offers
+      visualizations:
+        - title: Number of offers by day
+          chart: line
+          encoding:
+            x: { field: day, type: temporal }
+            y: { field: count, type: quantitative }
+          db: jobs
+          query: SELECT date(date) as day, count(*) as count FROM offers_view GROUP BY day ORDER BY day
+        - title: Number of offers by source
+          chart: arc
+          encoding:
+            color: { field: source, type: nominal }
+            theta: { field: count, type: quantitative }
+          db: jobs
+          query: SELECT source, count(*) as count FROM offers_view GROUP BY source ORDER BY count DESC
+        - title: Offers by day by source
+          chart: bar
+          encoding:
+            x: { field: day, type: temporal }
+            y: { field: count, type: quantitative }
+            color: { field: source, type: nominal }
+          db: jobs
+          query: SELECT date(date) as day, source, count(*) as count FROM offers_view GROUP BY day, source ORDER BY day

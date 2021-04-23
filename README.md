@@ -45,3 +45,13 @@ A new URL is now available at `/-/dashboards` listing all defined dashboards.
 pipenv install -d
 pipenv shell
 ```
+
+## Examples
+
+```bash
+datasette \
+    --template-dir datasette_dashboards/templates \
+    --plugins-dir datasette_dashboards \
+    --metadata example/metadata.yml \
+    example/jobs.db
+```
