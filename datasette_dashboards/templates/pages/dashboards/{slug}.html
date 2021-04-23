@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+
+{% block title %}{{ database }}{% endblock %}
+
+{% block extra_head %}
+{{ super() }}
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.2/css/bulma.min.css">
+{% endblock %}
+
+{% block nav %}
+    <p class="crumbs">
+        <a href="{{ urls.instance() }}">home</a> /
+        <a href="{{ urls.path('-/dashboards') }}">dashboards</a>
+    </p>
+    {{ super() }}
+{% endblock %}
+
+{% block body_class %}index{% endblock %}
+
+{% block content %}
+    {% set dashboard = dashboards[slug] %}
+    <div class="container">
+      <h1>{{ dashboard.title }}</h1>
+      <div class="columns is-multiline">
+        {% for vis in dashboard.visualizations %}
+        <div id="vis-{{ loop.index0 }}" class="column is-half"></div>
+        {% endfor %}
+      </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/vega@5.20.2"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vega-lite@5.1.0"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vega-embed@6.17.0"></script>
+    <script type="text/javascript">
+      {% for vis in dashboard.visualizations %}
+      var yourVlSpec = {
+        $schema: 'https://vega.github.io/schema/vega-lite/v5.json',
+        title: '{{ vis.title }}',
+        width: 'container',
+        view: {stroke: null},
+        config: {
+          background: '#00000000',
+          arc: {
+            innerRadius: 50
+          },
+          line: {
+            point: true
+          }
+        },
+        data: {
+          url: '/{{ vis.db }}.json?sql={{ vis.query }}&_shape=array',
+          format: {'type': 'json'}
+        },
+        mark: {
+          type: '{{ vis.chart }}',
+          tooltip: {content: 'encoding'}
+        },
+        encoding: JSON.parse('{{ vis.encoding|tojson }}')
+      };
+      vegaEmbed('#vis-{{ loop.index0 }}', yourVlSpec);
+      {% endfor %}
+    </script>
+{% endblock %}

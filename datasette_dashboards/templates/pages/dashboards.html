@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+
+{% block title %}{{ database }}{% endblock %}
+
+{% block nav %}
+    <p class="crumbs">
+        <a href="{{ urls.instance() }}">home</a>
+    </p>
+    {{ super() }}
+{% endblock %}
+
+{% block body_class %}index{% endblock %}
+
+{% block content %}
+  <h1>Dashboards</h1>
+
+  {% for slug, dashboard in dashboards.items() %}
+  <h2 style="padding-left: 10px; border-left: 10px solid">
+    <a href="{{ urls.path('-/dashboards/' + slug) }}">{{ dashboard.title }}</a>
+  </h2>
+  <p>{{ dashboard.description }}</p>
+  {% endfor %}
+{% endblock %}
