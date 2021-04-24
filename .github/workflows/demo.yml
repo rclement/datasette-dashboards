@@ -33,5 +33,5 @@ jobs:
             --install=datasette-cluster-map \
             --install=datasette-vega \
             --install=https://github.com/rclement/datasette-dashboards/archive/$GITHUB_SHA.zip \
-            --project="${{ secrets.VERCEL_PROJECT }}"
-            --token="${{ secrets.VERCEL_TOKEN }}"
+            --project=${{ secrets.VERCEL_PROJECT }} \
+            --token=${{ secrets.VERCEL_TOKEN }}
