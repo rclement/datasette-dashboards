@@ -1,4 +1,4 @@
-title: Datasette Dashboard Example
+title: Datasette Dashboards Demo
 plugins:
   datasette-dashboards:
     job_offers_stats:

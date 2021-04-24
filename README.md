@@ -13,6 +13,14 @@ Try out a live demo at [https://datasette-dashboards-demo.vercel.app](https://da
 proof-of-concept. This could become a plugin in the long run if something
 interesting comes up!
 
+## Installation
+
+Install this plugin in the same environment as Datasette:
+
+```bash
+$ datasette install datasette-dashboards
+```
+
 ## Usage
 
 Define dashboards within `metadata.yml` / `metadata.json`:
@@ -44,19 +52,30 @@ _Note_: for now, data visualizations are dynamically generated using `vega-lite`
 For simplicity sake, axes configuration are mapped to the same terminology depending
 on the chart type. Please refer to [Vega-Lite Documentation](https://vega.github.io/vega-lite/docs/).
 
-A new URL is now available at `/-/dashboards` listing all defined dashboards.
+A new menu entry is now available, pointing at `/-/dashboards` to access all defined dashboards.
 
-## Setup
+## Development
+
+To set up this plugin locally, first checkout the code.
+Then create a new virtual environment and the required dependencies:
 
 ```bash
 pipenv install -d
 pipenv shell
 ```
 
-## Example
+To run the tests:
 
 ```bash
-datasette --metadata example/metadata.yml example/jobs.db
+pytest
+```
+
+## Demo
+
+With the developmnent environment setup, you can run the demo locally:
+
+```bash
+datasette --metadata demo/metadata.yml demo/jobs.db
 ```
 
 ## License
