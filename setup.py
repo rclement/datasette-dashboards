@@ -23,5 +23,7 @@ setup(
     packages=["datasette_dashboards"],
     entry_points={"datasette": ["dashboards = datasette_dashboards"]},
     install_requires=["datasette"],
+    extras_require={"test": ["pytest", "pytest-asyncio"]},
+    tests_require=["datasette-my-plugin[test]"],
     package_data={"datasette_dashboards": ["templates/*.html", "static/*"]},
 )

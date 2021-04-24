@@ -11,6 +11,10 @@ sqlite-utils = "*"
 
 [dev-packages]
 black = "~=20.8b1"
+datasette-dashboards = {editable = true, path = "."}
+pytest = "*"
+pytest-asyncio = "*"
+pytest-cov = "*"
 
 [requires]
 python_version = "3.8"
