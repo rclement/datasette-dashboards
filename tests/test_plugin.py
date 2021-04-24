@@ -41,3 +41,6 @@ async def test_dashboard_views(datasette, datasette_metadata):
 
         for index, visualization in enumerate(dashboard["visualizations"]):
             assert f'<div id="vis-{index}" class="grid-item">'
+            assert (
+                f'/{visualization["db"]}.json?sql={visualization["query"]}&_shape=array'
+            )
