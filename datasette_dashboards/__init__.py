@@ -7,7 +7,7 @@ async def dashboards(request, datasette):
     config = datasette.plugin_config("datasette-dashboards") or {}
     return Response.html(
         await datasette.render_template(
-            "pages/dashboards.html",
+            "dashboards.html",
             {"dashboards": config},
         )
     )
@@ -18,7 +18,7 @@ async def dashboards_slug(request, datasette):
     slug = urllib.parse.unquote(request.url_vars["slug"])
     return Response.html(
         await datasette.render_template(
-            "pages/dashboards/{slug}.html",
+            "dashboard_view.html",
             {"dashboards": config, "slug": slug},
         )
     )
