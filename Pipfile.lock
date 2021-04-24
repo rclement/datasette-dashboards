@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "ba1c4592674f2993c37f6a296141f95ff66e3884275b9d62d4e0bc27c0cc440e"
+            "sha256": "9d54269264e032d71e4581e6284acf830a9d28a4cec064a5566a2152366d91f5"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -66,29 +66,6 @@
             ],
             "index": "pypi",
             "version": "==0.56"
-        },
-        "datasette-cluster-map": {
-            "hashes": [
-                "sha256:032d814dbd269edf37391695a52f7245bac5761e3fc2b03c59736888cc5e37dc",
-                "sha256:43155989da972a5925c8d2947a3ed5cefae918830023fea36b56652aec535727"
-            ],
-            "index": "pypi",
-            "version": "==0.17.1"
-        },
-        "datasette-leaflet": {
-            "hashes": [
-                "sha256:8fd4e634304be392ae6f7de770d4f22b95a37caecd676a35faeb6200da9423bc",
-                "sha256:fd88c25666e7680b25b4c6e5546bd02c9f5836bbc0fee61042dbb6b93d4139f0"
-            ],
-            "markers": "python_version >= '3.6'",
-            "version": "==0.2.2"
-        },
-        "datasette-vega": {
-            "hashes": [
-                "sha256:6aca6a40f0b244d6d05548bfff94a99f0ef96bd5b89ade241f0d389f7a01a063"
-            ],
-            "index": "pypi",
-            "version": "==0.6.2"
         },
         "h11": {
             "hashes": [
@@ -324,28 +301,6 @@
             "markers": "python_version >= '3.5'",
             "version": "==1.2.0"
         },
-        "sqlite-fts4": {
-            "hashes": [
-                "sha256:a41b3e510df8bda50e9b1a5162a1e8ff3b92c62a1576ff5c74aaae2cedc9d4f5",
-                "sha256:b2d4f536a28181dc4ced293b602282dd982cc04f506cf3fc491d18b824c2f613"
-            ],
-            "version": "==1.0.1"
-        },
-        "sqlite-utils": {
-            "hashes": [
-                "sha256:582a9bcf4b6cb32ee2efa4a0d8f79ec630e8965ca93c69ceaaa7d424e1c01560",
-                "sha256:62a127a8d615d1622ad373dcf8641204c37bb2afa1d6144eeda0706af051ad4c"
-            ],
-            "index": "pypi",
-            "version": "==3.6"
-        },
-        "tabulate": {
-            "hashes": [
-                "sha256:d7c013fe7abbc5e491394e10fa845f8f32fe54f8dc60c6622c6cf482d25d47e4",
-                "sha256:eb1d13f25760052e8931f2ef80aaf6045a6cceb47514db8beab24cded16f13a7"
-            ],
-            "version": "==0.8.9"
-        },
         "uvicorn": {
             "hashes": [
                 "sha256:3292251b3c7978e8e4a7868f4baf7f7f7bb7e40c759ecc125c37e99cdea34202",
@@ -486,9 +441,40 @@
             "index": "pypi",
             "version": "==0.56"
         },
+        "datasette-cluster-map": {
+            "hashes": [
+                "sha256:032d814dbd269edf37391695a52f7245bac5761e3fc2b03c59736888cc5e37dc",
+                "sha256:43155989da972a5925c8d2947a3ed5cefae918830023fea36b56652aec535727"
+            ],
+            "index": "pypi",
+            "version": "==0.17.1"
+        },
         "datasette-dashboards": {
             "editable": true,
             "path": "."
+        },
+        "datasette-leaflet": {
+            "hashes": [
+                "sha256:8fd4e634304be392ae6f7de770d4f22b95a37caecd676a35faeb6200da9423bc",
+                "sha256:fd88c25666e7680b25b4c6e5546bd02c9f5836bbc0fee61042dbb6b93d4139f0"
+            ],
+            "markers": "python_version >= '3.6'",
+            "version": "==0.2.2"
+        },
+        "datasette-publish-vercel": {
+            "hashes": [
+                "sha256:69f22eb1d0f13406f41224153534ff2f4b3b97a5518b63af7f8d877d50d7f858",
+                "sha256:70710da98805e67ffd83d4aa86626fa60ce2fc49f03613b752ce6a6b59416586"
+            ],
+            "index": "pypi",
+            "version": "==0.9.3"
+        },
+        "datasette-vega": {
+            "hashes": [
+                "sha256:6aca6a40f0b244d6d05548bfff94a99f0ef96bd5b89ade241f0d389f7a01a063"
+            ],
+            "index": "pypi",
+            "version": "==0.6.2"
         },
         "faker": {
             "hashes": [
@@ -838,6 +824,28 @@
             ],
             "markers": "python_version >= '3.5'",
             "version": "==1.2.0"
+        },
+        "sqlite-fts4": {
+            "hashes": [
+                "sha256:a41b3e510df8bda50e9b1a5162a1e8ff3b92c62a1576ff5c74aaae2cedc9d4f5",
+                "sha256:b2d4f536a28181dc4ced293b602282dd982cc04f506cf3fc491d18b824c2f613"
+            ],
+            "version": "==1.0.1"
+        },
+        "sqlite-utils": {
+            "hashes": [
+                "sha256:582a9bcf4b6cb32ee2efa4a0d8f79ec630e8965ca93c69ceaaa7d424e1c01560",
+                "sha256:62a127a8d615d1622ad373dcf8641204c37bb2afa1d6144eeda0706af051ad4c"
+            ],
+            "index": "pypi",
+            "version": "==3.6"
+        },
+        "tabulate": {
+            "hashes": [
+                "sha256:d7c013fe7abbc5e491394e10fa845f8f32fe54f8dc60c6622c6cf482d25d47e4",
+                "sha256:eb1d13f25760052e8931f2ef80aaf6045a6cceb47514db8beab24cded16f13a7"
+            ],
+            "version": "==0.8.9"
         },
         "text-unidecode": {
             "hashes": [

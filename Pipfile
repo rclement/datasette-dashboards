@@ -5,17 +5,18 @@ name = "pypi"
 
 [packages]
 datasette = "*"
-datasette-cluster-map = "*"
-datasette-vega = "*"
-sqlite-utils = "*"
 
 [dev-packages]
 black = "~=20.8b1"
+datasette-cluster-map = "*"
 datasette-dashboards = {editable = true, path = "."}
+datasette-publish-vercel = "*"
+datasette-vega = "*"
 faker = "*"
 pytest = "*"
 pytest-asyncio = "*"
 pytest-cov = "*"
+sqlite-utils = "*"
 
 [requires]
 python_version = "3.8"
