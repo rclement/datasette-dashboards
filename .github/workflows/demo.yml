@@ -28,7 +28,7 @@ jobs:
           pipenv install --dev --deploy
       - name: Deploy to Vercel
         run: |-
-          datasette publish vercel example/jobs.db \
+          pipenv run datasette publish vercel example/jobs.db \
             --metadata example/metadata.yml \
             --install=datasette-cluster-map \
             --install=datasette-vega \
