@@ -48,15 +48,10 @@ pipenv install -d
 pipenv shell
 ```
 
-## Examples
+## Example
 
 ```bash
-datasette \
-    --plugins-dir datasette_dashboards \
-    --template-dir datasette_dashboards/templates \
-    --static -/static-plugins/datasette_dashboards:datasette_dashboards/static/ \
-    --metadata example/metadata.yml \
-    example/jobs.db
+datasette --metadata example/metadata.yml example/jobs.db
 ```
 
 ## License
