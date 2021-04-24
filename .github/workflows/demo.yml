@@ -1,0 +1,37 @@
+name: Deploy demo
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.8
+      - name: Cache Python modules
+        uses: actions/cache@v1
+        with:
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-pip-${{ hashFiles('**/Pipfile.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-pip-
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install --upgrade pipenv
+          pipenv install --dev --deploy
+      - name: Deploy to Vercel
+        run: |-
+          datasette publish vercel example/jobs.db \
+            --metadata example/metadata.yml \
+            --install=datasette-cluster-map \
+            --install=datasette-vega \
+            --install=https://github.com/rclement/datasette-dashboards/archive/$GITHUB_SHA.zip \
+            --project="${{ secrets.VERCEL_PROJECT }}"
+            --token="${{ secrets.VERCEL_TOKEN }}"
