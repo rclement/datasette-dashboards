@@ -1,8 +1,8 @@
 # datasette-dashboards
 
-> Bringing data dashboards to Datasette!
+> Datasette plugin providing data dashboards from metadata
 
-Datasette plugin providing data dashboards from metadata.
+[![Test](https://github.com/rclement/datasette-dashboards/actions/workflows/test.yml/badge.svg)](https://github.com/rclement/datasette-dashboards/actions/workflows/test.yml)
 
 **WARNING**: this is a highly experimental work serving as exploration and
 proof-of-concept. This could become a plugin in the long run if something
