@@ -21,6 +21,7 @@
     {% set dashboard = dashboards[slug] %}
     <div class="container">
       <h1>{{ dashboard.title }}</h1>
+      <p>{{ dashboard.description }}</p>
       <div class="columns is-multiline">
         {% for vis in dashboard.visualizations %}
         <div id="vis-{{ loop.index0 }}" class="column is-half"></div>
