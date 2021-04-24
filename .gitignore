@@ -56,7 +56,6 @@ test-report.xml
 *.log
 local_settings.py
 media/
-static/
 
 # Flask stuff:
 instance/

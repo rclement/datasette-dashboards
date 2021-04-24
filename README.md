@@ -52,8 +52,9 @@ pipenv shell
 
 ```bash
 datasette \
-    --template-dir datasette_dashboards/templates \
     --plugins-dir datasette_dashboards \
+    --template-dir datasette_dashboards/templates \
+    --static -/static-plugins/datasette_dashboards:datasette_dashboards/static/ \
     --metadata example/metadata.yml \
     example/jobs.db
 ```

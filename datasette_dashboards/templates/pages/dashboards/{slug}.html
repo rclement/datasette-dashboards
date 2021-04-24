@@ -4,7 +4,7 @@
 
 {% block extra_head %}
 {{ super() }}
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.2/css/bulma.min.css">
+<link href="{{ urls.static_plugins('datasette_dashboards', 'dashboards.css') }}" rel="stylesheet"/>
 {% endblock %}
 
 {% block nav %}
@@ -19,14 +19,15 @@
 
 {% block content %}
     {% set dashboard = dashboards[slug] %}
-    <div class="container">
+    <div class="page-header" style="border-color: black">
       <h1>{{ dashboard.title }}</h1>
-      <p>{{ dashboard.description }}</p>
-      <div class="columns is-multiline">
-        {% for vis in dashboard.visualizations %}
-        <div id="vis-{{ loop.index0 }}" class="column is-half"></div>
-        {% endfor %}
-      </div>
+    </div>
+    <p>{{ dashboard.description }}</p>
+
+    <div class="grid">
+      {% for vis in dashboard.visualizations %}
+      <div id="vis-{{ loop.index0 }}" class="grid-item"></div>
+      {% endfor %}
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/vega@5.20.2"></script>
