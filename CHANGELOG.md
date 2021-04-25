@@ -9,8 +9,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Add missing packages for test requirements in `setup.py`
 
 ### Changed
-- Update README.md
 - BREAKING: update plugin metadata spec to be chart-library agnostic
+- Update demo with choropleth map
+- Update README.md
 
 ## [0.1.0] - 2021-04-24
 ### Added

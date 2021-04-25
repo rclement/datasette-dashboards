@@ -33,3 +33,27 @@ plugins:
               x: { field: day, type: temporal }
               y: { field: count, type: quantitative }
               color: { field: source, type: nominal }
+        - title: Offers by region
+          db: jobs
+          query: SELECT region, count(*) as count FROM offers_view GROUP BY region ORDER BY count DESC
+          library: vega
+          display:
+            mark: geoshape
+            projection: { type: mercator }
+            transform:
+              - lookup: region
+                from:
+                  data:
+                    url: https://raw.githubusercontent.com/gregoiredavid/france-geojson/master/regions.geojson
+                    format: { type: json, property: features }
+                  key: properties.nom
+                  fields: [type, geometry]
+            encoding:
+              fill:
+                field: count
+                type: quantitative
+                scale: { scheme: blues }
+              stroke: { value: white }
+              tooltip:
+                - { field: region, type: nominal }
+                - { field: count, type: quantitative }
