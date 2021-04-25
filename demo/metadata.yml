@@ -1,4 +1,6 @@
 title: Datasette Dashboards Demo
+about: rclement/datasette-dashboards
+about_url: https://github.com/rclement/datasette-dashboards
 plugins:
   datasette-dashboards:
     job_offers_stats:
