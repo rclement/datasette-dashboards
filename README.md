@@ -54,8 +54,11 @@ plugins:
 
 To display [Vega](https://vega.github.io/vega-lite/docs/) charts:
 
-- `library`: `vega`
-- `display`: a valid Vega specification object (only `mark` and `encoding` fields are required)
+- `library` must be set to `vega`
+- `display` is a valid Vega specification object:
+  - Some fields are pre-defined: `$schema`, `title`, `width`, `view`, `config`, `data`
+  - All fields are passed along as-is (overriding pre-defined fields if any)
+  - Only `mark` and `encoding` fields are required as the bare-minimum
 
 A new menu entry is now available, pointing at `/-/dashboards` to access all defined dashboards.
 
