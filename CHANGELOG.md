@@ -10,8 +10,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 - BREAKING: update plugin metadata spec to be chart-library agnostic
-- Update demo with choropleth map
+- Update demo with choropleth map and interactive charts
 - Update README.md
+
+### Added
+- Respect view-instance and execute-sql permissions
+- More unit tests
 
 ## [0.1.0] - 2021-04-24
 ### Added
