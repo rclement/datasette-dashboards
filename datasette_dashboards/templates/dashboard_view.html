@@ -24,42 +24,25 @@
     </div>
     <p>{{ dashboard.description }}</p>
 
-    <div class="grid">
-      {% for vis in dashboard.visualizations %}
-      <div id="vis-{{ loop.index0 }}" class="grid-item"></div>
+    <div class="chart-grid">
+      {% for chart in dashboard.charts %}
+      <div id="chart-{{ loop.index0 }}" class="chart-grid-item"></div>
       {% endfor %}
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/vega@5.20.2"></script>
     <script src="https://cdn.jsdelivr.net/npm/vega-lite@5.1.0"></script>
     <script src="https://cdn.jsdelivr.net/npm/vega-embed@6.17.0"></script>
+    <script src="{{ urls.static_plugins('datasette_dashboards', 'dashboards.js') }}"></script>
     <script type="text/javascript">
-      {% for vis in dashboard.visualizations %}
-      var vlSpec = {
-        $schema: 'https://vega.github.io/schema/vega-lite/v5.json',
-        title: '{{ vis.title }}',
-        width: 'container',
-        view: {stroke: null},
-        config: {
-          background: '#00000000',
-          arc: {
-            innerRadius: 50
-          },
-          line: {
-            point: true
-          }
-        },
-        data: {
-          url: '/{{ vis.db }}.json?sql={{ vis.query }}&_shape=array',
-          format: {'type': 'json'}
-        },
-        mark: {
-          type: '{{ vis.chart }}',
-          tooltip: {content: 'encoding'}
-        },
-        encoding: JSON.parse('{{ vis.encoding|tojson }}')
-      };
-      vegaEmbed('#vis-{{ loop.index0 }}', vlSpec);
+      {% for chart in dashboard.charts %}
+      {% if chart.library == 'vega' %}
+      renderVegaChart(
+        JSON.parse('{{ chart|tojson }}'),
+        '/{{ chart.db }}.json?sql={{ chart.query }}&_shape=array',
+        '#chart-{{ loop.index0 }}'
+      )
+      {% endif %}
       {% endfor %}
     </script>
 {% endblock %}

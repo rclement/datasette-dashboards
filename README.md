@@ -31,26 +31,31 @@ plugins:
     my_dashboard:
       title: My Dashboard
       description: Showing some nice metrics
-      visualizations:
+      charts:
         - title: Number of events by day
           db: jobs
           query: SELECT date(date) as day, count(*) as count FROM events GROUP BY day ORDER BY day
-          chart: line
-          encoding:
-            x: { field: day, type: temporal }
-            y: { field: count, type: quantitative }
+          library: vega
+          display:
+            mark: { type: line, tooltip: true }
+            encoding:
+              x: { field: day, type: temporal }
+              y: { field: count, type: quantitative }
         - title: Number of events by source
           db: jobs
           query: SELECT source, count(*) as count FROM events GROUP BY source ORDER BY count DESC
-          chart: arc
-          encoding:
-            color: { field: source, type: nominal }
-            theta: { field: count, type: quantitative }
+          library: vega
+          display:
+            mark: { type: bar, tooltip: true }
+            encoding:
+              color: { field: source, type: nominal }
+              theta: { field: count, type: quantitative }
 ```
 
-_Note_: for now, data visualizations are dynamically generated using `vega-lite`.
-For simplicity sake, axes configuration are mapped to the same terminology depending
-on the chart type. Please refer to [Vega-Lite Documentation](https://vega.github.io/vega-lite/docs/).
+To display [Vega](https://vega.github.io/vega-lite/docs/) charts:
+
+- `library`: `vega`
+- `display`: a valid Vega specification object (only `mark` and `encoding` fields are required)
 
 A new menu entry is now available, pointing at `/-/dashboards` to access all defined dashboards.
 

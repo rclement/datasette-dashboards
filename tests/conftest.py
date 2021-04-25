@@ -35,25 +35,37 @@ def datasette_metadata():
                 "job-dashboard": {
                     "title": "Job dashboard",
                     "description": "Gathering metrics about jobs",
-                    "visualizations": [
+                    "charts": [
                         {
                             "title": "Number of offers by day",
                             "db": "test",
                             "query": "SELECT date(date) as day, count(*) as count FROM jobs GROUP BY day ORDER BY day",
-                            "chart": "line",
-                            "encoding": {
-                                "x": {"field": "day", "type": "temporal"},
-                                "y": {"field": "count", "type": "quantitative"},
+                            "library": "vega",
+                            "display": {
+                                "mark": {
+                                    "type": "line",
+                                    "tooltip": "true",
+                                },
+                                "encoding": {
+                                    "x": {"field": "day", "type": "temporal"},
+                                    "y": {"field": "count", "type": "quantitative"},
+                                },
                             },
                         },
                         {
                             "title": "Number of offers by source",
                             "db": "test",
                             "query": "SELECT source, count(*) as count FROM jobs GROUP BY source ORDER BY count DESC",
-                            "chart": "bar",
-                            "encoding": {
-                                "color": {"field": "source", "type": "nominal"},
-                                "theta": {"field": "count", "type": "quantitative"},
+                            "library": "vega",
+                            "display": {
+                                "chart": {
+                                    "type": "bar",
+                                    "tooltip": "true",
+                                },
+                                "encoding": {
+                                    "color": {"field": "source", "type": "nominal"},
+                                    "theta": {"field": "count", "type": "quantitative"},
+                                },
                             },
                         },
                     ],
