@@ -14,25 +14,41 @@ plugins:
             encoding:
               x: { field: day, type: temporal }
               y: { field: count, type: quantitative }
+
         - title: Number of offers by source
           db: jobs
           query: SELECT source, count(*) as count FROM offers_view GROUP BY source ORDER BY count DESC
           library: vega
           display:
             mark: { type: arc, tooltip: true }
+            params:
+              - name: highlight
+                select: { type: point, "on": mouseover }
             encoding:
               color: { field: source, type: nominal }
               theta: { field: count, type: quantitative }
+              opacity:
+                condition: { param: highlight, value: 1 }
+                value: 0.2
+
         - title: Offers by day by source
           db: jobs
           query: SELECT date(date) as day, source, count(*) as count FROM offers_view GROUP BY day, source ORDER BY day
           library: vega
           display:
             mark: { type: bar, tooltip: true }
+            params:
+              - name: highlight
+                select: { type: point, fields: [source] }
+                bind: legend
             encoding:
-              x: { field: day, type: temporal }
+              x: { field: day, type: ordinal, timeUnit: monthdate }
               y: { field: count, type: quantitative }
               color: { field: source, type: nominal }
+              opacity:
+                condition: { param: highlight, value: 1 }
+                value: 0.2
+
         - title: Offers by region
           db: jobs
           query: SELECT region, count(*) as count FROM offers_view GROUP BY region ORDER BY count DESC
