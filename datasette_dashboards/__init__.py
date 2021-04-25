@@ -1,6 +1,6 @@
 import urllib
 from datasette import hookimpl
-from datasette.utils.asgi import Response
+from datasette.utils.asgi import NotFound, Response
 
 
 async def dashboards(request, datasette):
@@ -16,6 +16,9 @@ async def dashboards(request, datasette):
 async def dashboards_slug(request, datasette):
     config = datasette.plugin_config("datasette-dashboards") or {}
     slug = urllib.parse.unquote(request.url_vars["slug"])
+    if slug not in config.keys():
+        raise NotFound(f"Dashboard not found: {slug}")
+
     return Response.html(
         await datasette.render_template(
             "dashboard_view.html",
