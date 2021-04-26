@@ -1,7 +1,7 @@
 function renderVegaChart(chart, json_data_url, dom_id) {
   var vlSpec = {
     $schema: 'https://vega.github.io/schema/vega-lite/v5.json',
-    title: chart.title,
+    description: chart.title,
     width: 'container',
     view: {stroke: null},
     config: {

@@ -14,6 +14,7 @@ async def test_dashboard_views(datasette):
         assert f'<p>{dashboard["description"]}</p>' in response.text
 
         for index, chart in enumerate(dashboard["charts"]):
+            assert f'<p><a href="/{chart["db"]}?sql={chart["query"]}">{chart["title"]}</a></p>'
             assert f'<div id="vis-{index}" class="grid-item">'
             assert f'/{chart["db"]}.json?sql={chart["query"]}&_shape=array'
 

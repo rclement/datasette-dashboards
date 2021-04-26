@@ -1,5 +1,26 @@
-.chart-grid {
+.dashboard-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
   grid-gap: 2rem;
+}
+
+.dashboard-card {
+  background-color: white;
+  padding: 1rem;
+  box-shadow: 0px 1px 3px rgba(0, 0, 0, .13);
+  border-color: transparent;
+  border-radius: 8px;
+}
+
+.dashboard-card-title {
+  font-size: small;
+  font-weight: bold;
+}
+
+.dashboard-card-title a {
+  text-decoration: none;
+}
+
+.dashboard-card-chart {
+  width: 100%;
 }

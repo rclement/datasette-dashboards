@@ -19,14 +19,22 @@
 
 {% block content %}
     {% set dashboard = dashboards[slug] %}
-    <div class="page-header" style="border-color: black">
-      <h1>{{ dashboard.title }}</h1>
-    </div>
-    <p>{{ dashboard.description }}</p>
 
-    <div class="chart-grid">
+    <div class="dashboard-header">
+      <div class="page-header" style="border-color: black">
+        <h1>{{ dashboard.title }}</h1>
+      </div>
+      <p>{{ dashboard.description }}</p>
+    </div>
+
+    <div class="dashboard-grid">
       {% for chart in dashboard.charts %}
-      <div id="chart-{{ loop.index0 }}" class="chart-grid-item"></div>
+      <div class="dashboard-card">
+        <div class="dashboard-card-title">
+          <p><a href="/{{ chart.db }}?sql={{ chart.query }}">{{ chart.title }}</a></p>
+        </div>
+        <div id="chart-{{ loop.index0 }}" class="dashboard-card-chart"></div>
+      </div>
       {% endfor %}
     </div>
 
