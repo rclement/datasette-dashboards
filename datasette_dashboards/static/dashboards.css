@@ -4,12 +4,6 @@
   grid-gap: 0.5rem;
 }
 
-@media (min-width: 640px) {
-  .dashboard-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-}
-
 .dashboard-card {
   background-color: white;
   padding: 1rem;

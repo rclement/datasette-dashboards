@@ -1,10 +1,31 @@
 {% extends "base.html" %}
 
+{% set dashboard = dashboards[slug] %}
+
 {% block title %}{{ database }}{% endblock %}
 
 {% block extra_head %}
 {{ super() }}
 <link href="{{ urls.static_plugins('datasette_dashboards', 'dashboards.css') }}" rel="stylesheet"/>
+<style>
+  @media (min-width: 640px) {
+    .dashboard-grid {
+      {% if dashboard.layout %}
+      grid-template-areas: {% for row in dashboard.layout %}"{% for col in row %}{{ col }} {% endfor %}" {% endfor %};
+      {% else %}
+      grid-template-columns: repeat(2, 1fr);
+      {% endif %}
+    }
+
+    {% if dashboard.layout %}
+    {% for chart in dashboard.charts %}
+    #card-{{ loop.index }} {
+      grid-area: chart{{ loop.index }};
+    }
+    {% endfor %}
+    {% endif %}
+  }
+</style>
 {% endblock %}
 
 {% block nav %}
@@ -18,8 +39,6 @@
 {% block body_class %}index{% endblock %}
 
 {% block content %}
-    {% set dashboard = dashboards[slug] %}
-
     <div class="dashboard-header">
       <div class="page-header" style="border-color: black">
         <h1>{{ dashboard.title }}</h1>
@@ -29,11 +48,11 @@
 
     <div class="dashboard-grid">
       {% for chart in dashboard.charts %}
-      <div class="dashboard-card">
+      <div id="card-{{ loop.index }}" class="dashboard-card">
         <div class="dashboard-card-title">
           <p><a href="/{{ chart.db }}?sql={{ chart.query }}">{{ chart.title }}</a></p>
         </div>
-        <div id="chart-{{ loop.index0 }}" class="dashboard-card-chart"></div>
+        <div id="chart-{{ loop.index }}" class="dashboard-card-chart"></div>
       </div>
       {% endfor %}
     </div>
@@ -48,7 +67,7 @@
       renderVegaChart(
         JSON.parse('{{ chart|tojson }}'),
         '/{{ chart.db }}.json?sql={{ chart.query }}&_shape=array',
-        '#chart-{{ loop.index0 }}'
+        '#chart-{{ loop.index }}'
       )
       {% endif %}
       {% endfor %}
