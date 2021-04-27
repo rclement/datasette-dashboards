@@ -1,5 +1,5 @@
-function renderVegaChart(chart, json_data_url, dom_id) {
-  var vlSpec = {
+function renderVegaChart(chart, json_data_url, el) {
+  const spec = {
     $schema: 'https://vega.github.io/schema/vega-lite/v5.json',
     description: chart.title,
     width: 'container',
@@ -19,5 +19,6 @@ function renderVegaChart(chart, json_data_url, dom_id) {
     },
     ...chart.display
   };
-  vegaEmbed(dom_id, vlSpec);
+
+  vegaEmbed(el, spec);
 }

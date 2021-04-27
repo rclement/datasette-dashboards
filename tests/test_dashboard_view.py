@@ -12,11 +12,32 @@ async def test_dashboard_views(datasette):
         assert response.status_code == 200
         assert f'<h1>{dashboard["title"]}</h1>' in response.text
         assert f'<p>{dashboard["description"]}</p>' in response.text
+        assert "grid-template-areas" not in response.text
 
         for index, chart in enumerate(dashboard["charts"]):
             assert f'<p><a href="/{chart["db"]}?sql={chart["query"]}">{chart["title"]}</a></p>'
             assert f'<div id="vis-{index}" class="grid-item">'
             assert f'/{chart["db"]}.json?sql={chart["query"]}&_shape=array'
+
+
+@pytest.mark.asyncio
+async def test_dashboard_view_layout(datasette):
+    original_metadata = datasette._metadata
+    try:
+        metadata = copy.deepcopy(datasette._metadata)
+        metadata["plugins"]["datasette-dashboards"]["job-dashboard"]["layout"] = [
+            ["chart1"],
+            ["chart2"],
+        ]
+        datasette._metadata = metadata
+        response = await datasette.client.get(f"/-/dashboards/job-dashboard")
+        assert response.status_code == 200
+
+        assert 'grid-template-areas: "chart1 " "chart2 " ;' in response.text
+        assert "grid-area: chart1;" in response.text
+        assert "grid-area: chart2;" in response.text
+    finally:
+        datasette._metadata = original_metadata
 
 
 @pytest.mark.asyncio

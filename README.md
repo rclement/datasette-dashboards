@@ -31,6 +31,9 @@ plugins:
     my_dashboard:
       title: My Dashboard
       description: Showing some nice metrics
+      layout:
+        - [chart1]
+        - [chart2]
       charts:
         - title: Number of events by day
           db: jobs
@@ -59,6 +62,13 @@ To display [Vega](https://vega.github.io/vega-lite/docs/) charts:
   - Some fields are pre-defined: `$schema`, `title`, `width`, `view`, `config`, `data`
   - All fields are passed along as-is (overriding pre-defined fields if any)
   - Only `mark` and `encoding` fields are required as the bare-minimum
+
+The default dashboard layout will present two charts per row (one per row on mobile).
+To make use of custom dashboard layout using [CSS Grid Layout](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Grid_Layout),
+define the `layout` array property such as:
+
+- Each entry represents a row of charts
+- Each column is referred by the 1-indexed chart in the list (e.g. "chart1", "chart2, etc.)
 
 A new menu entry is now available, pointing at `/-/dashboards` to access all defined dashboards.
 
