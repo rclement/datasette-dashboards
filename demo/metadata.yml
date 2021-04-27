@@ -9,8 +9,8 @@ plugins:
       title: Job offers statistics
       description: Gather metrics about job offers
       layout:
-        - [chart1, chart1, chart4]
-        - [chart2, chart3, chart4]
+        - [chart1, chart1, chart1, chart4]
+        - [chart2, chart3, chart3, chart4]
       charts:
         - title: Number of offers by day
           db: jobs

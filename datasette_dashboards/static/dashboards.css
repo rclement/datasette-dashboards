@@ -1,6 +1,7 @@
 .dashboard-grid {
   display: grid;
-  grid-auto-rows: minmax(100px, auto);
+  grid-auto-columns: minmax(100px, 1fr);
+  grid-auto-rows: minmax(100px, 1fr);
   grid-gap: 0.5rem;
 }
 
@@ -23,4 +24,5 @@
 
 .dashboard-card-chart {
   width: 100%;
+  height: 100%;
 }
