@@ -30,7 +30,6 @@ jobs:
         run: |-
           pipenv run datasette publish vercel demo/jobs.db \
             --metadata demo/metadata.yml \
-            --install=datasette-render-markdown \
             --install=datasette-cluster-map \
             --install=datasette-vega \
             --install=https://github.com/rclement/datasette-dashboards/archive/$GITHUB_SHA.zip \
