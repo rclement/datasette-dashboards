@@ -37,6 +37,39 @@ def datasette_metadata():
                     "description": "Gathering metrics about jobs",
                     "charts": [
                         {
+                            "library": "markdown",
+                            "display": """# Analysis details
+
+We wanted to analyze data from job offers, using the **`python` search keyword**
+from three sources of job-boards:
+[APEC](https://www.apec.fr),
+[Indeed](https://fr.indeed.com/) and
+[RegionsJob](https://regionsjob.com).
+
+## Process
+
+The process was in 3 steps:
+
+- Extraction
+- Transformation
+- Loading
+
+After the ETL process, an extra data enrichment step was developed to provide
+location geocoding, based on place names.
+
+## SQL query
+
+```sql
+SELECT
+    date(date) as day,
+    count(*) as count
+FROM offers_view
+GROUP BY day
+ORDER BY day
+```
+""",
+                        },
+                        {
                             "title": "Number of offers by day",
                             "db": "test",
                             "query": "SELECT date(date) as day, count(*) as count FROM jobs GROUP BY day ORDER BY day",

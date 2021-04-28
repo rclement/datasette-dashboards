@@ -45,7 +45,7 @@ async def dashboards_slug(request, datasette):
     if slug not in config.keys():
         raise NotFound(f"Dashboard not found: {slug}")
 
-    dbs = set([chart["db"] for chart in config[slug]["charts"]])
+    dbs = set([chart["db"] for chart in config[slug]["charts"] if "db" in chart])
     for db in dbs:
         try:
             database = datasette.get_database(db)

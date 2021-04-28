@@ -5,6 +5,7 @@ name = "pypi"
 
 [packages]
 datasette = "*"
+datasette-render-markdown = "*"
 
 [dev-packages]
 black = "~=20.8b1"

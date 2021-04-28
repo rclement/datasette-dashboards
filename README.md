@@ -55,13 +55,58 @@ plugins:
               theta: { field: count, type: quantitative }
 ```
 
-To display [Vega](https://vega.github.io/vega-lite/docs/) charts:
+### Properties
 
-- `library` must be set to `vega`
-- `display` is a valid Vega specification object:
-  - Some fields are pre-defined: `$schema`, `title`, `width`, `view`, `config`, `data`
-  - All fields are passed along as-is (overriding pre-defined fields if any)
-  - Only `mark` and `encoding` fields are required as the bare-minimum
+Dashboard properties:
+
+| Property      | Type     | Description           |
+| ------------- | -------- | --------------------- |
+| `title`       | `string` | Dashboard title       |
+| `description` | `string` | Dashboard description |
+| `layout`      | `array`  | Dashboard layout      |
+
+Common chart properties for all chart types:
+
+| Property  | Type     | Description                                              |
+| --------- | -------- | -------------------------------------------------------- |
+| `title`   | `string` | Chart title                                              |
+| `db`      | `string` | Database name against which to run the query             |
+| `query`   | `string` | SQL query to run and extract data from                   |
+| `library` | `string` | One of supported libraries: `vega`, `markdown`           |
+| `display` | `object` | Chart display specification (depend on the used library) |
+
+#### Vega properties
+
+Available configuration for `vega` charts:
+
+| Property  | Type     | Description               |
+| --------- | -------- | ------------------------- |
+| `library` | `string` | Must be set to `vega`     |
+| `display` | `object` | Vega specification object |
+
+Notes about the `display` property:
+
+- Requires a valid [Vega specification object](https://vega.github.io/vega-lite/docs/)
+- Some fields are pre-defined: `$schema`, `title`, `width`, `view`, `config`, `data`
+- All fields are passed along as-is (overriding pre-defined fields if any)
+- Only `mark` and `encoding` fields are required as the bare-minimum
+
+#### Markdown properties
+
+Available configuration for `markdown` chart:
+
+| Property  | Type     | Description                                       |
+| --------- | -------- | ------------------------------------------------- |
+| `library` | `string` | Must be set to `markdown`                         |
+| `display` | `string` | Multi-line string containing the Markdown content |
+
+Note :
+
+- Some common properties do not apply and can be omitted: `title`, `db`, `query`
+- Markdown rendering is done by [`datasette-render-markdown`](https://datasette.io/plugins/datasette-render-markdown)
+- To configure Markdown rendering, extensions can be enabled in [metadata](https://datasette.io/plugins/datasette-render-markdown#user-content-markdown-extensions)
+
+### Layout
 
 The default dashboard layout will present two charts per row (one per row on mobile).
 To make use of custom dashboard layout using [CSS Grid Layout](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Grid_Layout),

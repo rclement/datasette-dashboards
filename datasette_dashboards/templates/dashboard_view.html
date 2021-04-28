@@ -2,7 +2,7 @@
 
 {% set dashboard = dashboards[slug] %}
 
-{% block title %}{{ database }}{% endblock %}
+{% block title %}{{ dashboard.title }}{% endblock %}
 
 {% block extra_head %}
 {{ super() }}
@@ -49,10 +49,17 @@
     <div class="dashboard-grid">
       {% for chart in dashboard.charts %}
       <div id="card-{{ loop.index }}" class="dashboard-card">
+        {% if chart.library != 'markdown' %}
         <div class="dashboard-card-title">
           <p><a href="/{{ chart.db }}?sql={{ chart.query }}">{{ chart.title }}</a></p>
         </div>
-        <div id="chart-{{ loop.index }}" class="dashboard-card-chart"></div>
+        {% endif %}
+
+        <div id="chart-{{ loop.index }}" class="dashboard-card-chart">
+          {% if chart.library == 'markdown' %}
+          {{ render_markdown(chart.display) }}
+          {% endif %}
+        </div>
       </div>
       {% endfor %}
     </div>
