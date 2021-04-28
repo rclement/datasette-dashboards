@@ -55,6 +55,8 @@ plugins:
               theta: { field: count, type: quantitative }
 ```
 
+A new menu entry is now available, pointing at `/-/dashboards` to access all defined dashboards.
+
 ### Properties
 
 Dashboard properties:
@@ -106,7 +108,7 @@ Note :
 - Markdown rendering is done by [`datasette-render-markdown`](https://datasette.io/plugins/datasette-render-markdown)
 - To configure Markdown rendering, extensions can be enabled in [metadata](https://datasette.io/plugins/datasette-render-markdown#user-content-markdown-extensions)
 
-### Layout
+### Dashboard layout
 
 The default dashboard layout will present two charts per row (one per row on mobile).
 To make use of custom dashboard layout using [CSS Grid Layout](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Grid_Layout),
@@ -114,8 +116,6 @@ define the `layout` array property such as:
 
 - Each entry represents a row of charts
 - Each column is referred by the 1-indexed chart in the list (e.g. "chart1", "chart2, etc.)
-
-A new menu entry is now available, pointing at `/-/dashboards` to access all defined dashboards.
 
 ## Development
 
