@@ -15,9 +15,9 @@ async def test_dashboard_views(datasette):
         assert "grid-template-areas" not in response.text
 
         for index, chart in enumerate(dashboard["charts"]):
-            assert f'<p><a href="/{chart["db"]}?sql={chart["query"]}">{chart["title"]}</a></p>'
-            assert f'<div id="vis-{index}" class="grid-item">'
-            assert f'/{chart["db"]}.json?sql={chart["query"]}&_shape=array'
+            assert f'<p><a href="/{chart["db"]}?sql={chart["query"]}">{chart["title"]}</a></p>' in response.text
+            assert f'<div id="chart-{index + 1}" class="dashboard-card-chart">' in response.text
+            assert f'/{chart["db"]}.json?sql={chart["query"]}&_shape=array' in response.text
 
 
 @pytest.mark.asyncio
