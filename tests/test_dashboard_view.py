@@ -12,7 +12,9 @@ async def test_dashboard_views(datasette):
         assert response.status_code == 200
         assert f'<h1>{dashboard["title"]}</h1>' in response.text
         assert f'<p>{dashboard["description"]}</p>' in response.text
+        assert "grid-template-columns: repeat(2, 1fr);" in response.text
         assert "grid-template-areas" not in response.text
+        assert "grid-area:" not in response.text
 
         for index, chart in enumerate(dashboard["charts"]):
             assert (
@@ -36,16 +38,22 @@ async def test_dashboard_view_layout(datasette):
     try:
         metadata = copy.deepcopy(datasette._metadata)
         metadata["plugins"]["datasette-dashboards"]["job-dashboard"]["layout"] = [
-            ["chart1"],
-            ["chart2"],
+            ["analysis-note"],
+            ["offers-day"],
+            ["offers-source"],
         ]
         datasette._metadata = metadata
         response = await datasette.client.get(f"/-/dashboards/job-dashboard")
         assert response.status_code == 200
 
-        assert 'grid-template-areas: "chart1 " "chart2 " ;' in response.text
-        assert "grid-area: chart1;" in response.text
-        assert "grid-area: chart2;" in response.text
+        assert (
+            'grid-template-areas: "analysis-note " "offers-day " "offers-source " ;'
+            in response.text
+        )
+        assert "grid-area: analysis-note;" in response.text
+        assert "grid-area: offers-day;" in response.text
+        assert "grid-area: offers-source;" in response.text
+        assert "grid-template-columns: repeat(2, 1fr);" not in response.text
     finally:
         datasette._metadata = original_metadata
 

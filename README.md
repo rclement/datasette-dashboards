@@ -10,7 +10,7 @@
 Try out a live demo at [https://datasette-dashboards-demo.vercel.app](https://datasette-dashboards-demo.vercel.app/-/dashboards)
 
 **WARNING**: this plugin is still experimental and not ready for production.
-Some breaking changes might between releases before reaching version 1.0.0.
+Some breaking changes might happen between releases before reaching a stable version.
 Use it at your own risks!
 
 ![Datasette Dashboards Demo](https://raw.githubusercontent.com/rclement/datasette-dashboards/master/demo/datasette-dashboards-demo.png)
@@ -34,10 +34,11 @@ plugins:
       title: My Dashboard
       description: Showing some nice metrics
       layout:
-        - [chart1]
-        - [chart2]
+        - [events-day]
+        - [events-source]
       charts:
-        - title: Number of events by day
+        - alias: events-day
+          title: Number of events by day
           db: jobs
           query: SELECT date(date) as day, count(*) as count FROM events GROUP BY day ORDER BY day
           library: vega
@@ -46,7 +47,9 @@ plugins:
             encoding:
               x: { field: day, type: temporal }
               y: { field: count, type: quantitative }
-        - title: Number of events by source
+
+        - alias: events-source
+          title: Number of events by source
           db: jobs
           query: SELECT source, count(*) as count FROM events GROUP BY source ORDER BY count DESC
           library: vega
@@ -73,6 +76,7 @@ Common chart properties for all chart types:
 
 | Property  | Type     | Description                                              |
 | --------- | -------- | -------------------------------------------------------- |
+| `alias`   | `string` | Chart identifier for layout (must not contain spaces)    |
 | `title`   | `string` | Chart title                                              |
 | `db`      | `string` | Database name against which to run the query             |
 | `query`   | `string` | SQL query to run and extract data from                   |
@@ -114,10 +118,10 @@ Note :
 
 The default dashboard layout will present two charts per row (one per row on mobile).
 To make use of custom dashboard layout using [CSS Grid Layout](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Grid_Layout),
-define the `layout` array property such as:
+define the `layout` array property as a grid / matrix:
 
 - Each entry represents a row of charts
-- Each column is referred by the 1-indexed chart in the list (e.g. "chart1", "chart2, etc.)
+- Each column is referring a chart `alias` property
 
 ## Development
 

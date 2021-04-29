@@ -37,6 +37,7 @@ def datasette_metadata():
                     "description": "Gathering metrics about jobs",
                     "charts": [
                         {
+                            "alias": "analysis-note",
                             "library": "markdown",
                             "display": """# Analysis details
 
@@ -70,6 +71,7 @@ ORDER BY day
 """,
                         },
                         {
+                            "alias": "offers-day",
                             "title": "Number of offers by day",
                             "db": "test",
                             "query": "SELECT date(date) as day, count(*) as count FROM jobs GROUP BY day ORDER BY day",
@@ -86,6 +88,7 @@ ORDER BY day
                             },
                         },
                         {
+                            "alias": "offers-source",
                             "title": "Number of offers by source",
                             "db": "test",
                             "query": "SELECT source, count(*) as count FROM jobs GROUP BY source ORDER BY count DESC",
