@@ -1,7 +1,6 @@
 .dashboard-grid {
   display: grid;
   grid-auto-columns: minmax(100px, 1fr);
-  grid-auto-rows: minmax(100px, 1fr);
   grid-gap: 0.5rem;
 }
 
