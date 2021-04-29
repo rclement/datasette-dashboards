@@ -20,7 +20,7 @@
     {% if dashboard.layout %}
     {% for chart in dashboard.charts %}
     #card-{{ loop.index }} {
-      grid-area: chart{{ loop.index }};
+      grid-area: {{ chart.alias }};
     }
     {% endfor %}
     {% endif %}

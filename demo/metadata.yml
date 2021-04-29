@@ -9,10 +9,11 @@ plugins:
       title: Job offers statistics
       description: Gather metrics about job offers
       layout:
-        - [chart1, chart2, chart2, chart5]
-        - [chart1, chart3, chart4, chart5]
+        - [analysis-note, offers-day, offers-day, offers-region]
+        - [analysis-note, offers-source, offers-day-source, offers-region]
       charts:
-        - library: markdown
+        - alias: analysis-note
+          library: markdown
           display: |-
             # Analysis details
 
@@ -44,7 +45,8 @@ plugins:
             ORDER BY day
             ```
 
-        - title: Number of offers by day
+        - alias: offers-day
+          title: Number of offers by day
           db: jobs
           query: SELECT date(date) as day, count(*) as count FROM offers_view GROUP BY day ORDER BY day
           library: vega
@@ -54,7 +56,8 @@ plugins:
               x: { field: day, type: temporal }
               y: { field: count, type: quantitative }
 
-        - title: Number of offers by source
+        - alias: offers-source
+          title: Number of offers by source
           db: jobs
           query: SELECT source, count(*) as count FROM offers_view GROUP BY source ORDER BY count DESC
           library: vega
@@ -70,7 +73,8 @@ plugins:
                 condition: { param: highlight, value: 1 }
                 value: 0.2
 
-        - title: Offers by day by source
+        - alias: offers-day-source
+          title: Offers by day by source
           db: jobs
           query: SELECT date(date) as day, source, count(*) as count FROM offers_view GROUP BY day, source ORDER BY day
           library: vega
@@ -88,7 +92,8 @@ plugins:
                 condition: { param: highlight, value: 1 }
                 value: 0.2
 
-        - title: Offers by region
+        - alias: offers-region
+          title: Offers by region
           db: jobs
           query: SELECT region, count(*) as count FROM offers_view GROUP BY region ORDER BY count DESC
           library: vega
