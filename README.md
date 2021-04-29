@@ -9,9 +9,11 @@
 
 Try out a live demo at [https://datasette-dashboards-demo.vercel.app](https://datasette-dashboards-demo.vercel.app/-/dashboards)
 
-**WARNING**: this is a highly experimental work serving as exploration and
-proof-of-concept. This could become a plugin in the long run if something
-interesting comes up!
+**WARNING**: this plugin is still experimental and not ready for production.
+Some breaking changes might between releases before reaching version 1.0.0.
+Use it at your own risks!
+
+![Datasette Dashboards Demo](demo/datasette-dashboards-demo.png)
 
 ## Installation
 
