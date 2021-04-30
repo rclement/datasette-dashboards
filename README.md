@@ -128,7 +128,7 @@ Available configuration for `metric` chart:
 Note:
 
 - The `display.field` must reference a single-numerical value from the SQL query
-  (e.g. `number` in`SELECT count(*) as number from events`)
+  (e.g. `number` in `SELECT count(*) as number from events`)
 
 ### Dashboard layout
 
