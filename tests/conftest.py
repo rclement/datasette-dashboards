@@ -39,36 +39,49 @@ def datasette_metadata():
                         {
                             "alias": "analysis-note",
                             "library": "markdown",
-                            "display": """# Analysis details
+                            "display": """
+                                # Analysis details
 
-We wanted to analyze data from job offers, using the **`python` search keyword**
-from three sources of job-boards:
-[APEC](https://www.apec.fr),
-[Indeed](https://fr.indeed.com/) and
-[RegionsJob](https://regionsjob.com).
+                                We wanted to analyze data from job offers, using the **`python` search keyword**
+                                from three sources of job-boards:
+                                [APEC](https://www.apec.fr),
+                                [Indeed](https://fr.indeed.com/) and
+                                [RegionsJob](https://regionsjob.com).
 
-## Process
+                                ## Process
 
-The process was in 3 steps:
+                                The process was in 3 steps:
 
-- Extraction
-- Transformation
-- Loading
+                                - Extraction
+                                - Transformation
+                                - Loading
 
-After the ETL process, an extra data enrichment step was developed to provide
-location geocoding, based on place names.
+                                After the ETL process, an extra data enrichment step was developed to provide
+                                location geocoding, based on place names.
 
-## SQL query
+                                ## SQL query
 
-```sql
-SELECT
-    date(date) as day,
-    count(*) as count
-FROM offers_view
-GROUP BY day
-ORDER BY day
-```
-""",
+                                ```sql
+                                SELECT
+                                    date(date) as day,
+                                    count(*) as count
+                                FROM offers_view
+                                GROUP BY day
+                                ORDER BY day
+                                ```
+                            """,
+                        },
+                        {
+                            "alias": "offers-count",
+                            "title": "Total number of offers",
+                            "db": "test",
+                            "query": "SELECT count(*) as count FROM offers_view;",
+                            "library": "metric",
+                            "display": {
+                                "field": "count",
+                                "prefix": "",
+                                "suffix": " offers",
+                            },
                         },
                         {
                             "alias": "offers-day",

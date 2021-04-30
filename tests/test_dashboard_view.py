@@ -38,19 +38,19 @@ async def test_dashboard_view_layout(datasette):
     try:
         metadata = copy.deepcopy(datasette._metadata)
         metadata["plugins"]["datasette-dashboards"]["job-dashboard"]["layout"] = [
-            ["analysis-note"],
-            ["offers-day"],
-            ["offers-source"],
+            ["analysis-note", "offers-day", "offers-day"],
+            ["analysis-note", "offers-source", "offers-count"],
         ]
         datasette._metadata = metadata
         response = await datasette.client.get(f"/-/dashboards/job-dashboard")
         assert response.status_code == 200
 
         assert (
-            'grid-template-areas: "analysis-note " "offers-day " "offers-source " ;'
+            'grid-template-areas: "analysis-note offers-day offers-day " "analysis-note offers-source offers-count " ;'
             in response.text
         )
         assert "grid-area: analysis-note;" in response.text
+        assert "grid-area: offers-count;" in response.text
         assert "grid-area: offers-day;" in response.text
         assert "grid-area: offers-source;" in response.text
         assert "grid-template-columns: repeat(2, 1fr);" not in response.text

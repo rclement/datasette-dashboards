@@ -76,6 +76,12 @@
         '/{{ chart.db }}.json?sql={{ chart.query }}&_shape=array',
         '#chart-{{ loop.index }}'
       )
+      {% elif chart.library == 'metric' %}
+      renderMetricChart(
+        JSON.parse('{{ chart|tojson }}'),
+        '/{{ chart.db }}.json?sql={{ chart.query }}&_shape=array',
+        '#chart-{{ loop.index }}'
+      )
       {% endif %}
       {% endfor %}
     </script>

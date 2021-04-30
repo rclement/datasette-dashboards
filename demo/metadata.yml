@@ -9,7 +9,7 @@ plugins:
       title: Job offers statistics
       description: Gather metrics about job offers
       layout:
-        - [analysis-note, offers-day, offers-day, offers-region]
+        - [analysis-note, offers-day, offers-day, offers-count]
         - [analysis-note, offers-source, offers-day-source, offers-region]
       charts:
         - alias: analysis-note
@@ -44,6 +44,16 @@ plugins:
             GROUP BY day
             ORDER BY day
             ```
+
+        - alias: offers-count
+          title: Total number of offers
+          db: jobs
+          query: SELECT count(*) as count FROM offers_view;
+          library: metric
+          display:
+            field: count
+            prefix:
+            suffix: " offers"
 
         - alias: offers-day
           title: Number of offers by day

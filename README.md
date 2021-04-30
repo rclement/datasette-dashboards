@@ -114,6 +114,22 @@ Note :
 - Markdown rendering is done by [`datasette-render-markdown`](https://datasette.io/plugins/datasette-render-markdown)
 - To configure Markdown rendering, extensions can be enabled in [metadata](https://datasette.io/plugins/datasette-render-markdown#user-content-markdown-extensions)
 
+#### Metric properties
+
+Available configuration for `metric` chart:
+
+| Property         | Type     | Description                               |
+| ---------------- | -------- | ----------------------------------------- |
+| `library`        | `string` | Must be set to `metric`                   |
+| `display.field`  | `string` | Numerical field to be displayed as metric |
+| `display.prefix` | `string` | Prefix to be displayed before metric      |
+| `display.suffix` | `string` | Prefix to be displayed after metric       |
+
+Note:
+
+- The `display.field` must reference a single-numerical value from the SQL query
+  (e.g. `number` in`SELECT count(*) as number from events`)
+
 ### Dashboard layout
 
 The default dashboard layout will present two charts per row (one per row on mobile).
