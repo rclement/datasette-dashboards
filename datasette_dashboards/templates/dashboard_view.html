@@ -71,17 +71,9 @@
     <script type="text/javascript">
       {% for chart in dashboard.charts %}
       {% if chart.library == 'vega' %}
-      renderVegaChart(
-        JSON.parse('{{ chart|tojson }}'),
-        '/{{ chart.db }}.json?sql={{ chart.query }}&_shape=array',
-        '#chart-{{ loop.index }}'
-      )
+      renderVegaChart('#chart-{{ loop.index }}', JSON.parse('{{ chart|tojson }}'))
       {% elif chart.library == 'metric' %}
-      renderMetricChart(
-        JSON.parse('{{ chart|tojson }}'),
-        '/{{ chart.db }}.json?sql={{ chart.query }}&_shape=array',
-        '#chart-{{ loop.index }}'
-      )
+      renderMetricChart('#chart-{{ loop.index }}', JSON.parse('{{ chart|tojson }}'))
       {% endif %}
       {% endfor %}
     </script>

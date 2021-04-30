@@ -21,15 +21,19 @@ async def test_dashboard_views(datasette):
                 f'<div id="chart-{index + 1}" class="dashboard-card-chart">'
                 in response.text
             )
-            if chart["library"] != "markdown":
+
+            if chart["library"] == "vega":
                 assert (
                     f'<p><a href="/{chart["db"]}?sql={chart["query"]}">{chart["title"]}</a></p>'
                     in response.text
                 )
+                assert f"renderVegaChart('#chart-{index + 1}', " in response.text
+            elif chart["library"] == "metric":
                 assert (
-                    f'/{chart["db"]}.json?sql={chart["query"]}&_shape=array'
+                    f'<p><a href="/{chart["db"]}?sql={chart["query"]}">{chart["title"]}</a></p>'
                     in response.text
                 )
+                assert f"renderMetricChart('#chart-{index + 1}', " in response.text
 
 
 @pytest.mark.asyncio
