@@ -75,7 +75,8 @@ plugins:
             mark: { type: arc, tooltip: true }
             params:
               - name: highlight
-                select: { type: point, "on": mouseover }
+                select: { fields: [source], type: point, "on": mouseover }
+                bind: legend
             encoding:
               color: { field: source, type: nominal }
               theta: { field: count, type: quantitative }
@@ -92,7 +93,7 @@ plugins:
             mark: { type: bar, tooltip: true }
             params:
               - name: highlight
-                select: { type: point, fields: [source] }
+                select: { fields: [source], type: point, "on": mouseover }
                 bind: legend
             encoding:
               x: { field: day, type: ordinal, timeUnit: monthdate }
