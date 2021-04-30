@@ -34,19 +34,24 @@ plugins:
       title: My Dashboard
       description: Showing some nice metrics
       layout:
-        - [events-day]
-        - [events-source]
+        - [note, events-count]
+        - [note, events-source]
       charts:
-        - alias: events-day
-          title: Number of events by day
+        - alias: note
+          library: markdown
+          display: |-
+            # Analysis notes
+            > A quick rundown of events statistics and KPIs
+
+        - alias: events-count
+          title: Total number of events
           db: jobs
-          query: SELECT date(date) as day, count(*) as count FROM events GROUP BY day ORDER BY day
-          library: vega
+          query: SELECT count(*) as count FROM events
+          library: metric
           display:
-            mark: { type: line, tooltip: true }
-            encoding:
-              x: { field: day, type: temporal }
-              y: { field: count, type: quantitative }
+            field: count
+            prefix:
+            suffix:
 
         - alias: events-source
           title: Number of events by source
