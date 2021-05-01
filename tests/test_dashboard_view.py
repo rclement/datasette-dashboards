@@ -1,8 +1,6 @@
 import copy
 import pytest
 
-from datasette.app import Datasette
-
 
 @pytest.mark.asyncio
 async def test_dashboard_views(datasette):
@@ -46,7 +44,7 @@ async def test_dashboard_view_layout(datasette):
             ["analysis-note", "offers-source", "offers-count"],
         ]
         datasette._metadata = metadata
-        response = await datasette.client.get(f"/-/dashboards/job-dashboard")
+        response = await datasette.client.get("/-/dashboards/job-dashboard")
         assert response.status_code == 200
 
         assert (
@@ -77,7 +75,7 @@ async def test_dashboard_view_unknown_chart_db(datasette):
             "db"
         ] = "unknown_db"
         datasette._metadata = metadata
-        response = await datasette.client.get(f"/-/dashboards/job-dashboard")
+        response = await datasette.client.get("/-/dashboards/job-dashboard")
         assert response.status_code == 404
     finally:
         datasette._metadata = original_metadata

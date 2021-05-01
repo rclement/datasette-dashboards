@@ -11,6 +11,7 @@ datasette-cluster-map = "*"
 datasette-dashboards = {editable = true, path = ".", extras = ["test"]}
 datasette-publish-vercel = "*"
 datasette-vega = "*"
+flake8 = "*"
 pytest-cov = "*"
 
 [requires]
