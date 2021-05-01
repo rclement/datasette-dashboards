@@ -4,20 +4,14 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
-datasette = "*"
-datasette-render-markdown = "*"
 
 [dev-packages]
 black = "~=20.8b1"
 datasette-cluster-map = "*"
-datasette-dashboards = {editable = true, path = "."}
+datasette-dashboards = {editable = true, path = ".", extras = ["test"]}
 datasette-publish-vercel = "*"
 datasette-vega = "*"
-faker = "*"
-pytest = "*"
-pytest-asyncio = "*"
 pytest-cov = "*"
-sqlite-utils = "*"
 
 [requires]
 python_version = "3.8"
