@@ -26,26 +26,28 @@ async def check_permission_execute_sql(request, datasette, database):
         raise Forbidden("execute-sql denied")
 
 
-async def dashboards(request, datasette):
+async def dashboard_list(request, datasette):
     await check_permission_instance(request, datasette)
     config = datasette.plugin_config("datasette-dashboards") or {}
     return Response.html(
         await datasette.render_template(
-            "dashboards.html",
+            "dashboard_list.html",
             {"dashboards": config},
         )
     )
 
 
-async def dashboards_slug(request, datasette):
+async def dashboard_view(request, datasette):
     await check_permission_instance(request, datasette)
 
     config = datasette.plugin_config("datasette-dashboards") or {}
     slug = urllib.parse.unquote(request.url_vars["slug"])
-    if slug not in config.keys():
+    try:
+        dashboard = config[slug]
+    except KeyError:
         raise NotFound(f"Dashboard not found: {slug}")
 
-    dbs = set([chart["db"] for chart in config[slug]["charts"] if "db" in chart])
+    dbs = set([chart["db"] for chart in dashboard["charts"] if "db" in chart])
     for db in dbs:
         try:
             database = datasette.get_database(db)
@@ -56,7 +58,7 @@ async def dashboards_slug(request, datasette):
     return Response.html(
         await datasette.render_template(
             "dashboard_view.html",
-            {"dashboards": config, "slug": slug},
+            {"dashboard": dashboard},
         )
     )
 
@@ -64,8 +66,8 @@ async def dashboards_slug(request, datasette):
 @hookimpl
 def register_routes():
     return (
-        ("^/-/dashboards$", dashboards),
-        ("^/-/dashboards/(?P<slug>.*)$", dashboards_slug),
+        ("^/-/dashboards$", dashboard_list),
+        ("^/-/dashboards/(?P<slug>.*)$", dashboard_view),
     )
 
 
