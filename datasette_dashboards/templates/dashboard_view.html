@@ -8,7 +8,7 @@
 {{ super() }}
 <link href="{{ urls.static_plugins('datasette_dashboards', 'dashboards.css') }}" rel="stylesheet"/>
 <style>
-  @media (min-width: 640px) {
+  @media (min-width: 800px) {
     .dashboard-grid {
       {% if dashboard.layout %}
       grid-template-areas: {% for row in dashboard.layout %}"{% for col in row %}{{ col }} {% endfor %}" {% endfor %};
