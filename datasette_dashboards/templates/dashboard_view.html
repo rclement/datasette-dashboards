@@ -16,9 +16,9 @@
     }
 
     {% if dashboard.layout %}
-    {% for chart in dashboard.charts %}
-    #card-{{ loop.index }} {
-      grid-area: {{ chart.alias }};
+    {% for chart_slug, chart in dashboard.charts.items() %}
+    #card-{{ chart_slug }} {
+      grid-area: {{ chart_slug }};
     }
     {% endfor %}
     {% endif %}
@@ -45,15 +45,15 @@
     </div>
 
     <div class="dashboard-grid">
-      {% for chart in dashboard.charts %}
-      <div id="card-{{ loop.index }}" class="dashboard-card">
+      {% for chart_slug, chart in dashboard.charts.items() %}
+      <div id="card-{{ chart_slug }}" class="dashboard-card">
         {% if chart.library != 'markdown' %}
         <div class="dashboard-card-title">
-          <p><a href="/{{ chart.db }}?sql={{ chart.query }}">{{ chart.title }}</a></p>
+          <p><a href="{{ urls.path('-/dashboards') }}/{{ slug }}/{{ chart_slug }}">{{ chart.title }}</a></p>
         </div>
         {% endif %}
 
-        <div id="chart-{{ loop.index }}" class="dashboard-card-chart">
+        <div id="chart-{{ chart_slug }}" class="dashboard-card-chart">
           {% if chart.library == 'markdown' %}
           {{ render_markdown(chart.display) }}
           {% endif %}
@@ -67,11 +67,11 @@
     <script src="https://cdn.jsdelivr.net/npm/vega-embed@6.17.0"></script>
     <script src="{{ urls.static_plugins('datasette_dashboards', 'dashboards.js') }}"></script>
     <script type="text/javascript">
-      {% for chart in dashboard.charts %}
+      {% for chart_slug, chart in dashboard.charts.items() %}
       {% if chart.library == 'vega' %}
-      renderVegaChart('#chart-{{ loop.index }}', JSON.parse('{{ chart|tojson }}'))
+      renderVegaChart('#chart-{{ chart_slug }}', JSON.parse('{{ chart|tojson }}'))
       {% elif chart.library == 'metric' %}
-      renderMetricChart('#chart-{{ loop.index }}', JSON.parse('{{ chart|tojson }}'))
+      renderMetricChart('#chart-{{ chart_slug }}', JSON.parse('{{ chart|tojson }}'))
       {% endif %}
       {% endfor %}
     </script>

@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+
+{% block title %}{{ chart.title }}{% endblock %}
+
+{% block extra_head %}
+{{ super() }}
+<link href="{{ urls.static_plugins('datasette_dashboards', 'dashboards.css') }}" rel="stylesheet"/>
+{% endblock %}
+
+{% block nav %}
+    <p class="crumbs">
+        <a href="{{ urls.instance() }}">home</a> /
+        <a href="{{ urls.path('-/dashboards') }}">dashboards</a> /
+        <a href="{{ urls.path('-/dashboards') }}/{{ slug }}">{{ dashboard.title }}</a>
+    </p>
+    {{ super() }}
+{% endblock %}
+
+{% block body_class %}index{% endblock %}
+
+{% block content %}
+    <div class="dashboard-header">
+      <div class="page-header" style="border-color: black">
+        <h1>{{ dashboard.title }}</h1>
+      </div>
+      {% if chart.title %}
+      <p>{{ chart.title }}</p>
+      {% endif %}
+    </div>
+
+    {% if chart.db and chart.query %}
+    <p><a class="not-underlined" title="{{ chart.query }}" href="{{ urls.database(chart.db) }}?{{ {'sql': chart.query}|urlencode|safe }}">&#x270e; <span class="underlined">View and edit SQL</span></a></p>
+    {% endif %}
+
+    <div id="chart" class="dashboard-card-chart">
+      {% if chart.library == 'markdown' %}
+      {{ render_markdown(chart.display) }}
+      {% endif %}
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/vega@5.20.2"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vega-lite@5.1.0"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vega-embed@6.17.0"></script>
+    <script src="{{ urls.static_plugins('datasette_dashboards', 'dashboards.js') }}"></script>
+    <script type="text/javascript">
+      {% if chart.library == 'vega' %}
+      renderVegaChart('#chart', JSON.parse('{{ chart|tojson }}'))
+      {% elif chart.library == 'metric' %}
+      renderMetricChart('#chart', JSON.parse('{{ chart|tojson }}'))
+      {% endif %}
+    </script>
+{% endblock %}

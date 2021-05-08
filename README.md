@@ -34,16 +34,16 @@ plugins:
       title: My Dashboard
       description: Showing some nice metrics
       layout:
-        - [note, events-count]
-        - [note, events-source]
+        - [analysis-note, events-count]
+        - [analysis-note, events-source]
       charts:
-        - alias: note
+        analysis-note:
           library: markdown
           display: |-
             # Analysis notes
             > A quick rundown of events statistics and KPIs
 
-        - alias: events-count
+        events-count:
           title: Total number of events
           db: jobs
           query: SELECT count(*) as count FROM events
@@ -53,7 +53,7 @@ plugins:
             prefix:
             suffix:
 
-        - alias: events-source
+        events-source:
           title: Number of events by source
           db: jobs
           query: SELECT source, count(*) as count FROM events GROUP BY source ORDER BY count DESC
@@ -81,7 +81,6 @@ Common chart properties for all chart types:
 
 | Property  | Type     | Description                                              |
 | --------- | -------- | -------------------------------------------------------- |
-| `alias`   | `string` | Chart identifier for layout (must not contain spaces)    |
 | `title`   | `string` | Chart title                                              |
 | `db`      | `string` | Database name against which to run the query             |
 | `query`   | `string` | SQL query to run and extract data from                   |
@@ -142,7 +141,7 @@ To make use of custom dashboard layout using [CSS Grid Layout](https://developer
 define the `layout` array property as a grid / matrix:
 
 - Each entry represents a row of charts
-- Each column is referring a chart `alias` property
+- Each column is referring a chart by its property name
 
 ## Development
 

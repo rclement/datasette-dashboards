@@ -47,7 +47,7 @@ async def dashboard_view(request, datasette):
     except KeyError:
         raise NotFound(f"Dashboard not found: {slug}")
 
-    dbs = set([chart["db"] for chart in dashboard["charts"] if "db" in chart])
+    dbs = set([chart["db"] for chart in dashboard["charts"].values() if "db" in chart])
     for db in dbs:
         try:
             database = datasette.get_database(db)
@@ -58,7 +58,41 @@ async def dashboard_view(request, datasette):
     return Response.html(
         await datasette.render_template(
             "dashboard_view.html",
-            {"dashboard": dashboard},
+            {"slug": slug, "dashboard": dashboard},
+        )
+    )
+
+
+async def dashboard_chart(request, datasette):
+    await check_permission_instance(request, datasette)
+
+    config = datasette.plugin_config("datasette-dashboards") or {}
+    slug = urllib.parse.unquote(request.url_vars["slug"])
+    chart_slug = urllib.parse.unquote(request.url_vars["chart_slug"])
+
+    try:
+        dashboard = config[slug]
+    except KeyError:
+        raise NotFound(f"Dashboard not found: {slug}")
+
+    try:
+        chart = dashboard["charts"][chart_slug]
+    except KeyError:
+        raise NotFound(f"Chart does not exist: {chart_slug}")
+
+    db = chart.get("db")
+    if db:
+        database = datasette.get_database(db)
+        await check_permission_execute_sql(request, datasette, database)
+
+    return Response.html(
+        await datasette.render_template(
+            "dashboard_chart.html",
+            {
+                "slug": slug,
+                "dashboard": dashboard,
+                "chart": chart,
+            },
         )
     )
 
@@ -67,7 +101,8 @@ async def dashboard_view(request, datasette):
 def register_routes():
     return (
         ("^/-/dashboards$", dashboard_list),
-        ("^/-/dashboards/(?P<slug>.*)$", dashboard_view),
+        ("^/-/dashboards/(?P<slug>[^/]+)$", dashboard_view),
+        ("^/-/dashboards/(?P<slug>[^/]+)/(?P<chart_slug>[^/]+)$", dashboard_chart),
     )
 
 

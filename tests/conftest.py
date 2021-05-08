@@ -35,9 +35,8 @@ def datasette_metadata():
                 "job-dashboard": {
                     "title": "Job dashboard",
                     "description": "Gathering metrics about jobs",
-                    "charts": [
-                        {
-                            "alias": "analysis-note",
+                    "charts": {
+                        "analysis-note": {
                             "library": "markdown",
                             "display": """
                                 # Analysis details
@@ -71,8 +70,7 @@ def datasette_metadata():
                                 ```
                             """,
                         },
-                        {
-                            "alias": "offers-count",
+                        "offers-count": {
                             "title": "Total number of offers",
                             "db": "test",
                             "query": "SELECT count(*) as count FROM offers_view;",
@@ -83,8 +81,7 @@ def datasette_metadata():
                                 "suffix": " offers",
                             },
                         },
-                        {
-                            "alias": "offers-day",
+                        "offers-day": {
                             "title": "Number of offers by day",
                             "db": "test",
                             "query": "SELECT date(date) as day, count(*) as count FROM jobs GROUP BY day ORDER BY day",
@@ -100,8 +97,7 @@ def datasette_metadata():
                                 },
                             },
                         },
-                        {
-                            "alias": "offers-source",
+                        "offers-source": {
                             "title": "Number of offers by source",
                             "db": "test",
                             "query": "SELECT source, count(*) as count FROM jobs GROUP BY source ORDER BY count DESC",
@@ -117,7 +113,7 @@ def datasette_metadata():
                                 },
                             },
                         },
-                    ],
+                    },
                 }
             }
         }

@@ -14,24 +14,24 @@ async def test_dashboard_views(datasette):
         assert "grid-template-areas" not in response.text
         assert "grid-area:" not in response.text
 
-        for index, chart in enumerate(dashboard["charts"]):
+        for chart_slug, chart in dashboard["charts"].items():
             assert (
-                f'<div id="chart-{index + 1}" class="dashboard-card-chart">'
+                f'<div id="chart-{chart_slug}" class="dashboard-card-chart">'
                 in response.text
             )
 
             if chart["library"] == "vega":
                 assert (
-                    f'<p><a href="/{chart["db"]}?sql={chart["query"]}">{chart["title"]}</a></p>'
+                    f'<p><a href="/-/dashboards/{slug}/{chart_slug}">{chart["title"]}</a></p>'
                     in response.text
                 )
-                assert f"renderVegaChart('#chart-{index + 1}', " in response.text
+                assert f"renderVegaChart('#chart-{chart_slug}', " in response.text
             elif chart["library"] == "metric":
                 assert (
-                    f'<p><a href="/{chart["db"]}?sql={chart["query"]}">{chart["title"]}</a></p>'
+                    f'<p><a href="/-/dashboards/{slug}/{chart_slug}">{chart["title"]}</a></p>'
                     in response.text
                 )
-                assert f"renderMetricChart('#chart-{index + 1}', " in response.text
+                assert f"renderMetricChart('#chart-{chart_slug}', " in response.text
 
 
 @pytest.mark.asyncio
@@ -71,9 +71,9 @@ async def test_dashboard_view_unknown_chart_db(datasette):
     original_metadata = datasette._metadata
     try:
         metadata = copy.deepcopy(datasette._metadata)
-        metadata["plugins"]["datasette-dashboards"]["job-dashboard"]["charts"][0][
-            "db"
-        ] = "unknown_db"
+        metadata["plugins"]["datasette-dashboards"]["job-dashboard"]["charts"][
+            "offers-count"
+        ]["db"] = "unknown_db"
         datasette._metadata = metadata
         response = await datasette.client.get("/-/dashboards/job-dashboard")
         assert response.status_code == 404

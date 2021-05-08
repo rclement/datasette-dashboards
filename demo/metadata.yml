@@ -12,7 +12,7 @@ plugins:
         - [analysis-note, offers-day, offers-day, offers-count]
         - [analysis-note, offers-source, offers-day-source, offers-region]
       charts:
-        - alias: analysis-note
+        analysis-note:
           library: markdown
           display: |-
             # Analysis details
@@ -45,7 +45,7 @@ plugins:
             ORDER BY day
             ```
 
-        - alias: offers-count
+        offers-count:
           title: Total number of offers
           db: jobs
           query: SELECT count(*) as count FROM offers_view;
@@ -55,7 +55,7 @@ plugins:
             prefix:
             suffix: " offers"
 
-        - alias: offers-day
+        offers-day:
           title: Number of offers by day
           db: jobs
           query: SELECT date(date) as day, count(*) as count FROM offers_view GROUP BY day ORDER BY day
@@ -66,7 +66,7 @@ plugins:
               x: { field: day, type: temporal }
               y: { field: count, type: quantitative }
 
-        - alias: offers-source
+        offers-source:
           title: Number of offers by source
           db: jobs
           query: SELECT source, count(*) as count FROM offers_view GROUP BY source ORDER BY count DESC
@@ -84,7 +84,7 @@ plugins:
                 condition: { param: highlight, value: 1 }
                 value: 0.2
 
-        - alias: offers-day-source
+        offers-day-source:
           title: Offers by day by source
           db: jobs
           query: SELECT date(date) as day, source, count(*) as count FROM offers_view GROUP BY day, source ORDER BY day
@@ -103,7 +103,7 @@ plugins:
                 condition: { param: highlight, value: 1 }
                 value: 0.2
 
-        - alias: offers-region
+        offers-region:
           title: Offers by region
           db: jobs
           query: SELECT region, count(*) as count FROM offers_view GROUP BY region ORDER BY count DESC
