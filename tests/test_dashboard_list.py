@@ -3,7 +3,7 @@ import pytest
 
 
 @pytest.mark.asyncio
-async def test_dashboards_index(datasette):
+async def test_dashboard_list_index(datasette):
     response = await datasette.client.get("/-/dashboards")
     assert response.status_code == 200
     assert "<h1>Dashboards</h1>" in response.text
@@ -17,7 +17,7 @@ async def test_dashboards_index(datasette):
 
 
 @pytest.mark.asyncio
-async def test_dashboards_index_empty(datasette):
+async def test_dashboard_list_index_empty(datasette):
     original_metadata = datasette._metadata
     try:
         metadata = copy.deepcopy(datasette._metadata)
@@ -46,7 +46,7 @@ async def test_dashboards_index_empty(datasette):
         ({"allow": {"id": "user"}}, True, 200),
     ],
 )
-async def test_dashboards_permissions(
+async def test_dashboard_list_permissions(
     datasette, metadata, authenticated, expected_status
 ):
     original_metadata = datasette._metadata
