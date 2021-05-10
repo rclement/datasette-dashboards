@@ -30,7 +30,7 @@ Define dashboards within `metadata.yml` / `metadata.json`:
 ```yaml
 plugins:
   datasette-dashboards:
-    my_dashboard:
+    my-dashboard:
       title: My Dashboard
       description: Showing some nice metrics
       layout:

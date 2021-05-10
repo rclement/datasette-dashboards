@@ -32,10 +32,12 @@
     <p><a class="not-underlined" title="{{ chart.query }}" href="{{ urls.database(chart.db) }}?{{ {'sql': chart.query}|urlencode|safe }}">&#x270e; <span class="underlined">View and edit SQL</span></a></p>
     {% endif %}
 
-    <div id="chart" class="chart-container">
-      {% if chart.library == 'markdown' %}
-      {{ render_markdown(chart.display) }}
-      {% endif %}
+    <div class="dashboard-card">
+      <div id="chart" class="chart-container">
+        {% if chart.library == 'markdown' %}
+        {{ render_markdown(chart.display) }}
+        {% endif %}
+      </div>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/vega@5.20.2"></script>

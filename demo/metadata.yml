@@ -5,7 +5,7 @@ description_html: |-
   Try it out at <a href="/-/dashboards">/-/dashboards</a>
 plugins:
   datasette-dashboards:
-    job_offers_stats:
+    job-offers-stats:
       title: Job offers statistics
       description: Gather metrics about job offers
       layout:
