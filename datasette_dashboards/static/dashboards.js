@@ -1,8 +1,9 @@
-function renderVegaChart(el, chart) {
+function renderVegaChart(el, chart, height_style = undefined) {
   const spec = {
     $schema: 'https://vega.github.io/schema/vega-lite/v5.json',
     description: chart.title,
     width: 'container',
+    height: height_style,
     view: {stroke: null},
     config: {
       background: '#00000000',

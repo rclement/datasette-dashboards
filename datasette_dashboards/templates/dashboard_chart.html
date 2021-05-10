@@ -19,7 +19,7 @@
 {% block body_class %}index{% endblock %}
 
 {% block content %}
-    <div class="dashboard-header">
+    <div class="chart-header">
       <div class="page-header" style="border-color: black">
         <h1>{{ dashboard.title }}</h1>
       </div>
@@ -32,7 +32,7 @@
     <p><a class="not-underlined" title="{{ chart.query }}" href="{{ urls.database(chart.db) }}?{{ {'sql': chart.query}|urlencode|safe }}">&#x270e; <span class="underlined">View and edit SQL</span></a></p>
     {% endif %}
 
-    <div id="chart" class="dashboard-card-chart">
+    <div id="chart" class="chart-container">
       {% if chart.library == 'markdown' %}
       {{ render_markdown(chart.display) }}
       {% endif %}
@@ -44,7 +44,7 @@
     <script src="{{ urls.static_plugins('datasette_dashboards', 'dashboards.js') }}"></script>
     <script type="text/javascript">
       {% if chart.library == 'vega' %}
-      renderVegaChart('#chart', JSON.parse('{{ chart|tojson }}'))
+      renderVegaChart('#chart', JSON.parse('{{ chart|tojson }}'), 'container')
       {% elif chart.library == 'metric' %}
       renderMetricChart('#chart', JSON.parse('{{ chart|tojson }}'))
       {% endif %}
