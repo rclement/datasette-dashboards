@@ -7,6 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 ### Fixed
 - Fix query URI encoding in AJAX calls
+- Fix Python packaging `setup.py`
 
 ## [0.1.4] - 2021-05-10
 ### Added
