@@ -18,7 +18,9 @@ setup(
     long_description_content_type="text/markdown",
     author="Romain Clement",
     url="https://github.com/rclement/datasette-dashboards",
-    project_urls={"Changelog": "https://github.com/rclement/datasette-dashboards/blob/master/CHANGELOG.md"},
+    project_urls={
+        "Changelog": "https://github.com/rclement/datasette-dashboards/blob/master/CHANGELOG.md"
+    },
     license="Apache License, Version 2.0",
     version=VERSION,
     packages=["datasette_dashboards"],
