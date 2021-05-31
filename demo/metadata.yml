@@ -22,11 +22,11 @@ plugins:
         date_start:
           name: Date Start
           type: date
-          default: 2021-01-01
+          default: '2021-01-01'
         date_end:
           name: Date End
           type: date
-          default: 2021-12-31
+          default: '2021-12-31'
         value:
           name: Some Value
           type: number
