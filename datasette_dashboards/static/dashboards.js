@@ -1,4 +1,4 @@
-function renderVegaChart(el, chart, height_style = undefined) {
+function renderVegaChart(el, chart, query_string, height_style = undefined) {
   const query = encodeURIComponent(chart.query)
   const spec = {
     $schema: 'https://vega.github.io/schema/vega-lite/v5.json',
@@ -16,7 +16,7 @@ function renderVegaChart(el, chart, height_style = undefined) {
       }
     },
     data: {
-      url: `/${chart.db}.csv?sql=${query}`,
+      url: `/${chart.db}.csv?sql=${query}&${query_string}`,
       format: {'type': 'csv'}
     },
     ...chart.display
@@ -25,9 +25,9 @@ function renderVegaChart(el, chart, height_style = undefined) {
   vegaEmbed(el, spec);
 }
 
-async function renderMetricChart(el, chart) {
+async function renderMetricChart(el, chart, query_string) {
   const query = encodeURIComponent(chart.query)
-  const results = await fetch(`/${chart.db}.json?sql=${query}&_shape=array`)
+  const results = await fetch(`/${chart.db}.json?sql=${query}&${query_string}&_shape=array`)
   const data = await results.json()
   const metric = data[0][chart.display.field]
 

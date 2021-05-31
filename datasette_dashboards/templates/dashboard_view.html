@@ -49,7 +49,7 @@
       <div id="card-{{ chart_slug }}" class="dashboard-card">
         {% if chart.library != 'markdown' %}
         <div class="dashboard-card-title">
-          <p><a href="{{ urls.path('-/dashboards') }}/{{ slug }}/{{ chart_slug }}">{{ chart.title }}</a></p>
+          <p><a href="{{ urls.path('-/dashboards') }}/{{ slug }}/{{ chart_slug }}{% if query_string|length > 0 %}?{{ query_string|safe }}{% endif %}">{{ chart.title }}</a></p>
         </div>
         {% endif %}
 
@@ -69,9 +69,9 @@
     <script type="text/javascript">
       {% for chart_slug, chart in dashboard.charts.items() %}
       {% if chart.library == 'vega' %}
-      renderVegaChart('#chart-{{ chart_slug }}', JSON.parse('{{ chart|tojson }}'))
+      renderVegaChart('#chart-{{ chart_slug }}', JSON.parse('{{ chart|tojson }}'), '{{ query_string|safe }}')
       {% elif chart.library == 'metric' %}
-      renderMetricChart('#chart-{{ chart_slug }}', JSON.parse('{{ chart|tojson }}'))
+      renderMetricChart('#chart-{{ chart_slug }}', JSON.parse('{{ chart|tojson }}'), '{{ query_string|safe }}')
       {% endif %}
       {% endfor %}
     </script>

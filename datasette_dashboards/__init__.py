@@ -1,6 +1,11 @@
+import re
 import urllib
 from datasette import hookimpl
 from datasette.utils.asgi import Forbidden, NotFound, Response
+
+
+sql_opt_pattern = re.compile(r"(?P<opt>\[\[[^\]]*\]\])")
+sql_var_pattern = re.compile(r"\:(?P<var>[a-zA-Z0-9_]+)")
 
 
 async def check_permission_instance(request, datasette):
@@ -24,6 +29,36 @@ async def check_permission_execute_sql(request, datasette, database):
         )
     ) is False:
         raise Forbidden("execute-sql denied")
+
+
+def get_dashboard_filters_keys(request, dashboard):
+    filters_keys = (dashboard.get("filters") or {}).keys()
+    return set(filters_keys) & set(request.args.keys())
+
+
+def generate_dashboard_filters_qs(request, opts_keys):
+    return urllib.parse.urlencode({key: request.args[key] for key in opts_keys})
+
+
+def fill_chart_query_options(chart, options_keys):
+    query = chart.get("query")
+    if query is None:
+        return
+
+    to_replace = []
+    for opt_match in re.finditer(sql_opt_pattern, query):
+        opt_group = opt_match.group("opt")
+        var_match = re.search(sql_var_pattern, opt_group)
+        var_group = var_match.group("var")
+        to_replace.append({"opt": opt_group, "keep": var_group in options_keys})
+
+    for r in to_replace:
+        if r["keep"]:
+            query = query.replace(r["opt"], r["opt"].strip("[[]]"))
+        else:
+            query = query.replace(r["opt"], "")
+
+    chart["query"] = query
 
 
 async def dashboard_list(request, datasette):
@@ -55,10 +90,20 @@ async def dashboard_view(request, datasette):
             raise NotFound(f"Database does not exist: {db}")
         await check_permission_execute_sql(request, datasette, database)
 
+    options_keys = get_dashboard_filters_keys(request, dashboard)
+    query_string = generate_dashboard_filters_qs(request, options_keys)
+
+    for chart in dashboard["charts"].values():
+        fill_chart_query_options(chart, options_keys)
+
     return Response.html(
         await datasette.render_template(
             "dashboard_view.html",
-            {"slug": slug, "dashboard": dashboard},
+            {
+                "slug": slug,
+                "query_string": query_string,
+                "dashboard": dashboard,
+            },
         )
     )
 
@@ -85,11 +130,16 @@ async def dashboard_chart(request, datasette):
         database = datasette.get_database(db)
         await check_permission_execute_sql(request, datasette, database)
 
+    options_keys = get_dashboard_filters_keys(request, dashboard)
+    query_string = generate_dashboard_filters_qs(request, options_keys)
+    fill_chart_query_options(chart, options_keys)
+
     return Response.html(
         await datasette.render_template(
             "dashboard_chart.html",
             {
                 "slug": slug,
+                "query_string": query_string,
                 "dashboard": dashboard,
                 "chart": chart,
             },

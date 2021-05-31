@@ -61,6 +61,18 @@ async def test_dashboard_view_layout(datasette):
 
 
 @pytest.mark.asyncio
+async def test_dashboard_view_parameters(datasette):
+    response = await datasette.client.get(
+        "/-/dashboards/job-dashboard?date_start=2021-01-01"
+    )
+    assert response.status_code == 200
+    assert (
+        "SELECT date(date) as day, count(*) as count FROM offers_view WHERE TRUE  AND date \\u003e= date(:date_start)   GROUP BY day ORDER BY day"
+        in response.text
+    )
+
+
+@pytest.mark.asyncio
 async def test_dashboard_view_unknown(datasette):
     response = await datasette.client.get("/-/dashboards/unknown-dashboard")
     assert response.status_code == 404

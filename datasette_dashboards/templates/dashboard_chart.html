@@ -29,7 +29,11 @@
     </div>
 
     {% if chart.db and chart.query %}
-    <p><a class="not-underlined" title="{{ chart.query }}" href="{{ urls.database(chart.db) }}?{{ {'sql': chart.query}|urlencode|safe }}">&#x270e; <span class="underlined">View and edit SQL</span></a></p>
+    <p>
+      <a class="not-underlined" title="{{ chart.query }}" href="{{ urls.database(chart.db) }}?{{ {'sql': chart.query}|urlencode|safe }}{% if query_string|length > 0 %}&{{ query_string|safe }}{% endif %}">
+        &#x270e; <span class="underlined">View and edit SQL</span>
+      </a>
+    </p>
     {% endif %}
 
     <div class="dashboard-card">
@@ -46,9 +50,9 @@
     <script src="{{ urls.static_plugins('datasette_dashboards', 'dashboards.js') }}"></script>
     <script type="text/javascript">
       {% if chart.library == 'vega' %}
-      renderVegaChart('#chart', JSON.parse('{{ chart|tojson }}'), 'container')
+      renderVegaChart('#chart', JSON.parse('{{ chart|tojson }}'), '{{ query_string|safe }}', 'container')
       {% elif chart.library == 'metric' %}
-      renderMetricChart('#chart', JSON.parse('{{ chart|tojson }}'))
+      renderMetricChart('#chart', JSON.parse('{{ chart|tojson }}'), '{{ query_string|safe }}')
       {% endif %}
     </script>
 {% endblock %}

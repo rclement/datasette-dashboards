@@ -35,6 +35,18 @@ def datasette_metadata():
                 "job-dashboard": {
                     "title": "Job dashboard",
                     "description": "Gathering metrics about jobs",
+                    "filters": {
+                        "date_start": {
+                            "name": "Date Start",
+                            "type": "date",
+                            "default": "2021-01-01",
+                        },
+                        "date_end": {
+                            "name": "Date End",
+                            "type": "date",
+                            "default": "2021-12-31",
+                        },
+                    },
                     "charts": {
                         "analysis-note": {
                             "library": "markdown",
@@ -84,7 +96,7 @@ def datasette_metadata():
                         "offers-day": {
                             "title": "Number of offers by day",
                             "db": "test",
-                            "query": "SELECT date(date) as day, count(*) as count FROM jobs GROUP BY day ORDER BY day",
+                            "query": "SELECT date(date) as day, count(*) as count FROM offers_view WHERE TRUE [[ AND date >= date(:date_start) ]] [[ AND date <= date(:date_end) ]] GROUP BY day ORDER BY day",
                             "library": "vega",
                             "display": {
                                 "mark": {
