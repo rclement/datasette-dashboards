@@ -13,12 +13,6 @@ plugins:
         - [analysis-note, offers-day, offers-day, offers-count]
         - [analysis-note, offers-source, offers-day-source, offers-region]
       filters:
-        title:
-          name: Title
-          type: search
-        source:
-          name: Source
-          type: category
         date_start:
           name: Date Start
           type: date
@@ -26,19 +20,6 @@ plugins:
         date_end:
           name: Date End
           type: date
-          default: '2021-12-31'
-        value:
-          name: Some Value
-          type: number
-          min:  0
-          max: 10
-          default: 5
-        threshold:
-          name: Threshold
-          type: range
-          min: 1
-          max: 1000
-          step: 10
       charts:
         analysis-note:
           library: markdown

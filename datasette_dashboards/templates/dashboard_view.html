@@ -44,6 +44,23 @@
       <p>{{ dashboard.description }}</p>
     </div>
 
+    {% if dashboard.filters %}
+    {{ request }}
+    <details class="dashboard-filters">
+      <summary>Filters</summary>
+
+      <form method="GET">
+        {% for key, dfilter in dashboard.filters.items() %}
+        <p>
+          <label for="{{ key }}">{{ dfilter.name }}</label>
+          <input id="{{ key }}" name="{{ key }}" type="{{ dfilter.type }}"{% if dfilter.min is defined %} min="{{ dfilter.min }}"{% endif %}{% if dfilter.max is defined %} max="{{ dfilter.max }}"{% endif %}{% if dfilter.step is defined %} step="{{ dfilter.step }}"{% endif %} value="{% if key in query_parameters.keys() %}{{ query_parameters[key] }}{% else %}{{ dfilter.default }}{% endif %}">
+        </p>
+        {% endfor %}
+        <input type="submit" value="Apply">
+      </form>
+    </details>
+    {% endif %}
+
     <div class="dashboard-grid">
       {% for chart_slug, chart in dashboard.charts.items() %}
       <div id="card-{{ chart_slug }}" class="dashboard-card">

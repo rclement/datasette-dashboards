@@ -36,6 +36,10 @@ def get_dashboard_filters_keys(request, dashboard):
     return set(filters_keys) & set(request.args.keys())
 
 
+def get_dashboard_filters(request, opts_keys):
+    return {key: request.args[key] for key in opts_keys}
+
+
 def generate_dashboard_filters_qs(request, opts_keys):
     return urllib.parse.urlencode({key: request.args[key] for key in opts_keys})
 
@@ -91,6 +95,7 @@ async def dashboard_view(request, datasette):
         await check_permission_execute_sql(request, datasette, database)
 
     options_keys = get_dashboard_filters_keys(request, dashboard)
+    query_parameters = get_dashboard_filters(request, options_keys)
     query_string = generate_dashboard_filters_qs(request, options_keys)
 
     for chart in dashboard["charts"].values():
@@ -101,6 +106,7 @@ async def dashboard_view(request, datasette):
             "dashboard_view.html",
             {
                 "slug": slug,
+                "query_parameters": query_parameters,
                 "query_string": query_string,
                 "dashboard": dashboard,
             },

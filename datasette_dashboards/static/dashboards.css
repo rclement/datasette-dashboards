@@ -1,3 +1,7 @@
+.dashboard-filters {
+  margin-bottom: 1rem;
+}
+
 .dashboard-grid {
   display: grid;
   grid-auto-columns: minmax(100px, 1fr);

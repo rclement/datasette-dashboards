@@ -36,6 +36,14 @@ plugins:
       layout:
         - [analysis-note, events-count]
         - [analysis-note, events-source]
+      filters:
+        date_start:
+          name: Date Start
+          type: date
+          default: "2021-01-01"
+        date_end:
+          name: Date End
+          type: date
       charts:
         analysis-note:
           library: markdown
@@ -56,7 +64,7 @@ plugins:
         events-source:
           title: Number of events by source
           db: jobs
-          query: SELECT source, count(*) as count FROM events GROUP BY source ORDER BY count DESC
+          query: SELECT source, count(*) as count FROM events WHERE TRUE [[ AND date >= date(:date_start) ]] [[ AND date <= date(:date_end) ]] GROUP BY source ORDER BY count DESC
           library: vega
           display:
             mark: { type: bar, tooltip: true }
@@ -76,6 +84,18 @@ Dashboard properties:
 | `title`       | `string` | Dashboard title       |
 | `description` | `string` | Dashboard description |
 | `layout`      | `array`  | Dashboard layout      |
+| `filters`     | `object` | Dashboard filters     |
+
+Dashboard filters:
+
+| Property  | Type               | Description                                  |
+| --------- | ------------------ | -------------------------------------------- |
+| `name`    | `string`           | Filter display name                          |
+| `type`    | `string`           | Filter type (mapped to HTML form input type) |
+| `default` | `string`, `number` | (optional) Filter default value              |
+| `min`     | `number`           | (optional) Filter minimum value              |
+| `max`     | `number`           | (optional) Filter maximum value              |
+| `step`    | `number`           | (optional) Filter stepping value             |
 
 Common chart properties for all chart types:
 
@@ -86,6 +106,16 @@ Common chart properties for all chart types:
 | `query`   | `string` | SQL query to run and extract data from                   |
 | `library` | `string` | One of supported libraries: `vega`, `markdown`           |
 | `display` | `object` | Chart display specification (depend on the used library) |
+
+To define SQL queries using dashboard filters:
+
+```sql
+SELECT * FROM mytable [[ WHERE col >= :my_filter ]]
+```
+
+```sql
+SELECT * FROM mytable WHERE TRUE [[ AND col1 = :my_filter_1 ]] [[ AND col2 = :my_filter_2 ]]
+```
 
 #### Vega properties
 

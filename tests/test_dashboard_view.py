@@ -14,6 +14,13 @@ async def test_dashboard_views(datasette):
         assert "grid-template-areas" not in response.text
         assert "grid-area:" not in response.text
 
+        assert '<details class="dashboard-filters">' in response.text
+        for key, flt in dashboard["filters"].items():
+            assert f'<label for="{key}">{flt["name"]}</label>' in response.text
+            assert (
+                f'<input id="{key}" name="{key}" type="{flt["type"]}"' in response.text
+            )
+
         for chart_slug, chart in dashboard["charts"].items():
             assert (
                 f'<div id="chart-{chart_slug}" class="dashboard-card-chart">'
@@ -66,6 +73,18 @@ async def test_dashboard_view_parameters(datasette):
         "/-/dashboards/job-dashboard?date_start=2021-01-01"
     )
     assert response.status_code == 200
+
+    assert '<details class="dashboard-filters">' in response.text
+    assert '<label for="date_start">Date Start</label>' in response.text
+    assert (
+        '<input id="date_start" name="date_start" type="date" value="2021-01-01">'
+        in response.text
+    )
+    assert (
+        '<input id="date_end" name="date_end" type="date" value="2021-12-31">'
+        in response.text
+    )
+
     assert (
         "SELECT date(date) as day, count(*) as count FROM offers_view WHERE TRUE  AND date \\u003e= date(:date_start)   GROUP BY day ORDER BY day"
         in response.text
