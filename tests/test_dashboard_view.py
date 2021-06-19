@@ -16,9 +16,13 @@ async def test_dashboard_views(datasette):
 
         assert '<details class="dashboard-filters">' in response.text
         for key, flt in dashboard["filters"].items():
+            expected_type = (
+                flt["type"] if flt["type"] in ["text", "date", "number"] else "text"
+            )
             assert f'<label for="{key}">{flt["name"]}</label>' in response.text
             assert (
-                f'<input id="{key}" name="{key}" type="{flt["type"]}"' in response.text
+                f'<input id="{key}" name="{key}" type="{expected_type}"'
+                in response.text
             )
 
         for chart_slug, chart in dashboard["charts"].items():

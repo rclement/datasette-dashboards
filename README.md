@@ -88,14 +88,14 @@ Dashboard properties:
 
 Dashboard filters:
 
-| Property  | Type               | Description                                  |
-| --------- | ------------------ | -------------------------------------------- |
-| `name`    | `string`           | Filter display name                          |
-| `type`    | `string`           | Filter type (mapped to HTML form input type) |
-| `default` | `string`, `number` | (optional) Filter default value              |
-| `min`     | `number`           | (optional) Filter minimum value              |
-| `max`     | `number`           | (optional) Filter maximum value              |
-| `step`    | `number`           | (optional) Filter stepping value             |
+| Property  | Type               | Description                            |
+| --------- | ------------------ | -------------------------------------- |
+| `name`    | `string`           | Filter display name                    |
+| `type`    | `string`           | Filter type (`text`, `date`, `number`) |
+| `default` | `string`, `number` | (optional) Filter default value        |
+| `min`     | `number`           | (optional) Filter minimum value        |
+| `max`     | `number`           | (optional) Filter maximum value        |
+| `step`    | `number`           | (optional) Filter stepping value       |
 
 Common chart properties for all chart types:
 

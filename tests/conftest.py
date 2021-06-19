@@ -46,6 +46,21 @@ def datasette_metadata():
                             "type": "date",
                             "default": "2021-12-31",
                         },
+                        "text_filter": {
+                            "name": "Text Filter",
+                            "type": "text",
+                        },
+                        "number_filter": {
+                            "name": "Number Filter",
+                            "type": "number",
+                            "min": 12,
+                            "max": 42,
+                            "step": 2,
+                        },
+                        "unknown_filter": {
+                            "name": "Unknown Filter",
+                            "type": "unknown",
+                        },
                     },
                     "charts": {
                         "analysis-note": {
