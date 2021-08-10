@@ -1,6 +1,8 @@
 import copy
 import pytest
 
+from datasette.app import Datasette
+
 
 @pytest.mark.asyncio
 async def test_dashboard_list_index(datasette):
@@ -17,18 +19,14 @@ async def test_dashboard_list_index(datasette):
 
 
 @pytest.mark.asyncio
-async def test_dashboard_list_index_empty(datasette):
-    original_metadata = datasette._metadata
-    try:
-        metadata = copy.deepcopy(datasette._metadata)
-        del metadata["plugins"]
-        datasette._metadata = metadata
-        response = await datasette.client.get("/-/dashboards")
-        assert response.status_code == 200
-        assert "<h1>Dashboards</h1>" in response.text
-        assert "<p>No dashboards found</p>" in response.text
-    finally:
-        datasette._metadata = original_metadata
+async def test_dashboard_list_index_empty(datasette_db, datasette_metadata):
+    metadata = copy.deepcopy(datasette_metadata)
+    del metadata["plugins"]
+    datasette = Datasette([str(datasette_db)], metadata=metadata)
+    response = await datasette.client.get("/-/dashboards")
+    assert response.status_code == 200
+    assert "<h1>Dashboards</h1>" in response.text
+    assert "<p>No dashboards found</p>" in response.text
 
 
 @pytest.mark.asyncio
@@ -47,15 +45,15 @@ async def test_dashboard_list_index_empty(datasette):
     ],
 )
 async def test_dashboard_list_permissions(
-    datasette, metadata, authenticated, expected_status
+    datasette_db, datasette_metadata, metadata, authenticated, expected_status
 ):
-    original_metadata = datasette._metadata
-    try:
-        datasette._metadata = {**datasette._metadata, **metadata}
-        cookies = {}
-        if authenticated:
-            cookies["ds_actor"] = datasette.sign({"a": {"id": "user"}}, "actor")
-        response = await datasette.client.get("/-/dashboards", cookies=cookies)
-        assert response.status_code == expected_status
-    finally:
-        datasette._metadata = original_metadata
+    datasette = Datasette(
+        [str(datasette_db)], metadata={**datasette_metadata, **metadata}
+    )
+
+    cookies = {}
+    if authenticated:
+        cookies["ds_actor"] = datasette.sign({"a": {"id": "user"}}, "actor")
+
+    response = await datasette.client.get("/-/dashboards", cookies=cookies)
+    assert response.status_code == expected_status
