@@ -1,0 +1,7 @@
+{
+  "extends": ["config:base", ":preserveSemverRanges"],
+  "rangeStrategy": "bump",
+  "labels": ["dependencies"],
+  "assignees": ["rclement"],
+  "reviewers": ["rclement"]
+}
