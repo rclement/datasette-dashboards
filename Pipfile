@@ -6,16 +6,13 @@ name = "pypi"
 [packages]
 
 [dev-packages]
-black = "~=20.8b1"
-datasette-cluster-map = "*"
+black = "==21.7b0"
+datasette-cluster-map = "~=0.17.1"
 datasette-dashboards = {editable = true, path = ".", extras = ["test"]}
-datasette-publish-vercel = "*"
-datasette-vega = "*"
-flake8 = "*"
-pytest-cov = "*"
+datasette-publish-vercel = "~=0.10"
+datasette-vega = "~=0.6.2"
+flake8 = "~=3.9.2"
+pytest-cov = "~=2.12.1"
 
 [requires]
-python_version = "3.8"
-
-[pipenv]
-allow_prereleases = true
+python_version = "3.9"
