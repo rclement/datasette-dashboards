@@ -3,7 +3,7 @@ name: Test
 on:
   push:
     branches:
-      - '**'
+      - "**"
 
 jobs:
   test:
@@ -35,3 +35,9 @@ jobs:
       - name: Run tests
         run: |
           pipenv run pytest -v --cov=datasette_dashboards --cov=tests --cov-branch --cov-report=term-missing tests
+          pipenv run coverage xml
+      - name: Publish code coverage to Codecov
+        uses: codecov/codecov-action@v2
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          file: ./coverage.xml
