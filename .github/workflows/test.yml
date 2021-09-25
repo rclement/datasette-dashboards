@@ -31,6 +31,7 @@ jobs:
           pipenv install --dev --deploy
       - name: Run linting
         run: |
+          pipenv run black --check datasette_dashboards tests
           pipenv run flake8 datasette_dashboards tests
       - name: Run tests
         run: |
