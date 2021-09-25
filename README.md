@@ -3,8 +3,7 @@
 > Datasette plugin providing data dashboards from metadata
 
 [![PyPI](https://img.shields.io/pypi/v/datasette-dashboards.svg)](https://pypi.org/project/datasette-dashboards/)
-[![Test](https://github.com/rclement/datasette-dashboards/actions/workflows/test.yml/badge.svg)](https://github.com/rclement/datasette-dashboards/actions/workflows/test.yml)
-[![Demo](https://github.com/rclement/datasette-dashboards/actions/workflows/demo.yml/badge.svg)](https://github.com/rclement/datasette-dashboards/actions/workflows/demo.yml)
+[![CI/CD](https://github.com/rclement/datasette-dashboards/actions/workflows/ci-cd.yml/badge.svg)](https://github.com/rclement/datasette-dashboards/actions/workflows/ci-cd.yml)
 [![Coverage Status](https://img.shields.io/codecov/c/github/rclement/datasette-dashboards)](https://codecov.io/gh/rclement/datasette-dashboards)
 [![License](https://img.shields.io/github/license/rclement/datasette-dashboards)](https://github.com/rclement/datasette-dashboards/blob/master/LICENSE)
 
