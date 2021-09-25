@@ -1,5 +1,9 @@
 {
-  "extends": ["config:base", ":preserveSemverRanges"],
+  "extends": [
+    "config:base",
+    ":preserveSemverRanges",
+    ":disableDependencyDashboard"
+  ],
   "rangeStrategy": "bump",
   "labels": ["dependencies"],
   "assignees": ["rclement"],
