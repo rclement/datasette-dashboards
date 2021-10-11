@@ -11,5 +11,5 @@ datasette-cluster-map = "~=0.17.1"
 datasette-dashboards = {editable = true, path = ".", extras = ["test"]}
 datasette-publish-vercel = "~=0.10"
 datasette-vega = "~=0.6.2"
-flake8 = "~=3.9.2"
+flake8 = "~=4.0.1"
 pytest-cov = "~=3.0.0"
