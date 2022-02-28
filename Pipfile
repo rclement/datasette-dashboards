@@ -6,7 +6,7 @@ name = "pypi"
 [packages]
 
 [dev-packages]
-black = "==21.9b0"
+black = "==22.1.0"
 datasette-cluster-map = "~=0.17.1"
 datasette-dashboards = {editable = true, path = ".", extras = ["test"]}
 datasette-publish-vercel = "~=0.10"
