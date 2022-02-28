@@ -7,7 +7,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 ### Added
 - Renovatebot configuration
-- Support for Python 3.10
 
 ### Changed
 - Pin dev dependencies in Pipfile
