@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Renovatebot configuration
 
 ### Changed
+- Mention the metric library in README.md (thanks @hydrosquall) (PR #20)
 - Pin dev dependencies in Pipfile
 - Update dependencies
 
