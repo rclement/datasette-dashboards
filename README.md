@@ -104,7 +104,7 @@ Common chart properties for all chart types:
 | `title`   | `string` | Chart title                                              |
 | `db`      | `string` | Database name against which to run the query             |
 | `query`   | `string` | SQL query to run and extract data from                   |
-| `library` | `string` | One of supported libraries: `vega`, `markdown`           |
+| `library` | `string` | One of supported libraries: `vega`, `markdown`, `metric` |
 | `display` | `object` | Chart display specification (depend on the used library) |
 
 To define SQL queries using dashboard filters:
