@@ -10,7 +10,7 @@ black = "==22.3.0"
 datasette-block-robots = "==1.0"
 datasette-cluster-map = "==0.17.2"
 datasette-dashboards = {editable = true, path = ".", extras = ["test"]}
-datasette-publish-vercel = "==0.12"
+datasette-publish-vercel = "==0.13"
 datasette-vega = "==0.6.2"
 flake8 = "==4.0.1"
 pytest-cov = "==3.0.0"

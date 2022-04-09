@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "679f5c0e9b92f882ec569acda7a805aabe7e8708378dc532500352eb48c4c1b1"
+            "sha256": "cb437726635ce241b6987265694d3f0c1540b7ca1e8bdaba083e4f5190fa2511"
         },
         "pipfile-spec": 6,
         "requires": {},
@@ -103,7 +103,7 @@
                 "sha256:2857e29ff0d34db842cd7ca3230549d1a697f96ee6d3fb071cfa6c7393832597",
                 "sha256:6881edbebdb17b39b4eaaa821b438bf6eddffb4468cf344f09f89def34a8b1df"
             ],
-            "markers": "python_version >= '3.5'",
+            "markers": "python_full_version >= '3.5.0'",
             "version": "==2.0.12"
         },
         "click": {
@@ -211,11 +211,11 @@
         },
         "datasette-publish-vercel": {
             "hashes": [
-                "sha256:a4535aed81f22b9931aacdec480c51fde14a05edb8b4a2dcfbc407ca9d802055",
-                "sha256:b97a570680bedf469b3a9a83a1ea3f22a3b72325bc22116eeedc8266538a5063"
+                "sha256:3e8825729d4d5288a4414ffa9629655638a87a99c545755b4410e92977f0d04f",
+                "sha256:7dc77424b68bb761364b202e55397b00e3863044719f7eb4a5f41d1fa2a5c4bd"
             ],
             "index": "pypi",
-            "version": "==0.12"
+            "version": "==0.13"
         },
         "datasette-render-markdown": {
             "hashes": [
@@ -284,7 +284,7 @@
                 "sha256:84d9dd047ffa80596e0f246e2eab0b391788b0503584e8945f2368256d2735ff",
                 "sha256:9d643ff0a55b762d5cdb124b8eaa99c66322e2157b69160bc32796e824360e6d"
             ],
-            "markers": "python_version >= '3.5'",
+            "markers": "python_full_version >= '3.5.0'",
             "version": "==3.3"
         },
         "importlib-metadata": {
@@ -579,7 +579,7 @@
                 "sha256:471b71698eac1c2112a40ce2752bb2f4a4814c22a54a3eed3676bc0f5ca9f663",
                 "sha256:c4666eecec1d3f50960c6bdf61ab7bc350648da6c126e3cf6898d8cd4ddcd3de"
             ],
-            "markers": "python_version >= '3.5'",
+            "markers": "python_full_version >= '3.5.0'",
             "version": "==1.2.0"
         },
         "sqlite-fts4": {
