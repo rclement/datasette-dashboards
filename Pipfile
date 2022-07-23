@@ -10,7 +10,7 @@ black = "==22.6.0"
 datasette-block-robots = "==1.0"
 datasette-cluster-map = "==0.17.2"
 datasette-dashboards = {editable = true, path = ".", extras = ["test"]}
-datasette-publish-vercel = "==0.14"
+datasette-publish-vercel = "==0.14.1"
 datasette-vega = "==0.6.2"
 flake8 = "==4.0.1"
 importlib-metadata = "==4.12.0"
