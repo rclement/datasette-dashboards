@@ -12,7 +12,7 @@ datasette-cluster-map = "==0.17.2"
 datasette-dashboards = {editable = true, path = ".", extras = ["test"]}
 datasette-publish-vercel = "==0.14.2"
 datasette-vega = "==0.6.2"
-exceptiongroup = {version = "==1.0.4", markers = "python_version < '3.11'"}
+exceptiongroup = {version = "==1.1.0", markers = "python_version < '3.11'"}
 flake8 = "==6.0.0"
 importlib-metadata = "==5.2.0"
 pytest-cov = "==4.0.0"
