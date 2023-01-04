@@ -92,7 +92,7 @@ async def dashboard_view(request, datasette):
             database = datasette.get_database(db)
         except KeyError:
             raise NotFound(f"Database does not exist: {db}")
-        await check_permission_execute_sql(request, datasette, database)
+        await check_permission_execute_sql(request, datasette, database.name)
 
     options_keys = get_dashboard_filters_keys(request, dashboard)
     query_parameters = get_dashboard_filters(request, options_keys)
@@ -134,7 +134,7 @@ async def dashboard_chart(request, datasette):
     db = chart.get("db")
     if db:
         database = datasette.get_database(db)
-        await check_permission_execute_sql(request, datasette, database)
+        await check_permission_execute_sql(request, datasette, database.name)
 
     options_keys = get_dashboard_filters_keys(request, dashboard)
     query_string = generate_dashboard_filters_qs(request, options_keys)
