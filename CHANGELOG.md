@@ -6,6 +6,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+- Pass database as string to execute sql permission check (thanks @badboy) (PR #47)
+
 ## [0.2.1] - 2022-12-22
 ### Added
 - Support for Python 3.11
