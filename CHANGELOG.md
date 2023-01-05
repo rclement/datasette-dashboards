@@ -6,8 +6,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.2.2] - 2023-01-05
 ### Fixed
 - Pass database as string to execute sql permission check (thanks @badboy) (PR #47)
+
+### Changed
+- Update dependencies
 
 ## [0.2.1] - 2022-12-22
 ### Added
@@ -78,7 +82,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - Initial release of `datasette-dashboards`
 
-[Unreleased]: https://github.com/rclement/datasette-dashboards/compare/0.2.1...HEAD
+[Unreleased]: https://github.com/rclement/datasette-dashboards/compare/0.2.2...HEAD
+[0.2.2]: https://github.com/rclement/datasette-dashboards/compare/0.2.1...0.2.2
 [0.2.1]: https://github.com/rclement/datasette-dashboards/compare/0.2.0...0.2.1
 [0.2.0]: https://github.com/rclement/datasette-dashboards/compare/0.1.6...0.2.0
 [0.1.6]: https://github.com/rclement/datasette-dashboards/compare/0.1.5...0.1.6
