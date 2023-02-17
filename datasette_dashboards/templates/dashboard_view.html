@@ -50,10 +50,19 @@
 
       <form method="GET">
         {% for key, dfilter in dashboard.filters.items() %}
-        {% set dfilter_type = dfilter.type if dfilter.type in ['text', 'date', 'number'] else 'text' %}
+        {% set dfilter_type = dfilter.type if dfilter.type in ['text', 'date', 'number', 'select'] else 'text' %}
         <p>
           <label for="{{ key }}">{{ dfilter.name }}</label>
+          {% if dfilter_type == 'select' %}
+          <select id="{{ key }}" name="{{ key }}">
+            <option value="-----"></option>
+            {% for option in dfilter.options %}
+            <option value="{{ option.value }}" {% if key in query_parameters.keys() and query_parameters[key] == option.value %}selected{% endif %}>{{ option.name }}</option>
+            {% endfor %}
+          </select>
+          {% else %}
           <input id="{{ key }}" name="{{ key }}" type="{{ dfilter_type }}"{% if dfilter.min is defined %} min="{{ dfilter.min }}"{% endif %}{% if dfilter.max is defined %} max="{{ dfilter.max }}"{% endif %}{% if dfilter.step is defined %} step="{{ dfilter.step }}"{% endif %} value="{% if key in query_parameters.keys() %}{{ query_parameters[key] }}{% else %}{{ dfilter.default }}{% endif %}">
+          {% endif %}
         </p>
         {% endfor %}
         <input type="submit" value="Apply">
