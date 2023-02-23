@@ -26,7 +26,7 @@ async def test_dashboard_views(datasette):
             assert f'<label for="{key}">{flt["name"]}</label>' in response.text
             if flt["type"] == "select":
                 assert f'<select id="{key}" name="{key}">' in response.text
-                assert '<option value="-----"></option>' in response.text
+                assert '<option value=""></option>' in response.text
                 for option in flt["options"]:
                     assert f'<option value="{option}">'
                     assert f"{option}</option>"
@@ -99,6 +99,28 @@ async def test_dashboard_view_parameters(datasette):
 
     assert (
         "SELECT date(date) as day, count(*) as count FROM offers_view WHERE TRUE  AND date \\u003e= date(:date_start)   GROUP BY day ORDER BY day"
+        in response.text
+    )
+
+
+@pytest.mark.asyncio
+async def test_dashboard_view_parameters_empty(datasette):
+    response = await datasette.client.get("/-/dashboards/job-dashboard?date_start=")
+    assert response.status_code == 200
+
+    assert '<details class="dashboard-filters">' in response.text
+    assert '<label for="date_start">Date Start</label>' in response.text
+    assert (
+        '<input id="date_start" name="date_start" type="date" value="">'
+        in response.text
+    )
+    assert (
+        '<input id="date_end" name="date_end" type="date" value="2021-12-31">'
+        in response.text
+    )
+
+    assert (
+        "SELECT date(date) as day, count(*) as count FROM offers_view WHERE TRUE   GROUP BY day ORDER BY day"
         in response.text
     )
 
