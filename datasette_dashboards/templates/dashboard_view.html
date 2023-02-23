@@ -57,7 +57,7 @@
           <select id="{{ key }}" name="{{ key }}">
             <option value="-----"></option>
             {% for option in dfilter.options %}
-            <option value="{{ option.value }}" {% if key in query_parameters.keys() and query_parameters[key] == option.value %}selected{% endif %}>{{ option.name }}</option>
+            <option value="{{ option }}" {% if key in query_parameters.keys() and query_parameters[key] == option %}selected{% endif %}>{{ option }}</option>
             {% endfor %}
           </select>
           {% else %}
