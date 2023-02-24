@@ -26,7 +26,7 @@ async def test_dashboard_views(datasette):
             assert f'<label for="{key}">{flt["name"]}</label>' in response.text
             if flt["type"] == "select":
                 assert f'<select id="{key}" name="{key}">' in response.text
-                assert '<option value=""></option>' in response.text
+                assert '<option value="" selected></option>' in response.text
                 for option in flt["options"]:
                     assert f'<option value="{option}">'
                     assert f"{option}</option>"

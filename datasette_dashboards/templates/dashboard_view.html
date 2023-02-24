@@ -55,9 +55,9 @@
           <label for="{{ key }}">{{ dfilter.name }}</label>
           {% if dfilter_type == 'select' %}
           <select id="{{ key }}" name="{{ key }}">
-            <option value=""></option>
+            <option value="" {% if (key in query_parameters.keys() and query_parameters[key] == '') or  (key not in query_parameters.keys() and not dfilter.default) %}selected{% endif %}></option>
             {% for option in dfilter.options %}
-            <option value="{{ option }}" {% if key in query_parameters.keys() and query_parameters[key] == option %}selected{% endif %}>{{ option }}</option>
+            <option value="{{ option }}" {% if (key in query_parameters.keys() and query_parameters[key] == option) or (key not in query_parameters.keys() and dfilter.default == option) %}selected{% endif %}>{{ option }}</option>
             {% endfor %}
           </select>
           {% else %}
