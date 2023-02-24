@@ -20,6 +20,10 @@ plugins:
         date_end:
           name: Date End
           type: date
+        source:
+          name: Source
+          type: select
+          options: [Apec, RegionsJob, Indeed]
       charts:
         analysis-note:
           library: markdown
@@ -57,7 +61,7 @@ plugins:
         offers-count:
           title: Total number of offers
           db: jobs
-          query: SELECT count(*) as count FROM offers_view WHERE TRUE [[ AND date >= date(:date_start) ]] [[ AND date <= date(:date_end) ]];
+          query: SELECT count(*) as count FROM offers_view WHERE TRUE [[ AND date >= date(:date_start) ]] [[ AND date <= date(:date_end) ]] [[ AND source = :source ]];
           library: metric
           display:
             field: count
@@ -67,7 +71,7 @@ plugins:
         offers-day:
           title: Number of offers by day
           db: jobs
-          query: SELECT date(date) as day, count(*) as count FROM offers_view WHERE TRUE [[ AND date >= date(:date_start) ]] [[ AND date <= date(:date_end) ]] GROUP BY day ORDER BY day
+          query: SELECT date(date) as day, count(*) as count FROM offers_view WHERE TRUE [[ AND date >= date(:date_start) ]] [[ AND date <= date(:date_end) ]] [[ AND source = :source ]] GROUP BY day ORDER BY day
           library: vega
           display:
             mark: { type: line, tooltip: true }
@@ -115,7 +119,7 @@ plugins:
         offers-region:
           title: Offers by region
           db: jobs
-          query: SELECT region, count(*) as count FROM offers_view WHERE TRUE [[ AND date >= date(:date_start) ]] [[ AND date <= date(:date_end) ]] GROUP BY region ORDER BY count DESC
+          query: SELECT region, count(*) as count FROM offers_view WHERE TRUE [[ AND date >= date(:date_start) ]] [[ AND date <= date(:date_end) ]] [[ AND source = :source ]] GROUP BY region ORDER BY count DESC
           library: vega
           display:
             mark: geoshape

@@ -44,6 +44,10 @@ plugins:
         date_end:
           name: Date End
           type: date
+        category:
+          name: My Category
+          type: select
+          options: [Option 1, Option 2, Option 3]
       charts:
         analysis-note:
           library: markdown
@@ -88,14 +92,15 @@ Dashboard properties:
 
 Dashboard filters:
 
-| Property  | Type               | Description                            |
-| --------- | ------------------ | -------------------------------------- |
-| `name`    | `string`           | Filter display name                    |
-| `type`    | `string`           | Filter type (`text`, `date`, `number`) |
-| `default` | `string`, `number` | (optional) Filter default value        |
-| `min`     | `number`           | (optional) Filter minimum value        |
-| `max`     | `number`           | (optional) Filter maximum value        |
-| `step`    | `number`           | (optional) Filter stepping value       |
+| Property  | Type               | Description                                      |
+| --------- | ------------------ | ------------------------------------------------ |
+| `name`    | `string`           | Filter display name                              |
+| `type`    | `string`           | Filter type (`text`, `date`, `number`, `select`) |
+| `default` | `string`, `number` | (optional) Filter default value                  |
+| `min`     | `number`           | (optional) Filter minimum value                  |
+| `max`     | `number`           | (optional) Filter maximum value                  |
+| `step`    | `number`           | (optional) Filter stepping value                 |
+| `options` | `list`             | (optional) Select filter options list            |
 
 Common chart properties for all chart types:
 

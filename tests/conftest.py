@@ -57,6 +57,11 @@ def datasette_metadata():
                             "max": 42,
                             "step": 2,
                         },
+                        "select_filter": {
+                            "name": "Select Filter",
+                            "type": "select",
+                            "options": ["Option 1", "Option 2", "Option 3"],
+                        },
                         "unknown_filter": {
                             "name": "Unknown Filter",
                             "type": "unknown",
