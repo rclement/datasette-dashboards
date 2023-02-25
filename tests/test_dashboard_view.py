@@ -39,13 +39,6 @@ async def test_dashboard_views(datasette):
                     in response.text
                 )
 
-        default_filters_qs = urllib.parse.urlencode(
-            {
-                k: v["default"]
-                for k, v in dashboard["filters"].items()
-                if v.get("default")
-            }
-        )
         for chart_slug, chart in dashboard["charts"].items():
             assert (
                 f'<div id="chart-{chart_slug}" class="dashboard-card-chart">'
