@@ -8,6 +8,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - Select filter type
 
+### Fixed
+- Automatically redirect with dashboard default filter values
+
 ### Changed
 - Update dependencies
 
