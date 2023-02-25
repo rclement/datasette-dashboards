@@ -1,5 +1,4 @@
 import copy
-import urllib
 import pytest
 
 from datasette.app import Datasette
