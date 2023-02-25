@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 - Automatically redirect with dashboard default filter values
+- Navigation breadcrumbs
 
 ### Changed
 - Update dependencies

@@ -13,7 +13,6 @@
         <a href="{{ urls.path('-/dashboards') }}">dashboards</a> /
         <a href="{{ urls.path('-/dashboards') }}/{{ slug }}">{{ dashboard.title }}</a>
     </p>
-    {{ super() }}
 {% endblock %}
 
 {% block body_class %}index{% endblock %}
