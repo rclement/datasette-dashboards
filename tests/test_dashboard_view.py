@@ -8,7 +8,9 @@ from datasette.app import Datasette
 async def test_dashboard_views(datasette):
     dashboards = datasette._metadata["plugins"]["datasette-dashboards"]
     for slug, dashboard in dashboards.items():
-        response = await datasette.client.get(f"/-/dashboards/{slug}")
+        response = await datasette.client.get(
+            f"/-/dashboards/{slug}", follow_redirects=True
+        )
         assert response.status_code == 200
         assert f'<h1>{dashboard["title"]}</h1>' in response.text
         assert f'<p>{dashboard["description"]}</p>' in response.text
@@ -43,16 +45,12 @@ async def test_dashboard_views(datasette):
             )
 
             if chart["library"] == "vega":
-                assert (
-                    f'<p><a href="/-/dashboards/{slug}/{chart_slug}">{chart["title"]}</a></p>'
-                    in response.text
-                )
+                assert f'<a href="/-/dashboards/{slug}/{chart_slug}?' in response.text
+                assert f'>{chart["title"]}</a>' in response.text
                 assert f"renderVegaChart('#chart-{chart_slug}', " in response.text
             elif chart["library"] == "metric":
-                assert (
-                    f'<p><a href="/-/dashboards/{slug}/{chart_slug}">{chart["title"]}</a></p>'
-                    in response.text
-                )
+                assert f'<a href="/-/dashboards/{slug}/{chart_slug}?' in response.text
+                assert f'>{chart["title"]}</a>' in response.text
                 assert f"renderMetricChart('#chart-{chart_slug}', " in response.text
 
 
@@ -65,7 +63,9 @@ async def test_dashboard_view_layout(datasette_db, datasette_metadata):
     ]
     datasette = Datasette([str(datasette_db)], metadata=metadata)
 
-    response = await datasette.client.get("/-/dashboards/job-dashboard")
+    response = await datasette.client.get(
+        "/-/dashboards/job-dashboard", follow_redirects=True
+    )
     assert response.status_code == 200
 
     assert (
@@ -77,6 +77,16 @@ async def test_dashboard_view_layout(datasette_db, datasette_metadata):
     assert "grid-area: offers-day;" in response.text
     assert "grid-area: offers-source;" in response.text
     assert "grid-template-columns: repeat(2, 1fr);" not in response.text
+
+
+@pytest.mark.asyncio
+async def test_dashboard_view_filters_default_redirect(datasette):
+    response = await datasette.client.get("/-/dashboards/job-dashboard")
+    assert response.status_code == 302
+    assert (
+        response.headers["location"]
+        == "/-/dashboards/job-dashboard?date_start=2021-01-01&date_end=2021-12-31"
+    )
 
 
 @pytest.mark.asyncio
@@ -176,5 +186,7 @@ async def test_dashboard_view_permissions(
         cookies["ds_actor"] = datasette.sign({"a": {"id": "user"}}, "actor")
 
     slug = list(datasette_metadata["plugins"]["datasette-dashboards"].keys())[0]
-    response = await datasette.client.get(f"/-/dashboards/{slug}", cookies=cookies)
+    response = await datasette.client.get(
+        f"/-/dashboards/{slug}", cookies=cookies, follow_redirects=True
+    )
     assert response.status_code == expected_status
