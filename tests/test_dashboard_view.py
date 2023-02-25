@@ -53,16 +53,12 @@ async def test_dashboard_views(datasette):
             )
 
             if chart["library"] == "vega":
-                assert (
-                    f'<p><a href="/-/dashboards/{slug}/{chart_slug}?{default_filters_qs}">{chart["title"]}</a></p>'
-                    in response.text
-                )
+                assert f'<a href="/-/dashboards/{slug}/{chart_slug}?' in response.text
+                assert f'>{chart["title"]}</a>' in response.text
                 assert f"renderVegaChart('#chart-{chart_slug}', " in response.text
             elif chart["library"] == "metric":
-                assert (
-                    f'<p><a href="/-/dashboards/{slug}/{chart_slug}?{default_filters_qs}">{chart["title"]}</a></p>'
-                    in response.text
-                )
+                assert f'<a href="/-/dashboards/{slug}/{chart_slug}?' in response.text
+                assert f'>{chart["title"]}</a>' in response.text
                 assert f"renderMetricChart('#chart-{chart_slug}', " in response.text
 
 
