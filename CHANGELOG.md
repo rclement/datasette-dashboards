@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Select filter type
 
 ### Fixed
+- Allow quotes in chart SQL query
 - Automatically redirect with dashboard default filter values
 - Navigation breadcrumbs
 
