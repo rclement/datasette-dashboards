@@ -99,6 +99,18 @@ async def dashboard_view(request, datasette):
     query_parameters = get_dashboard_filters(request, options_keys)
     query_string = generate_dashboard_filters_qs(request, options_keys)
 
+    default_filters = {
+        k: v["default"]
+        for k, v in dashboard["filters"].items()
+        if v.get("default")
+    }
+    if len(query_parameters.keys()) == 0 and len(default_filters) > 0:
+        qs = urllib.parse.urlencode(default_filters)
+        response = Response.redirect(f"{request.path}?{qs}")
+        for k, v in request.cookies.items():
+            response.set_cookie(k, v)
+        return response
+
     for chart in dashboard["charts"].values():
         fill_chart_query_options(chart, query_parameters)
 
