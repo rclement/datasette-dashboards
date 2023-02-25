@@ -100,9 +100,7 @@ async def dashboard_view(request, datasette):
     query_string = generate_dashboard_filters_qs(request, options_keys)
 
     default_filters = {
-        k: v["default"]
-        for k, v in dashboard["filters"].items()
-        if v.get("default")
+        k: v["default"] for k, v in dashboard["filters"].items() if v.get("default")
     }
     if len(query_parameters.keys()) == 0 and len(default_filters) > 0:
         qs = urllib.parse.urlencode(default_filters)
