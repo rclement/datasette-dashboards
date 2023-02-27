@@ -48,6 +48,11 @@ plugins:
           name: My Category
           type: select
           options: [Option 1, Option 2, Option 3]
+        dynamic_category:
+          name: My Dynamic Category
+          type: select
+          db: jobs
+          query: SELECT region FROM jobs ORDER BY region ASC
       charts:
         analysis-note:
           library: markdown
@@ -101,6 +106,8 @@ Dashboard filters:
 | `max`     | `number`           | (optional) Filter maximum value                  |
 | `step`    | `number`           | (optional) Filter stepping value                 |
 | `options` | `list`             | (optional) Select filter options list            |
+| `db`      | `string`           | (optional) Dynamic select filter database        |
+| `query`   | `string`           | (optional) Dynamic select filter query           |
 
 Common chart properties for all chart types:
 

@@ -29,9 +29,15 @@ async def test_dashboard_views(datasette):
             if flt["type"] == "select":
                 assert f'<select id="{key}" name="{key}">' in response.text
                 assert '<option value="" selected></option>' in response.text
-                for option in flt["options"]:
-                    assert f'<option value="{option}">'
-                    assert f"{option}</option>"
+                if "query" in flt:
+                    values = await datasette.execute("test", flt["query"])
+                    for option in values:
+                        assert f'<option value="{option[0]}"' in response.text
+                        assert f"{option[0]}</option>" in response.text
+                else:
+                    for option in flt["options"]:
+                        assert f'<option value="{option}"' in response.text
+                        assert f"{option}</option>" in response.text
             else:
                 assert (
                     f'<input id="{key}" name="{key}" type="{expected_type}"'

@@ -31,6 +31,15 @@ async def check_permission_execute_sql(request, datasette, database):
         raise Forbidden("execute-sql denied")
 
 
+async def fill_dynamic_filters(datasette, dashboard):
+    for filter in dashboard.get("filters", {}).values():
+        if filter["type"] == "select" and "db" in filter and "query" in filter:
+            values = [
+                row[0] for row in await datasette.execute(filter["db"], filter["query"])
+            ]
+            filter["options"] = values
+
+
 def get_dashboard_filters_keys(request, dashboard):
     filters_keys = (dashboard.get("filters") or {}).keys()
     return set(filters_keys) & set(request.args.keys())
@@ -95,6 +104,7 @@ async def dashboard_view(request, datasette):
             raise NotFound(f"Database does not exist: {db}")
         await check_permission_execute_sql(request, datasette, database.name)
 
+    await fill_dynamic_filters(datasette, dashboard)
     options_keys = get_dashboard_filters_keys(request, dashboard)
     query_parameters = get_dashboard_filters(request, options_keys)
     query_string = generate_dashboard_filters_qs(request, options_keys)

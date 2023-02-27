@@ -6,7 +6,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 ### Added
-- Select filter type
+- Select filter type with static and dynamic values
 
 ### Fixed
 - Allow quotes in chart SQL query
