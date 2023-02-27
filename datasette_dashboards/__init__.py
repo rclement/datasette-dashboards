@@ -32,12 +32,12 @@ async def check_permission_execute_sql(request, datasette, database):
 
 
 async def fill_dynamic_filters(datasette, dashboard):
-    for filter in dashboard.get("filters", {}).values():
-        if filter["type"] == "select" and "db" in filter and "query" in filter:
+    for flt in dashboard.get("filters", {}).values():
+        if flt["type"] == "select" and {"db", "query"} & flt.keys():
             values = [
-                row[0] for row in await datasette.execute(filter["db"], filter["query"])
+                row[0] for row in await datasette.execute(flt["db"], flt["query"])
             ]
-            filter["options"] = values
+            flt["options"] = values
 
 
 def get_dashboard_filters_keys(request, dashboard):
