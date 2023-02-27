@@ -66,7 +66,7 @@ def datasette_metadata():
                             "name": "Dynamic Select Filter",
                             "type": "select",
                             "db": "test",
-                            "query": "SELECT DISTINCT job FROM jobs",
+                            "query": "SELECT DISTINCT source FROM jobs",
                         },
                         "unknown_filter": {
                             "name": "Unknown Filter",
