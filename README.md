@@ -122,18 +122,36 @@ SELECT * FROM mytable [[ WHERE col >= :my_filter ]]
 SELECT * FROM mytable WHERE TRUE [[ AND col1 = :my_filter_1 ]] [[ AND col2 = :my_filter_2 ]]
 ```
 
-#### Vega properties
+#### Vega propertes
+
+Available configuration for `vega` charts:
+
+| Property  | Type     | Description                |
+|-----------|----------|----------------------------|
+| `library` | `string` | Must be set to `vega` |
+| `display` | `object` | Vega specification object  |
+
+Notes about the `display` property:
+
+- Requires a valid [Vega specification object](https://vega.github.io/vega/docs/)
+- Some fields are pre-defined: `$schema`, `description`, `autosize`, `data`, and `signals`
+- All fields are passed along as-is (overriding pre-defined fields if any)
+- Data property `name` is set to `table`
+- Only `scales`, `axes`, and `marks` fields are required as the bare-minimum
+
+
+#### Vega-Lite properties
 
 Available configuration for `vega` charts:
 
 | Property  | Type     | Description               |
 | --------- | -------- | ------------------------- |
-| `library` | `string` | Must be set to `vega`     |
-| `display` | `object` | Vega specification object |
+| `library` | `string` | Must be set to `vega-lite`     |
+| `display` | `object` | Vega-Lite specification object |
 
 Notes about the `display` property:
 
-- Requires a valid [Vega specification object](https://vega.github.io/vega-lite/docs/)
+- Requires a valid [Vega-Lite specification object](https://vega.github.io/vega-lite/docs/)
 - Some fields are pre-defined: `$schema`, `title`, `width`, `view`, `config`, `data`
 - All fields are passed along as-is (overriding pre-defined fields if any)
 - Only `mark` and `encoding` fields are required as the bare-minimum

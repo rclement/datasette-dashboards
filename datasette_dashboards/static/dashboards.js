@@ -1,4 +1,45 @@
-function renderVegaChart(el, chart, query_string, height_style = undefined) {
+function renderVegaChart(el, chart, query_string){
+    const query = encodeURIComponent(chart.query)
+    const spec = {
+	$schema: 'https://vega.github.io/schema/vega/v5.json',
+	description: chart.title,
+	autosize: {'type': 'fit'},
+	data: [{
+	    name: 'table',
+	    url: `/${chart.db}.csv?sql=${query}&${query_string}`,
+	    format: {'type': 'csv', "delimiter": ","}
+	}],
+	signals: [
+	    {
+		'name': 'width',
+		'init': 'containerSize()[0]',
+		'value': '',
+		'on': [{
+		    'events': {
+			'source': 'window',
+			'type': 'resize'
+		    },
+		    'update': 'containerSize()[0]'
+		}]
+	    },
+	    {
+		'name': 'height',
+		'init': 'containerSize()[1]',
+		'value': '',
+		'on': [{
+		    'events': {
+			'source': 'window',
+			'type': 'resize'
+		    },
+		    'update': 'containerSize()[1]'
+		}]
+	    }],
+	...chart.display
+    };
+    vegaEmbed(el, spec);
+}
+
+function renderVegaLiteChart(el, chart, query_string, height_style = undefined) {
   const query = encodeURIComponent(chart.query)
   const spec = {
     $schema: 'https://vega.github.io/schema/vega-lite/v5.json',
