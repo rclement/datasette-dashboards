@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 ### Added
 - Select filter type with static and dynamic values
+- Support for Vega charts with the new `vega` library
+
+### Changed
+- Renamed `vega` library to `vega-lite`
 
 ### Fixed
 - Allow quotes in chart SQL query
