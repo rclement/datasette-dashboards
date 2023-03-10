@@ -141,7 +141,7 @@ Available configuration for `vega` charts:
 Notes about the `display` property:
 
 - Requires a valid [Vega specification object](https://vega.github.io/vega/docs/)
-- Some fields are pre-defined: `$schema`, `description`, `config`, `data`, `signals`
+- Some fields are pre-defined: `$schema`, `description`, `autosize`, `data`, `signals`
 - All fields are passed along as-is (overriding pre-defined fields if any)
 - Only `mark` and `encoding` fields are required as the bare-minimum
 
@@ -157,7 +157,7 @@ Available configuration for `vega-lite` charts:
 Notes about the `display` property:
 
 - Requires a valid [Vega-Lite specification object](https://vega.github.io/vega-lite/docs/)
-- Some fields are pre-defined: `$schema`, `title`, `width`, `view`, `config`, `data`
+- Some fields are pre-defined: `$schema`, `description`, `width`, `view`, `config`, `data`
 - All fields are passed along as-is (overriding pre-defined fields if any)
 - Only `mark` and `encoding` fields are required as the bare-minimum
 
