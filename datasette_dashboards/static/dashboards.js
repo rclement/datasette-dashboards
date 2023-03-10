@@ -1,4 +1,4 @@
-function renderVegaChart(el, chart, query_string, height_style = undefined) {
+function renderVegaChart(el, chart, query_string, full_height) {
   const query = encodeURIComponent(chart.query)
   const spec = {
     $schema: 'https://vega.github.io/schema/vega/v5.json',
@@ -45,13 +45,13 @@ function renderVegaChart(el, chart, query_string, height_style = undefined) {
   vegaEmbed(el, spec);
 }
 
-function renderVegaLiteChart(el, chart, query_string, height_style = undefined) {
+function renderVegaLiteChart(el, chart, query_string, full_height) {
   const query = encodeURIComponent(chart.query)
   const spec = {
     $schema: 'https://vega.github.io/schema/vega-lite/v5.json',
     description: chart.title,
     width: 'container',
-    height: height_style,
+    height: full_height ? 'container' : undefined,
     view: { stroke: null },
     config: {
       background: '#00000000',
@@ -72,7 +72,7 @@ function renderVegaLiteChart(el, chart, query_string, height_style = undefined) 
   vegaEmbed(el, spec);
 }
 
-async function renderMetricChart(el, chart, query_string) {
+async function renderMetricChart(el, chart, query_string, full_height) {
   const query = encodeURIComponent(chart.query)
   const results = await fetch(`/${chart.db}.json?sql=${query}&${query_string}&_shape=array`)
   const data = await results.json()
@@ -100,4 +100,16 @@ async function renderMetricChart(el, chart, query_string) {
   wrapper.style.textOverflow = 'ellipsis'
 
   document.querySelector(el).appendChild(wrapper)
+}
+
+async function renderChart(el, chart, query_string, full_height = false) {
+  renderers = new Map()
+  renderers.set('vega', renderVegaChart)
+  renderers.set('vega-lite', renderVegaLiteChart)
+  renderers.set('metric', renderMetricChart)
+
+  render = renderers.get(chart.library)
+  if (render) {
+    await render(el, chart, query_string, full_height)
+  }
 }

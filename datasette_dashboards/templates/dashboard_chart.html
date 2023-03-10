@@ -48,12 +48,6 @@
     <script src="https://cdn.jsdelivr.net/npm/vega-embed@6.21.3"></script>
     <script src="{{ urls.static_plugins('datasette_dashboards', 'dashboards.js') }}"></script>
     <script type="text/javascript">
-      {% if chart.library == 'vega' %}
-      renderVegaChart('#chart', {{ chart|tojson }}, '{{ query_string|safe }}', 'container')
-      {% elif chart.library == 'vega-lite' %}
-      renderVegaLiteChart('#chart', {{ chart|tojson }}, '{{ query_string|safe }}', 'container')
-      {% elif chart.library == 'metric' %}
-      renderMetricChart('#chart', {{ chart|tojson }}, '{{ query_string|safe }}')
-      {% endif %}
+      renderChart('#chart', {{ chart|tojson }}, '{{ query_string|safe }}', true)
     </script>
 {% endblock %}
