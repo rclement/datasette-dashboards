@@ -158,6 +158,7 @@ plugins:
             FROM (
                 SELECT '["' || lower(replace(trim(title), ' ', '", "')) || '"]' AS array
                 FROM offers_view
+                WHERE TRUE [[ AND date >= date(:date_start) ]] [[ AND date <= date(:date_end) ]] [[ AND source = :source ]] [[ AND region = :region ]]
               ) a,
               json_each(a.array) b
             WHERE length(b.value) > 3
@@ -166,6 +167,7 @@ plugins:
             LIMIT 100
           library: vega
           display:
+            height: 150
             scales:
               - name: color
                 type: ordinal

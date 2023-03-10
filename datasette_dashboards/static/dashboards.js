@@ -3,9 +3,7 @@ function renderVegaChart(el, chart, query_string, height_style = undefined) {
   const spec = {
     $schema: 'https://vega.github.io/schema/vega/v5.json',
     description: chart.title,
-    config: {
-      autosize: { 'type': 'fit', 'resize': true }
-    },
+    autosize: { 'type': 'fit', 'resize': true },
     data: [
       {
         name: 'table',
@@ -17,24 +15,28 @@ function renderVegaChart(el, chart, query_string, height_style = undefined) {
       {
         'name': 'width',
         'init': 'isFinite(containerSize()[0]) ? containerSize()[0] : 400',
-        'on': [{
-          'events': {
-            'source': 'window',
-            'type': 'resize'
-          },
-          'update': 'isFinite(containerSize()[0]) ? containerSize()[0] : 400',
-        }]
+        'on': [
+          {
+            'events': {
+              'source': 'window',
+              'type': 'resize'
+            },
+            'update': 'isFinite(containerSize()[0]) ? containerSize()[0] : 400',
+          }
+        ]
       },
       {
         'name': 'height',
         'init': 'isFinite(containerSize()[1]) ? containerSize()[1] : 400',
-        'on': [{
-          'events': {
-            'source': 'window',
-            'type': 'resize'
-          },
-          'update': 'isFinite(containerSize()[1]) ? containerSize()[1] : 400'
-        }]
+        'on': [
+          {
+            'events': {
+              'source': 'window',
+              'type': 'resize'
+            },
+            'update': 'isFinite(containerSize()[1]) ? containerSize()[1] : 400'
+          }
+        ]
       }
     ],
     ...chart.display
