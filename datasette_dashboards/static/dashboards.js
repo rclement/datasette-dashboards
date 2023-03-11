@@ -14,27 +14,27 @@ function renderVegaChart(el, chart, query_string, full_height) {
     signals: [
       {
         'name': 'width',
-        'init': 'isFinite(containerSize()[0]) ? containerSize()[0] : 400',
+        'init': 'containerSize()[0]',
         'on': [
           {
             'events': {
               'source': 'window',
               'type': 'resize'
             },
-            'update': 'isFinite(containerSize()[0]) ? containerSize()[0] : 400',
+            'update': 'containerSize()[0]',
           }
         ]
       },
       {
         'name': 'height',
-        'init': 'isFinite(containerSize()[1]) ? containerSize()[1] : 400',
+        'init': 'containerSize()[1]',
         'on': [
           {
             'events': {
               'source': 'window',
               'type': 'resize'
             },
-            'update': 'isFinite(containerSize()[1]) ? containerSize()[1] : 400'
+            'update': 'containerSize()[1]'
           }
         ]
       }
