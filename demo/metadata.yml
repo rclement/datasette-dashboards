@@ -10,9 +10,9 @@ plugins:
       title: Job offers statistics
       description: Gather metrics about job offers
       layout:
-        - [job-titles, job-titles, job-titles, job-titles]
         - [analysis-note, offers-day, offers-day, offers-count]
         - [analysis-note, offers-source, offers-day-source, offers-region]
+        - [job-titles, job-titles, job-titles, job-titles]
       filters:
         date_start:
           name: Date Start
