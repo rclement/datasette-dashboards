@@ -1,5 +1,36 @@
 function renderVegaChart(el, chart, query_string, full_height) {
   const query = encodeURIComponent(chart.query)
+  let defaultSignals = [
+    {
+      'name': 'width',
+      'init': 'containerSize()[0]',
+      'on': [
+        {
+          'events': {
+            'source': 'window',
+            'type': 'resize'
+          },
+          'update': 'containerSize()[0]',
+        }
+      ]
+    }
+  ]
+  if (full_height) {
+    defaultSignals.push({
+      'name': 'height',
+      'init': 'containerSize()[1]',
+      'on': [
+        {
+          'events': {
+            'source': 'window',
+            'type': 'resize'
+          },
+          'update': 'containerSize()[1]'
+        }
+      ]
+    })
+  }
+
   const spec = {
     $schema: 'https://vega.github.io/schema/vega/v5.json',
     description: chart.title,
@@ -11,34 +42,7 @@ function renderVegaChart(el, chart, query_string, full_height) {
         format: { 'type': 'csv', 'parse': 'auto' }
       }
     ],
-    signals: [
-      {
-        'name': 'width',
-        'init': 'containerSize()[0]',
-        'on': [
-          {
-            'events': {
-              'source': 'window',
-              'type': 'resize'
-            },
-            'update': 'containerSize()[0]',
-          }
-        ]
-      },
-      {
-        'name': 'height',
-        'init': 'containerSize()[1]',
-        'on': [
-          {
-            'events': {
-              'source': 'window',
-              'type': 'resize'
-            },
-            'update': 'containerSize()[1]'
-          }
-        ]
-      }
-    ],
+    signals: defaultSignals,
     ...chart.display
   };
 
