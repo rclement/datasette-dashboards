@@ -16,6 +16,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 - Update dependencies
 
+### Internal
+- Add preview deployment for branches
+
 ## [0.2.2] - 2023-01-05
 ### Fixed
 - Pass database as string to execute sql permission check (thanks @badboy) (PR #47)
