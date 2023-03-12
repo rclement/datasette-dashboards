@@ -1,0 +1,34 @@
+name: Cleanup
+
+on: [delete]
+
+env:
+  BASE_URL_PREVIEW: dd-demo.vercel.app
+
+jobs:
+  cleanup-preview-deployment:
+    name: Cleanup Preview Deployment
+    runs-on: ubuntu-latest
+
+    env:
+      VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+      VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+      VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+
+    steps:
+      - name: Inject slug/short variables
+        uses: rlespinasse/github-slug-action@v3.x
+      - name: Set Vercel alias using event ref slug
+        run: echo "VERCEL_ALIAS=${GITHUB_EVENT_REF_SLUG_URL}-${BASE_URL_PREVIEW}" >> ${GITHUB_ENV}
+      - name: Remove Vercel alias
+        run: vercel alias --token ${VERCEL_TOKEN} rm ${VERCEL_ALIAS} -y
+      - name: Delete GitHub environment
+        uses: actions/github-script@v5
+        with:
+          github-token: ${{ secrets.GH_PERSONAL_TOKEN }}
+          script: |
+            github.rest.repos.deleteAnEnvironment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              environment_name: `preview/${process.env.GITHUB_EVENT_REF_SLUG_URL}`,
+            })
