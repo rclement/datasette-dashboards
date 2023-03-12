@@ -129,3 +129,4 @@ Thumbs.db
 
 # Docker
 .docker/
+.vercel
