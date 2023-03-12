@@ -111,7 +111,7 @@ jobs:
             --project=${{ secrets.VERCEL_PROJECT }} \
             --token=${{ secrets.VERCEL_TOKEN }} \
             --no-prod)
-          vercel alias --token $VERCEL_TOKEN set $VERCEL_URL $VERCEL_ALIAS
+          vercel alias --token ${{ secrets.VERCEL_TOKEN }} set $VERCEL_URL $VERCEL_ALIAS
 
   deploy-demo-production:
     runs-on: ubuntu-latest
