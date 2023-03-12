@@ -61,10 +61,10 @@ jobs:
         uses: rlespinasse/github-slug-action@v4
       - name: Set preview deployment url variable
         if: ${{ !contains(github.ref, 'tags') }}
-        run: echo "DEPLOYMENT_URL=https://${GITHUB_REF_SLUG_URL}-${DEMO_BASE_URL_PREVIEW}" >> $GITHUB_ENV
+        run: echo "DEPLOYMENT_URL=https://${GITHUB_REF_SLUG_URL}-${DEMO_BASE_URL_PREVIEW}" >> ${GITHUB_ENV}
       - name: Set production deployment url variable
         if: ${{ contains(github.ref, 'tags') }}
-        run: echo "DEPLOYMENT_URL=https://${DEMO_BASE_URL_PRODUCTION}" >> $GITHUB_ENV
+        run: echo "DEPLOYMENT_URL=https://${DEMO_BASE_URL_PRODUCTION}" >> ${GITHUB_ENV}
       - id: output_step
         run: |
           echo "::set-output name=github_ref_slug::${GITHUB_REF_SLUG_URL}"
@@ -73,7 +73,7 @@ jobs:
   deploy-demo-preview:
     runs-on: ubuntu-latest
     needs: [deploy-demo-setup]
-    if: ${{ !contains(github.ref, 'master') && !contains(github.ref, 'tags') }}
+    if: ${{ github.event_name == 'push' && !contains(github.ref, 'master') && !contains(github.ref, 'tags') }}
 
     environment:
       name: preview/${{ needs.deploy-demo-setup.outputs.github_ref_slug }}
@@ -107,11 +107,11 @@ jobs:
             --install=datasette-cluster-map \
             --install=datasette-vega \
             --install=datasette-block-robots \
-            --install=https://github.com/rclement/datasette-dashboards/archive/$GITHUB_SHA.zip \
+            --install=https://github.com/rclement/datasette-dashboards/archive/${GITHUB_SHA}.zip \
             --project=${{ secrets.VERCEL_PROJECT }} \
             --token=${{ secrets.VERCEL_TOKEN }} \
             --no-prod)
-          vercel alias --token ${{ secrets.VERCEL_TOKEN }} set $VERCEL_URL $VERCEL_ALIAS
+          vercel alias --token ${{ secrets.VERCEL_TOKEN }} set ${VERCEL_URL} ${VERCEL_ALIAS}
 
   deploy-demo-production:
     runs-on: ubuntu-latest
@@ -147,7 +147,7 @@ jobs:
             --install=datasette-cluster-map \
             --install=datasette-vega \
             --install=datasette-block-robots \
-            --install=https://github.com/rclement/datasette-dashboards/archive/$GITHUB_SHA.zip \
+            --install=https://github.com/rclement/datasette-dashboards/archive/${GITHUB_SHA}.zip \
             --project=${{ secrets.VERCEL_PROJECT }} \
             --token=${{ secrets.VERCEL_TOKEN }}
 
