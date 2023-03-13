@@ -3,14 +3,11 @@ function renderVegaChart(el, chart, query_string, full_height) {
   let defaultSignals = [
     {
       'name': 'width',
-      'init': 'containerSize()[0]',
+      'init': 'isFinite(containerSize()[0]) ? containerSize()[0] : 200',
       'on': [
         {
-          'events': {
-            'source': 'window',
-            'type': 'resize'
-          },
-          'update': 'containerSize()[0]',
+          'update': 'isFinite(containerSize()[0]) ? containerSize()[0] : 200',
+          'events': 'window:resize'
         }
       ]
     }
@@ -18,14 +15,11 @@ function renderVegaChart(el, chart, query_string, full_height) {
   if (full_height) {
     defaultSignals.push({
       'name': 'height',
-      'init': 'containerSize()[1]',
+      'init': 'isFinite(containerSize()[1]) ? containerSize()[1] : 200',
       'on': [
         {
-          'events': {
-            'source': 'window',
-            'type': 'resize'
-          },
-          'update': 'containerSize()[1]'
+          'update': 'isFinite(containerSize()[1]) ? containerSize()[1] : 200',
+          'events': 'window:resize'
         }
       ]
     })
