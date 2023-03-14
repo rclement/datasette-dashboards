@@ -12,11 +12,12 @@ plugins:
       layout:
         - [analysis-note, offers-day, offers-day, offers-count]
         - [analysis-note, offers-source, offers-day-source, offers-region]
+        - [job-titles, job-titles, job-titles, job-titles]
       filters:
         date_start:
           name: Date Start
           type: date
-          default: '2021-01-01'
+          default: "2021-01-01"
         date_end:
           name: Date End
           type: date
@@ -77,7 +78,7 @@ plugins:
           title: Number of offers by day
           db: jobs
           query: SELECT date(date) as day, count(*) as count FROM offers_view WHERE TRUE [[ AND date >= date(:date_start) ]] [[ AND date <= date(:date_end) ]] [[ AND source = :source ]] [[ AND region = :region ]] GROUP BY day ORDER BY day
-          library: vega
+          library: vega-lite
           display:
             mark: { type: line, tooltip: true }
             encoding:
@@ -88,7 +89,7 @@ plugins:
           title: Number of offers by source
           db: jobs
           query: SELECT source, count(*) as count FROM offers_view WHERE TRUE [[ AND date >= date(:date_start) ]] [[ AND date <= date(:date_end) ]] [[ AND region = :region ]] GROUP BY source ORDER BY count DESC
-          library: vega
+          library: vega-lite
           display:
             mark: { type: arc, tooltip: true }
             params:
@@ -106,7 +107,7 @@ plugins:
           title: Offers by day by source
           db: jobs
           query: SELECT date(date) as day, source, count(*) as count FROM offers_view WHERE TRUE [[ AND date >= date(:date_start) ]] [[ AND date <= date(:date_end) ]] [[ AND region = :region ]] GROUP BY day, source ORDER BY day
-          library: vega
+          library: vega-lite
           display:
             mark: { type: bar, tooltip: true }
             params:
@@ -125,7 +126,7 @@ plugins:
           title: Offers by region
           db: jobs
           query: SELECT region, count(*) as count FROM offers_view WHERE TRUE [[ AND date >= date(:date_start) ]] [[ AND date <= date(:date_end) ]] [[ AND source = :source ]] GROUP BY region ORDER BY count DESC
-          library: vega
+          library: vega-lite
           display:
             mark: geoshape
             projection: { type: mercator }
@@ -146,3 +147,52 @@ plugins:
               tooltip:
                 - { field: region, type: nominal }
                 - { field: count, type: quantitative }
+
+        job-titles:
+          title: Word cloud of job titles
+          db: jobs
+          query: >-
+            SELECT
+              b.value AS word,
+              COUNT(*) AS frequency
+            FROM (
+                SELECT '["' || lower(replace(trim(title), ' ', '", "')) || '"]' AS array
+                FROM offers_view
+                WHERE TRUE [[ AND date >= date(:date_start) ]] [[ AND date <= date(:date_end) ]] [[ AND source = :source ]] [[ AND region = :region ]]
+              ) a,
+              json_each(a.array) b
+            WHERE length(b.value) > 3
+            GROUP BY b.value
+            ORDER BY frequency DESC
+            LIMIT 100
+          library: vega
+          display:
+            height: 150
+            scales:
+              - name: color
+                type: ordinal
+                domain: { data: table, field: word }
+                range: ["#d5a928", "#652c90", "#939597"]
+            marks:
+              - type: text
+                from: { data: table }
+                encode:
+                  enter:
+                    text: { field: word }
+                    align: { value: center }
+                    baseline: { value: alphabetic }
+                    fill: { scale: color, field: "word" }
+                  update:
+                    fillOpacity: { value: 1 }
+                  hover:
+                    fillOpacity: { value: 0.5 }
+                transform:
+                  - type: wordcloud
+                    size: [{ signal: width }, { signal: height }]
+                    text: { field: word }
+                    rotate: 0
+                    font: Helvetica Neue, Arial
+                    fontSize: { field: datum.frequency }
+                    fontWeight: "300"
+                    fontSizeRange: [12, 56]
+                    padding: 2

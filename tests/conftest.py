@@ -123,7 +123,7 @@ def datasette_metadata():
                             "title": "Number of offers by day",
                             "db": "test",
                             "query": "SELECT date(date) as day, count(*) as count FROM offers_view WHERE TRUE [[ AND date >= date(:date_start) ]] [[ AND date <= date(:date_end) ]] GROUP BY day ORDER BY day",
-                            "library": "vega",
+                            "library": "vega-lite",
                             "display": {
                                 "mark": {
                                     "type": "line",
@@ -139,7 +139,7 @@ def datasette_metadata():
                             "title": "Number of offers by source",
                             "db": "test",
                             "query": "SELECT source, count(*) as count FROM jobs GROUP BY source ORDER BY count DESC",
-                            "library": "vega",
+                            "library": "vega-lite",
                             "display": {
                                 "chart": {
                                     "type": "bar",

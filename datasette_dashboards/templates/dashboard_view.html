@@ -93,11 +93,7 @@
     <script src="{{ urls.static_plugins('datasette_dashboards', 'dashboards.js') }}"></script>
     <script type="text/javascript">
       {% for chart_slug, chart in dashboard.charts.items() %}
-      {% if chart.library == 'vega' %}
-      renderVegaChart('#chart-{{ chart_slug }}', {{ chart|tojson }}, '{{ query_string|safe }}')
-      {% elif chart.library == 'metric' %}
-      renderMetricChart('#chart-{{ chart_slug }}', {{ chart|tojson }}, '{{ query_string|safe }}')
-      {% endif %}
+      renderChart('#chart-{{ chart_slug }}', {{ chart|tojson }}, '{{ query_string|safe }}')
       {% endfor %}
     </script>
 {% endblock %}

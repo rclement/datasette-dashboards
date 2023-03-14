@@ -111,13 +111,13 @@ Dashboard filters:
 
 Common chart properties for all chart types:
 
-| Property  | Type     | Description                                              |
-| --------- | -------- | -------------------------------------------------------- |
-| `title`   | `string` | Chart title                                              |
-| `db`      | `string` | Database name against which to run the query             |
-| `query`   | `string` | SQL query to run and extract data from                   |
-| `library` | `string` | One of supported libraries: `vega`, `markdown`, `metric` |
-| `display` | `object` | Chart display specification (depend on the used library) |
+| Property  | Type     | Description                                                           |
+| --------- | -------- | --------------------------------------------------------------------- |
+| `title`   | `string` | Chart title                                                           |
+| `db`      | `string` | Database name against which to run the query                          |
+| `query`   | `string` | SQL query to run and extract data from                                |
+| `library` | `string` | One of supported libraries: `vega`, `vega-lite`, `markdown`, `metric` |
+| `display` | `object` | Chart display specification (depend on the used library)              |
 
 To define SQL queries using dashboard filters:
 
@@ -140,8 +140,24 @@ Available configuration for `vega` charts:
 
 Notes about the `display` property:
 
-- Requires a valid [Vega specification object](https://vega.github.io/vega-lite/docs/)
-- Some fields are pre-defined: `$schema`, `title`, `width`, `view`, `config`, `data`
+- Requires a valid [Vega specification object](https://vega.github.io/vega/docs/)
+- Some fields are pre-defined: `$schema`, `description`, `autosize`, `data`, `signals`
+- All fields are passed along as-is (overriding pre-defined fields if any)
+- Only `mark` and `encoding` fields are required as the bare-minimum
+
+#### Vega-Lite properties
+
+Available configuration for `vega-lite` charts:
+
+| Property  | Type     | Description                |
+| --------- | -------- | -------------------------- |
+| `library` | `string` | Must be set to `vega-lite` |
+| `display` | `object` | Vega specification object  |
+
+Notes about the `display` property:
+
+- Requires a valid [Vega-Lite specification object](https://vega.github.io/vega-lite/docs/)
+- Some fields are pre-defined: `$schema`, `description`, `width`, `view`, `config`, `data`
 - All fields are passed along as-is (overriding pre-defined fields if any)
 - Only `mark` and `encoding` fields are required as the bare-minimum
 
