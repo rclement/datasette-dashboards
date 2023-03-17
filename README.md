@@ -197,6 +197,14 @@ Note:
 There is no required configured in `display`, so you can either ignored or
 leave it empty for table charts.
 
+Some advice for a nice table chart:
+
+- Set proper column names in the `SELECT` clause
+- Limit the number of columns in the `SELECT` clause
+- Limit the number of rows with the `LIMIT` clause
+- Order the rows explicitely with the `ORDER BY` clause
+- Use SQLite string concatenation operator (`||`) to format column data (for instance to include HTML markup!)
+
 ### Dashboard layout
 
 The default dashboard layout will present two charts per row (one per row on mobile).
