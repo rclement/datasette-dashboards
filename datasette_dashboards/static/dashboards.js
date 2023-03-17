@@ -104,7 +104,6 @@ async function renderTableChart(el, chart, query_string, full_height) {
   const query = encodeURIComponent(chart.query)
   const results = await fetch(`/${chart.db}.json?sql=${query}&${query_string}`)
   const data = await results.json()
-  console.log(data)
 
   const thead = document.createElement('thead')
   const thead_tr = document.createElement('tr')
