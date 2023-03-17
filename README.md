@@ -111,13 +111,13 @@ Dashboard filters:
 
 Common chart properties for all chart types:
 
-| Property  | Type     | Description                                                           |
-| --------- | -------- | --------------------------------------------------------------------- |
-| `title`   | `string` | Chart title                                                           |
-| `db`      | `string` | Database name against which to run the query                          |
-| `query`   | `string` | SQL query to run and extract data from                                |
-| `library` | `string` | One of supported libraries: `vega`, `vega-lite`, `markdown`, `metric` |
-| `display` | `object` | Chart display specification (depend on the used library)              |
+| Property  | Type     | Description                                                                    |
+| --------- | -------- | ------------------------------------------------------------------------------ |
+| `title`   | `string` | Chart title                                                                    |
+| `db`      | `string` | Database name against which to run the query                                   |
+| `query`   | `string` | SQL query to run and extract data from                                         |
+| `library` | `string` | One of supported libraries: `vega`, `vega-lite`, `markdown`, `metric`, `table` |
+| `display` | `object` | Chart display specification (depend on the used library)                       |
 
 To define SQL queries using dashboard filters:
 
@@ -191,6 +191,19 @@ Note:
 
 - The `display.field` must reference a single-numerical value from the SQL query
   (e.g. numerical `number` field in `SELECT count(*) as number FROM events`)
+
+#### Table properties
+
+There is no required configured in `display`, so you can either ignored or
+leave it empty for table charts.
+
+Some advice for a nice table chart:
+
+- Set proper column names in the `SELECT` clause
+- Limit the number of columns in the `SELECT` clause
+- Limit the number of rows with the `LIMIT` clause
+- Order the rows explicitely with the `ORDER BY` clause
+- Use SQLite string concatenation operator (`||`) to format column data (for instance to include HTML markup!)
 
 ### Dashboard layout
 

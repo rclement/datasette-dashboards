@@ -100,11 +100,50 @@ async function renderMetricChart(el, chart, query_string, full_height) {
   document.querySelector(el).appendChild(wrapper)
 }
 
+async function renderTableChart(el, chart, query_string, full_height) {
+  const query = encodeURIComponent(chart.query)
+  const results = await fetch(`/${chart.db}.json?sql=${query}&${query_string}`)
+  const data = await results.json()
+
+  const thead = document.createElement('thead')
+  const thead_tr = document.createElement('tr')
+  data.columns.forEach(col => {
+    const thead_th = document.createElement('th')
+    thead_th.innerHTML = col
+    thead_tr.appendChild(thead_th)
+  })
+  thead.appendChild(thead_tr)
+
+  const tbody = document.createElement('tbody')
+  data.rows.forEach(row => {
+    const tbody_tr = document.createElement('tr')
+    row.forEach(col => {
+      const tbody_td = document.createElement('td')
+      tbody_td.innerHTML = col
+      tbody_tr.appendChild(tbody_td)
+    })
+    tbody.appendChild(tbody_tr)
+  })
+
+  const table = document.createElement('table')
+  table.appendChild(thead)
+  table.appendChild(tbody)
+
+  const wrapper = document.createElement('div')
+  wrapper.style.width = '100%'
+  wrapper.style.height = '100%'
+  wrapper.style.overflow = 'auto'
+  wrapper.appendChild(table)
+
+  document.querySelector(el).appendChild(wrapper)
+}
+
 async function renderChart(el, chart, query_string, full_height = false) {
   renderers = new Map()
   renderers.set('vega', renderVegaChart)
   renderers.set('vega-lite', renderVegaLiteChart)
   renderers.set('metric', renderMetricChart)
+  renderers.set('table', renderTableChart)
 
   render = renderers.get(chart.library)
   if (render) {
