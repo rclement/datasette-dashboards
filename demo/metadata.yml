@@ -12,7 +12,7 @@ plugins:
       layout:
         - [analysis-note, offers-day, offers-day, offers-count]
         - [analysis-note, offers-source, offers-day-source, offers-region]
-        - [job-titles, job-titles, job-titles, job-titles]
+        - [job-titles, job-titles, latest-offers, latest-offers]
       filters:
         date_start:
           name: Date Start
@@ -196,3 +196,23 @@ plugins:
                     fontWeight: "300"
                     fontSizeRange: [12, 56]
                     padding: 2
+
+        latest-offers:
+          title: Latest offers
+          db: jobs
+          query: >-
+            SELECT
+              date(date) as Date,
+              title as Title,
+              company as Company,
+              '<a href="' || url || '">' || source || '</a>' as Link
+            FROM offers_view
+            WHERE TRUE
+              [[ AND date >= date(:date_start) ]]
+              [[ AND date <= date(:date_end) ]]
+              [[ AND source = :source ]]
+              [[ AND region = :region ]]
+            ORDER BY date DESC
+            LIMIT 5
+          library: table
+          display:
