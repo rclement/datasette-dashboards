@@ -207,6 +207,11 @@ Some advice for a nice table chart:
 
 #### Leaflet properties
 
+The `SELECT` clause in the SQL query will drive the map chart:
+
+- `longitude` and `latitude` columns are mandatory
+- All other columns will be displayed as metadata for pin popups
+
 ### Dashboard layout
 
 The default dashboard layout will present two charts per row (one per row on mobile).
