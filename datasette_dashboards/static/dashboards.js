@@ -138,12 +138,49 @@ async function renderTableChart(el, chart, query_string, full_height) {
   document.querySelector(el).appendChild(wrapper)
 }
 
+async function renderLeafletChart(el, chart, query_string, full_height) {
+  document.addEventListener("DOMContentLoaded", async () => {
+    const query = encodeURIComponent(chart.query)
+    const results = await fetch(`/${chart.db}.json?sql=${query}&${query_string}&_shape=array`)
+    const data = await results.json()
+
+    const wrapper = document.createElement('div')
+    wrapper.style.width = '100%'
+    wrapper.style.height = '100%'
+    wrapper.style.minHeight = '200px'
+    document.querySelector(el).appendChild(wrapper)
+
+    const map = L.map(wrapper, { zoom: 12 })
+
+    const tiles = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      maxZoom: 19,
+      detectRetina: true,
+      attribution: '&copy; <a href="https://openstreetmap.org/copyright">OpenStreetMap contributors</a>'
+    })
+    map.addLayer(tiles)
+
+    data.forEach(row => {
+      const marker = L.marker([row.latitude, row.longitude])
+      const popup = Object.entries(row)
+        .filter(e => e[0] !== 'longitude' && e[0] !== 'latitude')
+        .reduce((acc, e) => `${acc}<span style="font-weight:bold;">${e[0]}:</span> ${e[1]}<br>`, '')
+      marker.bindPopup(popup)
+      map.addLayer(marker)
+    })
+
+    const coords = data.map(row => [row.latitude, row.longitude])
+    const bounds = new L.LatLngBounds(coords)
+    map.fitBounds(bounds)
+  })
+}
+
 async function renderChart(el, chart, query_string, full_height = false) {
   renderers = new Map()
   renderers.set('vega', renderVegaChart)
   renderers.set('vega-lite', renderVegaLiteChart)
   renderers.set('metric', renderMetricChart)
   renderers.set('table', renderTableChart)
+  renderers.set('leaflet', renderLeafletChart)
 
   render = renderers.get(chart.library)
   if (render) {

@@ -4,6 +4,7 @@
 
 {% block extra_head %}
 {{ super() }}
+<link href="{{ datasette_leaflet_css_url }}" rel="stylesheet">
 <link href="{{ urls.static_plugins('datasette_dashboards', 'dashboards.css') }}" rel="stylesheet"/>
 {% endblock %}
 
@@ -46,6 +47,7 @@
     <script src="https://cdn.jsdelivr.net/npm/vega@5.24.0"></script>
     <script src="https://cdn.jsdelivr.net/npm/vega-lite@5.6.1"></script>
     <script src="https://cdn.jsdelivr.net/npm/vega-embed@6.21.3"></script>
+    <script src="{{ datasette_leaflet_url }}" type="module"></script>
     <script src="{{ urls.static_plugins('datasette_dashboards', 'dashboards.js') }}"></script>
     <script type="text/javascript">
       renderChart('#chart', {{ chart|tojson }}, '{{ query_string|safe }}', true)

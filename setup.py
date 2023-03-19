@@ -25,7 +25,7 @@ setup(
     version=VERSION,
     packages=["datasette_dashboards"],
     entry_points={"datasette": ["dashboards = datasette_dashboards"]},
-    install_requires=["datasette", "datasette-render-markdown"],
+    install_requires=["datasette", "datasette-leaflet", "datasette-render-markdown"],
     extras_require={"test": ["faker", "pytest", "pytest-asyncio", "sqlite-utils"]},
     tests_require=["datasette_dashboards[test]"],
     python_requires=">=3.7",
