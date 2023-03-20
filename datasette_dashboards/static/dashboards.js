@@ -159,16 +159,21 @@ async function renderLeafletChart(el, chart, query_string, full_height) {
     })
     map.addLayer(tiles)
 
+    const options = chart.display || {}
+    const latitude_column = options.latitude_column || 'latitude'
+    const longitude_column = options.longitude_column || 'longitude'
+    const show_latlng_popup = options.show_latlng_popup || false
+
     data.forEach(row => {
-      const marker = L.marker([row.latitude, row.longitude])
+      const marker = L.marker([row[latitude_column], row[longitude_column]])
       const popup = Object.entries(row)
-        .filter(e => e[0] !== 'longitude' && e[0] !== 'latitude')
+        .filter(e => (e[0] === latitude_column || e[0] === longitude_column) ? show_latlng_popup : true)
         .reduce((acc, e) => `${acc}<span style="font-weight:bold;">${e[0]}:</span> ${e[1]}<br>`, '')
       marker.bindPopup(popup)
       map.addLayer(marker)
     })
 
-    const coords = data.map(row => [row.latitude, row.longitude])
+    const coords = data.map(row => [row[latitude_column], row[longitude_column]])
     const bounds = new L.LatLngBounds(coords)
     map.fitBounds(bounds)
   })

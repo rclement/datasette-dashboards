@@ -207,10 +207,18 @@ Some advice for a nice table chart:
 
 #### Leaflet properties
 
-The `SELECT` clause in the SQL query will drive the map chart:
+Available configuration for `leaflet` chart:
 
-- `longitude` and `latitude` columns are mandatory
-- All other columns will be displayed as metadata for pin popups
+| Property                    | Type      | Description                                                                         |
+| --------------------------- | --------- | ----------------------------------------------------------------------------------- |
+| `library`                   | `string`  | Must be set to `leaflet`                                                            |
+| `display.latitude_column`   | `string`  | Name of the latitude column (default: `latitude`)                                   |
+| `display.longitude_column`  | `string`  | Name of the latitude column (default: `longitude`)                                  |
+| `display.show_latlng_popup` | `boolean` | Whether or not to display latitude and longitude values in popup (default: `false`) |
+
+**Warning**: do not try to load more than a thousand rows for a map at the risk of
+slugginess and being unreadable. Make sensible use of the `LIMIT` clause to reduce
+the number of items to display on the map.
 
 ### Dashboard layout
 
