@@ -192,3 +192,12 @@ async function renderChart(el, chart, query_string, full_height = false) {
     await render(el, chart, query_string, full_height)
   }
 }
+
+function toggleFullscreen() {
+  const el = document.documentElement
+  if (document.fullscreenElement) {
+    document.exitFullscreen()
+  } else {
+    el.requestFullscreen()
+  }
+}
