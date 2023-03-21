@@ -7,6 +7,16 @@
 <link href="{{ datasette_leaflet_css_url }}" rel="stylesheet">
 <link href="{{ urls.static_plugins('datasette_dashboards', 'dashboards.css') }}" rel="stylesheet"/>
 <style>
+  {% if embed %}
+  header {
+    display: none;
+  }
+
+  footer {
+    display: none;
+  }
+  {% endif %}
+
   @media (min-width: 800px) {
     .dashboard-grid {
       {% if dashboard.layout %}
@@ -28,15 +38,18 @@
 {% endblock %}
 
 {% block crumbs %}
+    {% if not embed %}
     <p class="crumbs">
         <a href="{{ urls.instance() }}">home</a> /
         <a href="{{ urls.path('-/dashboards') }}">dashboards</a>
     </p>
+    {% endif %}
 {% endblock %}
 
 {% block body_class %}index{% endblock %}
 
 {% block content %}
+  <div class="dashboard-container">
     <div class="dashboard-header">
       <div>
         <div class="page-header" style="border-color: black">
@@ -85,7 +98,15 @@
       <div id="card-{{ chart_slug }}" class="dashboard-card">
         {% if chart.library != 'markdown' %}
         <div class="dashboard-card-title">
-          <p><a href="{{ urls.path('-/dashboards') }}/{{ slug }}/{{ chart_slug }}{% if query_string|length > 0 %}?{{ query_string|safe }}{% endif %}">{{ chart.title }}</a></p>
+          <p>
+            {% if not embed %}
+            <a href="{{ urls.path('-/dashboards') }}/{{ slug }}/{{ chart_slug }}{% if query_string|length > 0 %}?{{ query_string|safe }}{% endif %}">
+            {% endif%}
+            {{ chart.title }}
+            {% if not embed %}
+            </a>
+            {% endif%}
+          </p>
         </div>
         {% endif %}
 
@@ -97,19 +118,20 @@
       </div>
       {% endfor %}
     </div>
+  </div>
 
-    <script src="{{ datasette_leaflet_url }}" type="module"></script>
-    <script src="{{ urls.static_plugins('datasette_dashboards', 'vega.min.js') }}"></script>
-    <script src="{{ urls.static_plugins('datasette_dashboards', 'vega-lite.min.js') }}"></script>
-    <script src="{{ urls.static_plugins('datasette_dashboards', 'vega-embed.min.js') }}"></script>
-    <script src="{{ urls.static_plugins('datasette_dashboards', 'dashboards.js') }}"></script>
-    <script type="text/javascript">
-      {% for chart_slug, chart in dashboard.charts.items() %}
-      renderChart('#chart-{{ chart_slug }}', {{ chart|tojson }}, '{{ query_string|safe }}')
-      {% endfor %}
+  <script src="{{ datasette_leaflet_url }}" type="module"></script>
+  <script src="{{ urls.static_plugins('datasette_dashboards', 'vega.min.js') }}"></script>
+  <script src="{{ urls.static_plugins('datasette_dashboards', 'vega-lite.min.js') }}"></script>
+  <script src="{{ urls.static_plugins('datasette_dashboards', 'vega-embed.min.js') }}"></script>
+  <script src="{{ urls.static_plugins('datasette_dashboards', 'dashboards.js') }}"></script>
+  <script type="text/javascript">
+    {% for chart_slug, chart in dashboard.charts.items() %}
+    renderChart('#chart-{{ chart_slug }}', {{ chart|tojson }}, '{{ query_string|safe }}')
+    {% endfor %}
 
-      {% if settings.autorefresh %}
-      autorefresh({{ settings.autorefresh }})
-      {% endif %}
-    </script>
+    {% if settings.autorefresh %}
+    autorefresh({{ settings.autorefresh }})
+    {% endif %}
+  </script>
 {% endblock %}

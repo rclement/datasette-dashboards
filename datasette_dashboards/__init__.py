@@ -1,5 +1,6 @@
 import re
 import urllib
+
 from datasette import hookimpl
 from datasette.utils.asgi import Forbidden, NotFound, Response
 
@@ -86,7 +87,7 @@ async def dashboard_list(request, datasette):
     )
 
 
-async def dashboard_view(request, datasette):
+async def _dashboard_view(request, datasette, embed=False):
     await check_permission_instance(request, datasette)
 
     config = datasette.plugin_config("datasette-dashboards") or {}
@@ -132,12 +133,21 @@ async def dashboard_view(request, datasette):
                 "query_parameters": query_parameters,
                 "query_string": query_string,
                 "dashboard": dashboard,
+                "embed": embed,
             },
         )
     )
 
 
-async def dashboard_chart(request, datasette):
+async def dashboard_view(request, datasette):
+    return await _dashboard_view(request, datasette, embed=False)
+
+
+async def dashboard_view_embed(request, datasette):
+    return await _dashboard_view(request, datasette, embed=True)
+
+
+async def _dashboard_chart(request, datasette, embed=False):
     await check_permission_instance(request, datasette)
 
     config = datasette.plugin_config("datasette-dashboards") or {}
@@ -172,9 +182,18 @@ async def dashboard_chart(request, datasette):
                 "query_string": query_string,
                 "dashboard": dashboard,
                 "chart": chart,
+                "embed": embed,
             },
         )
     )
+
+
+async def dashboard_chart(request, datasette):
+    return await _dashboard_chart(request, datasette, embed=False)
+
+
+async def dashboard_chart_embed(request, datasette):
+    return await _dashboard_chart(request, datasette, embed=True)
 
 
 @hookimpl
@@ -182,7 +201,12 @@ def register_routes():
     return (
         ("^/-/dashboards$", dashboard_list),
         ("^/-/dashboards/(?P<slug>[^/]+)$", dashboard_view),
+        ("^/-/dashboards/(?P<slug>[^/]+)/embed$", dashboard_view_embed),
         ("^/-/dashboards/(?P<slug>[^/]+)/(?P<chart_slug>[^/]+)$", dashboard_chart),
+        (
+            "^/-/dashboards/(?P<slug>[^/]+)/(?P<chart_slug>[^/]+)/embed$",
+            dashboard_chart_embed,
+        ),
     )
 
 

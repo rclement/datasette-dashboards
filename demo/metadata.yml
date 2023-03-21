@@ -2,7 +2,29 @@ title: Datasette Dashboards Demo
 about: rclement/datasette-dashboards
 about_url: https://github.com/rclement/datasette-dashboards
 description_html: |-
-  Try it out at <a href="/-/dashboards">/-/dashboards</a>
+  <p>Try it out at <a href="/-/dashboards">/-/dashboards</a></p>
+
+  <h2>Embedding dashboards</h2>
+  <p>Dashboards can also be embedded within an `iframe`:</p>
+  <iframe
+    src="/-/dashboards/job-offers-stats/embed?start_date=2023-01-01&end_date=2023-12-31"
+    frameborder="0"
+    width="75%"
+    height="400"
+    allowtransparency
+  >
+  </iframe>
+
+  <h2>Embedding charts</h2>
+  <p>Charts can also be embedded within an `iframe`:</p>
+  <iframe
+    src="/-/dashboards/job-offers-stats/offers-day-source/embed?start_date=2023-01-01&end_date=2023-12-31"
+    frameborder="0"
+    width="400"
+    height="400"
+    allowtransparency
+  >
+  </iframe>
 
 plugins:
   datasette-dashboards:

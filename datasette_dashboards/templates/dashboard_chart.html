@@ -6,20 +6,34 @@
 {{ super() }}
 <link href="{{ datasette_leaflet_css_url }}" rel="stylesheet">
 <link href="{{ urls.static_plugins('datasette_dashboards', 'dashboards.css') }}" rel="stylesheet"/>
+<style>
+  {% if embed %}
+  header {
+    display: none;
+  }
+
+  footer {
+    display: none;
+  }
+  {% endif %}
+</style>
 {% endblock %}
 
 {% block crumbs %}
+    {% if not embed %}
     <p class="crumbs">
         <a href="{{ urls.instance() }}">home</a> /
         <a href="{{ urls.path('-/dashboards') }}">dashboards</a> /
         <a href="{{ urls.path('-/dashboards') }}/{{ slug }}">{{ dashboard.title }}</a>
     </p>
+    {% endif %}
 {% endblock %}
 
 {% block body_class %}index{% endblock %}
 
 {% block content %}
-    <div class="chart-header">
+  <div class="dashboard-container">
+    <div class="dashboard-header">
       <div class="page-header" style="border-color: black">
         <h1>{{ dashboard.title }}</h1>
       </div>
@@ -28,7 +42,7 @@
       {% endif %}
     </div>
 
-    {% if chart.db and chart.query %}
+    {% if chart.db and chart.query and not embed %}
     <p>
       <a class="not-underlined" title="{{ chart.query }}" href="{{ urls.database(chart.db) }}?{{ {'sql': chart.query}|urlencode|safe }}{% if query_string|length > 0 %}&{{ query_string|safe }}{% endif %}">
         &#x270e; <span class="underlined">View and edit SQL</span>
@@ -43,13 +57,14 @@
         {% endif %}
       </div>
     </div>
+  </div>
 
-    <script src="{{ datasette_leaflet_url }}" type="module"></script>
-    <script src="{{ urls.static_plugins('datasette_dashboards', 'vega.min.js') }}"></script>
-    <script src="{{ urls.static_plugins('datasette_dashboards', 'vega-lite.min.js') }}"></script>
-    <script src="{{ urls.static_plugins('datasette_dashboards', 'vega-embed.min.js') }}"></script>
-    <script src="{{ urls.static_plugins('datasette_dashboards', 'dashboards.js') }}"></script>
-    <script type="text/javascript">
-      renderChart('#chart', {{ chart|tojson }}, '{{ query_string|safe }}', true)
-    </script>
+  <script src="{{ datasette_leaflet_url }}" type="module"></script>
+  <script src="{{ urls.static_plugins('datasette_dashboards', 'vega.min.js') }}"></script>
+  <script src="{{ urls.static_plugins('datasette_dashboards', 'vega-lite.min.js') }}"></script>
+  <script src="{{ urls.static_plugins('datasette_dashboards', 'vega-embed.min.js') }}"></script>
+  <script src="{{ urls.static_plugins('datasette_dashboards', 'dashboards.js') }}"></script>
+  <script type="text/javascript">
+    renderChart('#chart', {{ chart|tojson }}, '{{ query_string|safe }}', true)
+  </script>
 {% endblock %}

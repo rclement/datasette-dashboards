@@ -4,6 +4,10 @@
   overflow: scroll !important;
 }
 
+.dashboard-container {
+  margin-bottom: 1rem;
+}
+
 .dashboard-header {
   display: flex;
   flex-direction: row;
