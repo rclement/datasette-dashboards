@@ -82,7 +82,7 @@ plugins:
           display:
             mark: { type: line, tooltip: true }
             encoding:
-              x: { field: day, type: temporal }
+              x: { field: day, type: temporal, timeUnit: yearmonthdate }
               y: { field: count, type: quantitative }
 
         offers-source:
@@ -115,7 +115,7 @@ plugins:
                 select: { fields: [source], type: point, "on": mouseover }
                 bind: legend
             encoding:
-              x: { field: day, type: ordinal, timeUnit: monthdate }
+              x: { field: day, type: ordinal, timeUnit: yearmonthdate }
               y: { field: count, type: quantitative }
               color: { field: source, type: nominal }
               opacity:
