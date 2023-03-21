@@ -138,7 +138,7 @@ async function renderTableChart(el, chart, query_string, full_height) {
   document.querySelector(el).appendChild(wrapper)
 }
 
-async function renderLeafletChart(el, chart, query_string, full_height) {
+async function renderMapChart(el, chart, query_string, full_height) {
   document.addEventListener("DOMContentLoaded", async () => {
     const query = encodeURIComponent(chart.query)
     const results = await fetch(`/${chart.db}.json?sql=${query}&${query_string}&_shape=array`)
@@ -185,7 +185,7 @@ async function renderChart(el, chart, query_string, full_height = false) {
   renderers.set('vega-lite', renderVegaLiteChart)
   renderers.set('metric', renderMetricChart)
   renderers.set('table', renderTableChart)
-  renderers.set('leaflet', renderLeafletChart)
+  renderers.set('map', renderMapChart)
 
   render = renderers.get(chart.library)
   if (render) {

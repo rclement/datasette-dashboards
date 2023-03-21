@@ -235,5 +235,5 @@ plugins:
               [[ AND date <= date(:date_end) ]]
               [[ AND source = :source ]]
               [[ AND region = :region ]]
-          library: leaflet
+          library: map
           display:
