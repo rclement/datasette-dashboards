@@ -111,13 +111,13 @@ Dashboard filters:
 
 Common chart properties for all chart types:
 
-| Property  | Type     | Description                                                                    |
-| --------- | -------- | ------------------------------------------------------------------------------ |
-| `title`   | `string` | Chart title                                                                    |
-| `db`      | `string` | Database name against which to run the query                                   |
-| `query`   | `string` | SQL query to run and extract data from                                         |
-| `library` | `string` | One of supported libraries: `vega`, `vega-lite`, `markdown`, `metric`, `table` |
-| `display` | `object` | Chart display specification (depend on the used library)                       |
+| Property  | Type     | Description                                                                           |
+| --------- | -------- | ------------------------------------------------------------------------------------- |
+| `title`   | `string` | Chart title                                                                           |
+| `db`      | `string` | Database name against which to run the query                                          |
+| `query`   | `string` | SQL query to run and extract data from                                                |
+| `library` | `string` | One of supported libraries: `vega`, `vega-lite`, `markdown`, `metric`, `table`, `map` |
+| `display` | `object` | Chart display specification (depend on the used library)                              |
 
 To define SQL queries using dashboard filters:
 
@@ -204,6 +204,21 @@ Some advice for a nice table chart:
 - Limit the number of rows with the `LIMIT` clause
 - Order the rows explicitely with the `ORDER BY` clause
 - Use SQLite string concatenation operator (`||`) to format column data (for instance to include HTML markup!)
+
+#### Map properties
+
+Available configuration for `map` chart:
+
+| Property                    | Type      | Description                                                                         |
+| --------------------------- | --------- | ----------------------------------------------------------------------------------- |
+| `library`                   | `string`  | Must be set to `map`                                                                |
+| `display.latitude_column`   | `string`  | Name of the latitude column (default: `latitude`)                                   |
+| `display.longitude_column`  | `string`  | Name of the latitude column (default: `longitude`)                                  |
+| `display.show_latlng_popup` | `boolean` | Whether or not to display latitude and longitude values in popup (default: `false`) |
+
+**Warning**: do not try to load more than a thousand rows for a map at the risk of
+slugginess and being unreadable. Make sensible use of the `LIMIT` clause to reduce
+the number of items to display on the map.
 
 ### Dashboard layout
 

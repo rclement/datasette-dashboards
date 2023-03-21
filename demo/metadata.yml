@@ -12,7 +12,7 @@ plugins:
       layout:
         - [analysis-note, offers-day, offers-day, offers-count]
         - [analysis-note, offers-source, offers-day-source, offers-region]
-        - [job-titles, job-titles, latest-offers, latest-offers]
+        - [job-titles, offers-map, latest-offers, latest-offers]
       filters:
         date_start:
           name: Date Start
@@ -215,4 +215,25 @@ plugins:
             ORDER BY date DESC
             LIMIT 5
           library: table
+          display:
+
+        offers-map:
+          title: Offers map
+          db: jobs
+          query: >-
+            SELECT
+              date(date) as Date,
+              title as Title,
+              company as Company,
+              source as Source,
+              city as City,
+              longitude,
+              latitude
+            FROM offers_view
+            WHERE longitude IS NOT NULL AND latitude IS NOT NULL
+              [[ AND date >= date(:date_start) ]]
+              [[ AND date <= date(:date_end) ]]
+              [[ AND source = :source ]]
+              [[ AND region = :region ]]
+          library: map
           display:
