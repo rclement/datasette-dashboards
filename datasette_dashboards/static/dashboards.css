@@ -2,6 +2,24 @@
   margin-bottom: 1rem;
 }
 
+.dashboard-filters-boxes {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+
+.dashboard-filters-boxes > fieldset {
+  margin: 0rem 1rem 0.5rem 0rem;
+  padding: 0rem 1rem 0.5rem 1rem;
+  border: 1px solid #a0a0a0;
+  border-radius: 4px;
+}
+
+.dashboard-filters-boxes > fieldset > legend {
+  padding: 0 0.2rem 0 0.2rem;
+  font-size: small;
+}
+
 .dashboard-grid {
   display: grid;
   grid-auto-columns: minmax(100px, 1fr);

@@ -18,14 +18,14 @@ async def test_dashboard_views(datasette):
         assert "grid-template-areas" not in response.text
         assert "grid-area:" not in response.text
 
-        assert '<details class="dashboard-filters">' in response.text
+        assert '<div class="dashboard-filters">' in response.text
         for key, flt in dashboard["filters"].items():
             expected_type = (
                 flt["type"]
                 if flt["type"] in ["text", "date", "number", "select"]
                 else "text"
             )
-            assert f'<label for="{key}">{flt["name"]}</label>' in response.text
+            assert f'<legend>{flt["name"]}</legend>' in response.text
             if flt["type"] == "select":
                 assert f'<select id="{key}" name="{key}">' in response.text
                 assert '<option value="" selected></option>' in response.text
@@ -98,8 +98,8 @@ async def test_dashboard_view_parameters(datasette):
     )
     assert response.status_code == 200
 
-    assert '<details class="dashboard-filters">' in response.text
-    assert '<label for="date_start">Date Start</label>' in response.text
+    assert '<div class="dashboard-filters">' in response.text
+    assert "<legend>Date Start</legend>" in response.text
     assert (
         '<input id="date_start" name="date_start" type="date" value="2021-01-01">'
         in response.text
@@ -120,8 +120,8 @@ async def test_dashboard_view_parameters_empty(datasette):
     response = await datasette.client.get("/-/dashboards/job-dashboard?date_start=")
     assert response.status_code == 200
 
-    assert '<details class="dashboard-filters">' in response.text
-    assert '<label for="date_start">Date Start</label>' in response.text
+    assert '<div class="dashboard-filters">' in response.text
+    assert "<legend>Date Start</legend>" in response.text
     assert (
         '<input id="date_start" name="date_start" type="date" value="">'
         in response.text
