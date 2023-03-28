@@ -194,7 +194,7 @@ async function renderChart(el, chart, query_string, full_height = false) {
 }
 
 function toggleFullscreen() {
-  const el = document.documentElement
+  const el = document.querySelector("section.content")
   if (document.fullscreenElement) {
     document.exitFullscreen()
   } else {

@@ -1,5 +1,7 @@
 :fullscreen, ::backdrop {
   background-color: #F8FAFB;
+  padding: 0 1rem;
+  overflow: scroll !important;
 }
 
 .dashboard-header {
