@@ -35,6 +35,7 @@ def datasette_metadata():
                 "job-dashboard": {
                     "title": "Job dashboard",
                     "description": "Gathering metrics about jobs",
+                    "settings": {"allow_fullscreen": False},
                     "filters": {
                         "date_start": {
                             "name": "Date Start",

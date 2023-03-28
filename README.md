@@ -92,8 +92,15 @@ Dashboard properties:
 | ------------- | -------- | --------------------- |
 | `title`       | `string` | Dashboard title       |
 | `description` | `string` | Dashboard description |
+| `settings`    | `object` | Dashboard settings    |
 | `layout`      | `array`  | Dashboard layout      |
 | `filters`     | `object` | Dashboard filters     |
+
+Dashboard settings:
+
+| Property           | Type   | Description                                                    |
+| ------------------ | ------ | -------------------------------------------------------------- |
+| `allow_fullscreen` | `bool` | Allow dashboard to be toggled in fullscreen  (default `false`) |
 
 Dashboard filters:
 

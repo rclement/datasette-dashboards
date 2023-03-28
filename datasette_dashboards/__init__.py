@@ -96,6 +96,7 @@ async def dashboard_view(request, datasette):
     except KeyError:
         raise NotFound(f"Dashboard not found: {slug}")
 
+    settings = dashboard.get("settings", {})
     dbs = set([chart["db"] for chart in dashboard["charts"].values() if "db" in chart])
     for db in dbs:
         try:
@@ -126,6 +127,7 @@ async def dashboard_view(request, datasette):
         await datasette.render_template(
             "dashboard_view.html",
             {
+                "settings": settings,
                 "slug": slug,
                 "query_parameters": query_parameters,
                 "query_string": query_string,
