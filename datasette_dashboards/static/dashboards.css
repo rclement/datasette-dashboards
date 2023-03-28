@@ -1,3 +1,22 @@
+:fullscreen, ::backdrop {
+  background-color: #F8FAFB;
+  padding: 0 1rem;
+  overflow: scroll !important;
+}
+
+.dashboard-header {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.dashboard-toolbar {
+  margin-bottom: 1rem;
+}
+
 .dashboard-filters {
   margin-bottom: 1rem;
 }

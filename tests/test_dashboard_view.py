@@ -18,6 +18,12 @@ async def test_dashboard_views(datasette):
         assert "grid-template-areas" not in response.text
         assert "grid-area:" not in response.text
 
+        assert '<div class="dashboard-toolbar">' in response.text
+        assert (
+            '<button type="button" onclick="toggleFullscreen()">Fullscreen</button>'
+            not in response.text
+        )
+
         assert '<div class="dashboard-filters">' in response.text
         for key, flt in dashboard["filters"].items():
             expected_type = (
@@ -153,6 +159,25 @@ async def test_dashboard_view_unknown_chart_db(datasette_db, datasette_metadata)
 
     response = await datasette.client.get("/-/dashboards/job-dashboard")
     assert response.status_code == 404
+
+
+@pytest.mark.asyncio
+async def test_dashboard_view_allow_fullscreen(datasette_db, datasette_metadata):
+    metadata = copy.deepcopy(datasette_metadata)
+    metadata["plugins"]["datasette-dashboards"]["job-dashboard"]["settings"][
+        "allow_fullscreen"
+    ] = True
+    datasette = Datasette([str(datasette_db)], metadata=metadata)
+
+    response = await datasette.client.get(
+        "/-/dashboards/job-dashboard", follow_redirects=True
+    )
+    assert response.status_code == 200
+
+    assert (
+        '<button type="button" onclick="toggleFullscreen()">Fullscreen</button>'
+        in response.text
+    )
 
 
 @pytest.mark.asyncio
