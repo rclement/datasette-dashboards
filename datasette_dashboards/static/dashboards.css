@@ -3,9 +3,16 @@
 }
 
 .dashboard-header {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
   margin-bottom: 1rem;
-  padding-bottom: 1rem;
-  border-bottom: 1px solid #a0a0a0;
+}
+
+.dashboard-toolbar {
+  margin-bottom: 1rem;
 }
 
 .dashboard-filters {

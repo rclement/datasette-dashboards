@@ -38,11 +38,18 @@
 
 {% block content %}
     <div class="dashboard-header">
-      <div class="page-header" style="border-color: black">
-        <h1>{{ dashboard.title }}</h1>
+      <div>
+        <div class="page-header" style="border-color: black">
+          <h1>{{ dashboard.title }}</h1>
+        </div>
+        <p>{{ dashboard.description }}</p>
       </div>
-      <p>{{ dashboard.description }}</p>
-      <button onclick="toggleFullscreen()">Fullscreen</button>
+
+      <div class="dashboard-toolbar">
+        <form>
+          <button type="button" onclick="toggleFullscreen()">Fullscreen</button>
+        </form>
+      </div>
     </div>
 
     {% if dashboard.filters %}
