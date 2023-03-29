@@ -8,6 +8,7 @@ from datasette.app import Datasette
 async def test_dashboard_list_index(datasette):
     response = await datasette.client.get("/-/dashboards")
     assert response.status_code == 200
+    assert '<li><a href="/-/dashboards">Dashboards</a></li>' in response.text
     assert "<h1>Dashboards</h1>" in response.text
 
     dashboards = datasette._metadata["plugins"]["datasette-dashboards"]

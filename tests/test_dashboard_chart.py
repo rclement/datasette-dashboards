@@ -9,6 +9,7 @@ async def test_dashboard_chart(datasette):
             props = chart.keys()
             response = await datasette.client.get(f"/-/dashboards/{slug}/{chart_slug}")
             assert response.status_code == 200
+            assert '<li><a href="/-/dashboards">Dashboards</a></li>' in response.text
             assert f'<h1>{dashboard["title"]}</h1>' in response.text
             if "title" in props:
                 assert f'<p>{chart["title"]}</p>' in response.text
