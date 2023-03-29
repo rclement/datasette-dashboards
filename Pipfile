@@ -6,7 +6,7 @@ name = "pypi"
 [packages]
 
 [dev-packages]
-black = "==23.1.0"
+black = "==23.3.0"
 datasette-block-robots = "==1.1"
 datasette-cluster-map = "==0.17.2"
 datasette-dashboards = {editable = true, path = ".", extras = ["test"]}
