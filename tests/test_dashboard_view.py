@@ -23,6 +23,7 @@ async def test_dashboard_views(datasette):
             '<button type="button" onclick="toggleFullscreen()">Fullscreen</button>'
             not in response.text
         )
+        assert "autorefresh" not in response.text
 
         assert '<div class="dashboard-filters">' in response.text
         for key, flt in dashboard["filters"].items():
@@ -178,6 +179,22 @@ async def test_dashboard_view_allow_fullscreen(datasette_db, datasette_metadata)
         '<button type="button" onclick="toggleFullscreen()">Fullscreen</button>'
         in response.text
     )
+
+
+@pytest.mark.asyncio
+async def test_dashboard_view_enable_autorefresh(datasette_db, datasette_metadata):
+    metadata = copy.deepcopy(datasette_metadata)
+    metadata["plugins"]["datasette-dashboards"]["job-dashboard"]["settings"][
+        "autorefresh"
+    ] = 1
+    datasette = Datasette([str(datasette_db)], metadata=metadata)
+
+    response = await datasette.client.get(
+        "/-/dashboards/job-dashboard", follow_redirects=True
+    )
+    assert response.status_code == 200
+
+    assert "autorefresh(1)" in response.text
 
 
 @pytest.mark.asyncio

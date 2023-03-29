@@ -107,5 +107,9 @@
       {% for chart_slug, chart in dashboard.charts.items() %}
       renderChart('#chart-{{ chart_slug }}', {{ chart|tojson }}, '{{ query_string|safe }}')
       {% endfor %}
+
+      {% if settings.autorefresh %}
+      autorefresh({{ settings.autorefresh }})
+      {% endif %}
     </script>
 {% endblock %}

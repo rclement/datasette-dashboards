@@ -98,9 +98,10 @@ Dashboard properties:
 
 Dashboard settings:
 
-| Property           | Type   | Description                                                    |
-| ------------------ | ------ | -------------------------------------------------------------- |
-| `allow_fullscreen` | `bool` | Allow dashboard to be toggled in fullscreen  (default `false`) |
+| Property           | Type     | Description                                                    |
+| ------------------ | -------- | -------------------------------------------------------------- |
+| `allow_fullscreen` | `bool`   | Allow dashboard to be toggled in fullscreen  (default `false`) |
+| `autorefresh`      | `number` | Auto-refresh timeout in minutes                                |
 
 Dashboard filters:
 
