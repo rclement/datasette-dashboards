@@ -34,12 +34,14 @@
 {% block content %}
   <div class="dashboard-container">
     <div class="dashboard-header">
-      <div class="page-header" style="border-color: black">
-        <h1>{{ dashboard.title }}</h1>
+      <div>
+        <div class="page-header" style="border-color: black">
+          <h1>{{ dashboard.title }}</h1>
+        </div>
+        {% if chart.title %}
+        <p>{{ chart.title }}</p>
+        {% endif %}
       </div>
-      {% if chart.title %}
-      <p>{{ chart.title }}</p>
-      {% endif %}
     </div>
 
     {% if chart.db and chart.query and not embed %}
