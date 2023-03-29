@@ -11,6 +11,7 @@ plugins:
       description: Gather metrics about job offers
       settings:
         allow_fullscreen: true
+        autorefresh: 1
       layout:
         - [analysis-note, offers-day, offers-day, offers-count]
         - [analysis-note, offers-source, offers-day-source, offers-region]

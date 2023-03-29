@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Table chart component
 - Map chart component
 - Fullscreen mode for dashboards
+- Autorefresh mode for dashboards
 
 ### Changed
 - Improve filters layout
