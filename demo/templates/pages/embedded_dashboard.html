@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+
+{% block title %}Embedded Dashboard{% endblock %}
+
+{% block content %}
+  <h1>Embedded Dashboard</h1>
+
+  <p>Dashboards can be embedded within an `iframe` element:</p>
+
+  <iframe
+    src="/-/dashboards/job-offers-stats/embed?start_date=2023-01-01&end_date=2023-12-31"
+    frameborder="0"
+    width="100%"
+    height="600"
+    allowtransparency
+  >
+  </iframe>
+{% endblock %}

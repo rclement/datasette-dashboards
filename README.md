@@ -258,7 +258,10 @@ pytest
 With the developmnent environment setup, you can run the demo locally:
 
 ```bash
-datasette --metadata demo/metadata.yml demo/jobs.db
+datasette \
+  --metadata demo/metadata.yml \
+  --template-dir demo/templates \
+  demo/jobs.db
 ```
 
 ## License
