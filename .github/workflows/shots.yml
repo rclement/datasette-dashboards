@@ -1,0 +1,50 @@
+name: Shots
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "0 4 * * *"
+
+jobs:
+  take-shots:
+    name: Take Shots
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.10"
+      - uses: actions/cache@v3
+        name: Configure pip caching
+        with:
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-pip
+      - name: Cache Playwright browsers
+        uses: actions/cache@v3
+        with:
+          path: ~/.cache/ms-playwright/
+          key: ${{ runner.os }}-playwright
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install --upgrade shot-scraper
+          shot-scraper install
+      - name: Demo dashboard screenshot
+        run: |
+          shot-scraper \
+            "https://datasette-dashboards-demo.vercel.app/-/dashboards/job-offers-stats?date_start=2021-01-01&date_end=2021-05-01&source=&region=" \
+            --output demo/datasette-dashboards-demo.png
+      - name: Upload screenshot artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: screenshot
+          path: demo/datasette-dashboards-demo.png
+      # - name: Commit and push changes
+      #   run: |
+      #     git config user.name "Automated"
+      #     git config user.email "actions@users.noreply.github.com"
+      #     git add -A
+      #     timestamp=$(date -u)
+      #     git commit -m "Latest data: ${timestamp}" || exit 0
+      #     git push
