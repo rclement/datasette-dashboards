@@ -34,8 +34,8 @@ jobs:
         run: |
           shot-scraper \
             "https://datasette-dashboards-demo.vercel.app/-/dashboards/job-offers-stats?date_start=2021-01-01&date_end=2021-05-01&source=&region=" \
-            --output demo/datasette-dashboards-demo.png
-            --wait 2000
+            --output demo/datasette-dashboards-demo.png \
+            --wait 2000 \
             --retina
       - name: Upload screenshot artifact
         uses: actions/upload-artifact@v3
