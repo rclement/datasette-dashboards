@@ -187,6 +187,9 @@ jobs:
     needs: [deploy-demo-production]
     if: contains(github.ref, 'master')
 
+    permissions:
+      contents: write
+
     steps:
       - uses: actions/checkout@v3
       - name: Set up Python
