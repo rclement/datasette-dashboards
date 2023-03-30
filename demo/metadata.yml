@@ -2,7 +2,14 @@ title: Datasette Dashboards Demo
 about: rclement/datasette-dashboards
 about_url: https://github.com/rclement/datasette-dashboards
 description_html: |-
-  Try it out at <a href="/-/dashboards">/-/dashboards</a>
+  <div class="message-info">
+    <p>Welcome to the <a href="https://github.com/rclement/datasette-dashboards">Datasette Dashboards plugin</a> demo!</p>
+    <ul class="bullets">
+      <li>Browse dashboards at <a href="/-/dashboards">/-/dashboards</a></li>
+      <li>See an example of an embedded dashboard within a custom page at <a href="/embedded_dashboard">/embedded_dashboard</a></li>
+      <li>See an example of an embedded chart within a custom page at <a href="/embedded_chart">/embedded_chart</a></li>
+    </ul>
+  </div>
 
 plugins:
   datasette-dashboards:

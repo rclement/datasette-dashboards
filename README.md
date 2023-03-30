@@ -237,6 +237,34 @@ define the `layout` array property as a grid / matrix:
 - Each entry represents a row of charts
 - Each column is referring a chart by its property name
 
+### Embedding dashboards and charts
+
+Dashboards can be embedded within an HTML page using an `iframe` element:
+
+```html
+<iframe
+  src="/-/dashboards/my-dashboard/embed?start_date=2023-01-01&end_date=2023-12-31"
+  frameborder="0"
+  width="100%"
+  height="600"
+  allowtransparency
+>
+</iframe>
+```
+
+Same goes for charts:
+
+```html
+<iframe
+  src="/-/dashboards/my-dashboard/my-chart/embed?start_date=2023-01-01&end_date=2023-12-31"
+  frameborder="0"
+  width="100%"
+  height="600"
+  allowtransparency
+>
+</iframe>
+```
+
 ## Development
 
 To set up this plugin locally, first checkout the code.
@@ -258,7 +286,10 @@ pytest
 With the developmnent environment setup, you can run the demo locally:
 
 ```bash
-datasette --metadata demo/metadata.yml demo/jobs.db
+datasette \
+  --metadata demo/metadata.yml \
+  --template-dir demo/templates \
+  demo/jobs.db
 ```
 
 ## License

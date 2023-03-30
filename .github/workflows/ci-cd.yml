@@ -104,6 +104,7 @@ jobs:
           VERCEL_ALIAS=${GITHUB_REF_SLUG_URL}-${DEMO_BASE_URL_PREVIEW}
           VERCEL_URL=$(pipenv run datasette publish vercel demo/jobs.db \
             --metadata demo/metadata.yml \
+            --template-dir demo/templates \
             --install=datasette-cluster-map \
             --install=datasette-vega \
             --install=datasette-block-robots \
@@ -144,6 +145,7 @@ jobs:
         run: |-
           pipenv run datasette publish vercel demo/jobs.db \
             --metadata demo/metadata.yml \
+            --template-dir demo/templates \
             --install=datasette-cluster-map \
             --install=datasette-vega \
             --install=datasette-block-robots \
