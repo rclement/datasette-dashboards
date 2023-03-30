@@ -187,8 +187,6 @@ async function renderChart(el, chart, query_string, full_height = false) {
   renderers.set('table', renderTableChart)
   renderers.set('map', renderMapChart)
 
-  vega.setRandom(vega.randomLCG(0))
-
   render = renderers.get(chart.library)
   if (render) {
     await render(el, chart, query_string, full_height)
@@ -208,3 +206,5 @@ function autorefresh(minutes) {
   const timeout = Math.round(minutes * 60 * 1000)
   window.setTimeout(function () { window.location.reload() }, timeout)
 }
+
+vega.setRandom(vega.randomLCG(0))
