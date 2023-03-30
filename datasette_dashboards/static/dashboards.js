@@ -187,6 +187,8 @@ async function renderChart(el, chart, query_string, full_height = false) {
   renderers.set('table', renderTableChart)
   renderers.set('map', renderMapChart)
 
+  vega.setRandom(vega.randomLCG(0))
+
   render = renderers.get(chart.library)
   if (render) {
     await render(el, chart, query_string, full_height)
