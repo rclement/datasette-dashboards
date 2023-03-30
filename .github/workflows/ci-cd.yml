@@ -67,8 +67,8 @@ jobs:
         run: echo "DEPLOYMENT_URL=https://${DEMO_BASE_URL_PRODUCTION}" >> ${GITHUB_ENV}
       - id: output_step
         run: |
-          echo "::set-output name=github_ref_slug::${GITHUB_REF_SLUG_URL}"
-          echo "::set-output name=deployment_url::${DEPLOYMENT_URL}"
+          echo "github_ref_slug=${GITHUB_REF_SLUG_URL}" >> $GITHUB_OUTPUT
+          echo "deployment_url=${DEPLOYMENT_URL}" >> $GITHUB_OUTPUT
 
   deploy-demo-preview:
     runs-on: ubuntu-latest

@@ -8,7 +8,7 @@
 <link href="{{ urls.static_plugins('datasette_dashboards', 'dashboards.css') }}" rel="stylesheet"/>
 {% endblock %}
 
-{% block nav %}
+{% block crumbs %}
     <p class="crumbs">
         <a href="{{ urls.instance() }}">home</a> /
         <a href="{{ urls.path('-/dashboards') }}">dashboards</a> /

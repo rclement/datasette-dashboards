@@ -12,6 +12,7 @@ async def test_dashboard_views(datasette):
             f"/-/dashboards/{slug}", follow_redirects=True
         )
         assert response.status_code == 200
+        assert '<li><a href="/-/dashboards">Dashboards</a></li>' in response.text
         assert f'<h1>{dashboard["title"]}</h1>' in response.text
         assert f'<p>{dashboard["description"]}</p>' in response.text
         assert "grid-template-columns: repeat(2, 1fr);" in response.text
