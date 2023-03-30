@@ -206,3 +206,5 @@ function autorefresh(minutes) {
   const timeout = Math.round(minutes * 60 * 1000)
   window.setTimeout(function () { window.location.reload() }, timeout)
 }
+
+vega.setRandom(vega.randomLCG(0))
