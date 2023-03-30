@@ -1,17 +1,20 @@
+import typing as t
 import pytest
 import sqlite_utils
 
+from pathlib import Path
 from datasette.app import Datasette
 from faker import Faker
 
 
 @pytest.fixture(scope="session")
-def datasette_db(tmp_path_factory):
+def datasette_db(tmp_path_factory: pytest.TempPathFactory) -> Path:
     faker = Faker()
     db_directory = tmp_path_factory.mktemp("dbs")
     db_path = db_directory / "test.db"
     db = sqlite_utils.Database(db_path)
-    db["jobs"].insert_all(
+    jobs_table = sqlite_utils.db.Table(db, "jobs")
+    jobs_table.insert_all(
         [
             dict(
                 id=i + 1,
@@ -28,7 +31,7 @@ def datasette_db(tmp_path_factory):
 
 
 @pytest.fixture(scope="session")
-def datasette_metadata():
+def datasette_metadata() -> t.Dict[str, t.Any]:
     return {
         "plugins": {
             "datasette-dashboards": {
@@ -160,5 +163,5 @@ def datasette_metadata():
 
 
 @pytest.fixture(scope="session")
-def datasette(datasette_db, datasette_metadata):
+def datasette(datasette_db: Path, datasette_metadata: t.Dict[str, t.Any]) -> Datasette:
     return Datasette([str(datasette_db)], metadata=datasette_metadata)

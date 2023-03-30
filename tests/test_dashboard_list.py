@@ -1,11 +1,13 @@
 import copy
+import typing as t
 import pytest
 
+from pathlib import Path
 from datasette.app import Datasette
 
 
 @pytest.mark.asyncio
-async def test_dashboard_list_index(datasette):
+async def test_dashboard_list_index(datasette: Datasette) -> None:
     response = await datasette.client.get("/-/dashboards")
     assert response.status_code == 200
     assert '<li><a href="/-/dashboards">Dashboards</a></li>' in response.text
@@ -20,7 +22,9 @@ async def test_dashboard_list_index(datasette):
 
 
 @pytest.mark.asyncio
-async def test_dashboard_list_index_empty(datasette_db, datasette_metadata):
+async def test_dashboard_list_index_empty(
+    datasette_db: Path, datasette_metadata: t.Dict[str, t.Any]
+) -> None:
     metadata = copy.deepcopy(datasette_metadata)
     del metadata["plugins"]
     datasette = Datasette([str(datasette_db)], metadata=metadata)
@@ -46,8 +50,12 @@ async def test_dashboard_list_index_empty(datasette_db, datasette_metadata):
     ],
 )
 async def test_dashboard_list_permissions(
-    datasette_db, datasette_metadata, metadata, authenticated, expected_status
-):
+    datasette_db: Path,
+    datasette_metadata: t.Dict[str, t.Any],
+    metadata: t.Dict[str, t.Any],
+    authenticated: bool,
+    expected_status: int,
+) -> None:
     datasette = Datasette(
         [str(datasette_db)], metadata={**datasette_metadata, **metadata}
     )

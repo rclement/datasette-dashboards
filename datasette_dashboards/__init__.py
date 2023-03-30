@@ -1,15 +1,20 @@
 import re
-import urllib
+import typing as t
+import urllib.parse
 
 from datasette import hookimpl
-from datasette.utils.asgi import Forbidden, NotFound, Response
+from datasette.database import Database
+from datasette.utils.asgi import Forbidden, NotFound, Request, Response
+
+if t.TYPE_CHECKING:  # pragma: no cover
+    from datasette.app import Datasette
 
 
 sql_opt_pattern = re.compile(r"(?P<opt>\[\[[^\]]*\]\])")
 sql_var_pattern = re.compile(r"\:(?P<var>[a-zA-Z0-9_]+)")
 
 
-async def check_permission_instance(request, datasette):
+async def check_permission_instance(request: Request, datasette: "Datasette") -> None:
     if (
         await datasette.permission_allowed(
             request.actor,
@@ -20,7 +25,9 @@ async def check_permission_instance(request, datasette):
         raise Forbidden("view-instance denied")
 
 
-async def check_permission_execute_sql(request, datasette, database):
+async def check_permission_execute_sql(
+    request: Request, datasette: "Datasette", database: Database
+) -> None:
     if (
         await datasette.permission_allowed(
             request.actor,
@@ -32,7 +39,9 @@ async def check_permission_execute_sql(request, datasette, database):
         raise Forbidden("execute-sql denied")
 
 
-async def fill_dynamic_filters(datasette, dashboard):
+async def fill_dynamic_filters(
+    datasette: "Datasette", dashboard: t.Dict[str, t.Any]
+) -> None:
     for flt in dashboard.get("filters", {}).values():
         if flt["type"] == "select" and {"db", "query"} & flt.keys():
             values = [
@@ -41,42 +50,48 @@ async def fill_dynamic_filters(datasette, dashboard):
             flt["options"] = values
 
 
-def get_dashboard_filters_keys(request, dashboard):
+def get_dashboard_filters_keys(
+    request: Request, dashboard: t.Dict[str, t.Any]
+) -> t.Set[str]:
     filters_keys = (dashboard.get("filters") or {}).keys()
     return set(filters_keys) & set(request.args.keys())
 
 
-def get_dashboard_filters(request, opts_keys):
+def get_dashboard_filters(request: Request, opts_keys: t.Set[str]) -> t.Dict[str, str]:
     return {key: request.args[key] for key in opts_keys}
 
 
-def generate_dashboard_filters_qs(request, opts_keys):
+def generate_dashboard_filters_qs(request: Request, opts_keys: t.Set[str]) -> str:
     return urllib.parse.urlencode({key: request.args[key] for key in opts_keys})
 
 
-def fill_chart_query_options(chart, options):
-    query = chart.get("query")
+def fill_chart_query_options(
+    chart: t.Dict[str, t.Any], options: t.Dict[str, str]
+) -> None:
+    query: t.Optional[str] = chart.get("query")
     if query is None:
         return
 
-    to_replace = []
+    to_replace: t.List[t.Dict[str, str]] = []
     for opt_match in re.finditer(sql_opt_pattern, query):
         opt_group = opt_match.group("opt")
         var_match = re.search(sql_var_pattern, opt_group)
-        var_group = var_match.group("var")
+        var_group = var_match.group("var") if var_match is not None else ""
         opt_keep = var_group in options and options[var_group] != ""
-        to_replace.append({"opt": opt_group, "keep": opt_keep})
+        to_replace.append(
+            {
+                "opt": opt_group,
+                "replacement": opt_group.strip("[[]]") if opt_keep else "",
+            }
+        )
 
     for r in to_replace:
-        if r["keep"]:
-            query = query.replace(r["opt"], r["opt"].strip("[[]]"))
-        else:
-            query = query.replace(r["opt"], "")
+        query = query.replace(r["opt"], r["replacement"])
 
     chart["query"] = query
 
 
-async def dashboard_list(request, datasette):
+async def dashboard_list(request: Request, datasette: "Datasette") -> Response:
     await check_permission_instance(request, datasette)
     config = datasette.plugin_config("datasette-dashboards") or {}
     return Response.html(
@@ -87,7 +102,9 @@ async def dashboard_list(request, datasette):
     )
 
 
-async def _dashboard_view(request, datasette, embed=False):
+async def _dashboard_view(
+    request: Request, datasette: "Datasette", embed: bool = False
+) -> Response:
     await check_permission_instance(request, datasette)
 
     config = datasette.plugin_config("datasette-dashboards") or {}
@@ -139,15 +156,17 @@ async def _dashboard_view(request, datasette, embed=False):
     )
 
 
-async def dashboard_view(request, datasette):
+async def dashboard_view(request: Request, datasette: "Datasette") -> Response:
     return await _dashboard_view(request, datasette, embed=False)
 
 
-async def dashboard_view_embed(request, datasette):
+async def dashboard_view_embed(request: Request, datasette: "Datasette") -> Response:
     return await _dashboard_view(request, datasette, embed=True)
 
 
-async def _dashboard_chart(request, datasette, embed=False):
+async def _dashboard_chart(
+    request: Request, datasette: "Datasette", embed: bool = False
+) -> Response:
     await check_permission_instance(request, datasette)
 
     config = datasette.plugin_config("datasette-dashboards") or {}
@@ -188,16 +207,18 @@ async def _dashboard_chart(request, datasette, embed=False):
     )
 
 
-async def dashboard_chart(request, datasette):
+async def dashboard_chart(request: Request, datasette: "Datasette") -> Response:
     return await _dashboard_chart(request, datasette, embed=False)
 
 
-async def dashboard_chart_embed(request, datasette):
+async def dashboard_chart_embed(request: Request, datasette: "Datasette") -> Response:
     return await _dashboard_chart(request, datasette, embed=True)
 
 
 @hookimpl
-def register_routes():
+def register_routes() -> (
+    t.Iterable[t.Tuple[str, t.Callable[..., t.Coroutine[t.Any, t.Any, Response]]]]
+):
     return (
         ("^/-/dashboards$", dashboard_list),
         ("^/-/dashboards/(?P<slug>[^/]+)$", dashboard_view),
@@ -211,7 +232,9 @@ def register_routes():
 
 
 @hookimpl
-def menu_links(datasette, actor):
+def menu_links(
+    datasette: "Datasette", actor: t.Optional[t.Dict[str, t.Any]]
+) -> t.Iterable[t.Dict[str, t.Any]]:
     return [
         {"href": datasette.urls.path("/-/dashboards"), "label": "Dashboards"},
     ]

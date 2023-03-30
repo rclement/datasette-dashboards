@@ -1,11 +1,13 @@
 import copy
+import typing as t
 import pytest
 
+from pathlib import Path
 from datasette.app import Datasette
 
 
 @pytest.mark.asyncio
-async def test_dashboard_views(datasette):
+async def test_dashboard_views(datasette: Datasette) -> None:
     dashboards = datasette._metadata["plugins"]["datasette-dashboards"]
     for slug, dashboard in dashboards.items():
         response = await datasette.client.get(
@@ -65,7 +67,9 @@ async def test_dashboard_views(datasette):
 
 
 @pytest.mark.asyncio
-async def test_dashboard_view_layout(datasette_db, datasette_metadata):
+async def test_dashboard_view_layout(
+    datasette_db: Path, datasette_metadata: t.Dict[str, t.Any]
+) -> None:
     metadata = copy.deepcopy(datasette_metadata)
     metadata["plugins"]["datasette-dashboards"]["job-dashboard"]["layout"] = [
         ["analysis-note", "offers-day", "offers-day"],
@@ -90,7 +94,7 @@ async def test_dashboard_view_layout(datasette_db, datasette_metadata):
 
 
 @pytest.mark.asyncio
-async def test_dashboard_view_filters_default_redirect(datasette):
+async def test_dashboard_view_filters_default_redirect(datasette: Datasette) -> None:
     response = await datasette.client.get("/-/dashboards/job-dashboard")
     assert response.status_code == 302
     assert (
@@ -100,7 +104,7 @@ async def test_dashboard_view_filters_default_redirect(datasette):
 
 
 @pytest.mark.asyncio
-async def test_dashboard_view_parameters(datasette):
+async def test_dashboard_view_parameters(datasette: Datasette) -> None:
     response = await datasette.client.get(
         "/-/dashboards/job-dashboard?date_start=2021-01-01"
     )
@@ -124,7 +128,7 @@ async def test_dashboard_view_parameters(datasette):
 
 
 @pytest.mark.asyncio
-async def test_dashboard_view_parameters_empty(datasette):
+async def test_dashboard_view_parameters_empty(datasette: Datasette) -> None:
     response = await datasette.client.get("/-/dashboards/job-dashboard?date_start=")
     assert response.status_code == 200
 
@@ -146,13 +150,15 @@ async def test_dashboard_view_parameters_empty(datasette):
 
 
 @pytest.mark.asyncio
-async def test_dashboard_view_unknown(datasette):
+async def test_dashboard_view_unknown(datasette: Datasette) -> None:
     response = await datasette.client.get("/-/dashboards/unknown-dashboard")
     assert response.status_code == 404
 
 
 @pytest.mark.asyncio
-async def test_dashboard_view_unknown_chart_db(datasette_db, datasette_metadata):
+async def test_dashboard_view_unknown_chart_db(
+    datasette_db: Path, datasette_metadata: t.Dict[str, t.Any]
+) -> None:
     metadata = copy.deepcopy(datasette_metadata)
     metadata["plugins"]["datasette-dashboards"]["job-dashboard"]["charts"][
         "offers-count"
@@ -164,7 +170,9 @@ async def test_dashboard_view_unknown_chart_db(datasette_db, datasette_metadata)
 
 
 @pytest.mark.asyncio
-async def test_dashboard_view_allow_fullscreen(datasette_db, datasette_metadata):
+async def test_dashboard_view_allow_fullscreen(
+    datasette_db: Path, datasette_metadata: t.Dict[str, t.Any]
+) -> None:
     metadata = copy.deepcopy(datasette_metadata)
     metadata["plugins"]["datasette-dashboards"]["job-dashboard"]["settings"][
         "allow_fullscreen"
@@ -183,7 +191,9 @@ async def test_dashboard_view_allow_fullscreen(datasette_db, datasette_metadata)
 
 
 @pytest.mark.asyncio
-async def test_dashboard_view_enable_autorefresh(datasette_db, datasette_metadata):
+async def test_dashboard_view_enable_autorefresh(
+    datasette_db: Path, datasette_metadata: t.Dict[str, t.Any]
+) -> None:
     metadata = copy.deepcopy(datasette_metadata)
     metadata["plugins"]["datasette-dashboards"]["job-dashboard"]["settings"][
         "autorefresh"
@@ -220,8 +230,12 @@ async def test_dashboard_view_enable_autorefresh(datasette_db, datasette_metadat
     ],
 )
 async def test_dashboard_view_permissions(
-    datasette_db, datasette_metadata, metadata, authenticated, expected_status
-):
+    datasette_db: Path,
+    datasette_metadata: t.Dict[str, t.Any],
+    metadata: t.Dict[str, t.Any],
+    authenticated: bool,
+    expected_status: int,
+) -> None:
     datasette = Datasette(
         [str(datasette_db)], metadata={**datasette_metadata, **metadata}
     )

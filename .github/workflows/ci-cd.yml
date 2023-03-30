@@ -37,6 +37,7 @@ jobs:
         run: |
           pipenv run black --check datasette_dashboards tests
           pipenv run flake8 datasette_dashboards tests
+          pipenv run mypy datasette_dashboards tests
       - name: Run tests
         run: |
           pipenv run pytest -v --cov=datasette_dashboards --cov=tests --cov-branch --cov-report=term-missing tests
