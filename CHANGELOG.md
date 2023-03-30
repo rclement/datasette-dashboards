@@ -15,6 +15,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 - Improve filters layout
 - Embed external static assets for Vega, Vega-Lite and Vega-Embed
+- Update dependencies
 
 ### Fixed
 - Menu not showing in plugin pages
