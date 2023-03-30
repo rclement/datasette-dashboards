@@ -1,8 +1,10 @@
 import pytest
 
+from datasette.app import Datasette
+
 
 @pytest.mark.asyncio
-async def test_dashboard_chart_embed(datasette):
+async def test_dashboard_chart_embed(datasette: Datasette) -> None:
     dashboards = datasette._metadata["plugins"]["datasette-dashboards"]
     for slug, dashboard in dashboards.items():
         for chart_slug, chart in dashboard["charts"].items():

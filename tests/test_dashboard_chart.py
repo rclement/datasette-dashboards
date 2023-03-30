@@ -1,8 +1,10 @@
 import pytest
 
+from datasette.app import Datasette
+
 
 @pytest.mark.asyncio
-async def test_dashboard_chart(datasette):
+async def test_dashboard_chart(datasette: Datasette) -> None:
     dashboards = datasette._metadata["plugins"]["datasette-dashboards"]
     for slug, dashboard in dashboards.items():
         for chart_slug, chart in dashboard["charts"].items():
@@ -19,7 +21,7 @@ async def test_dashboard_chart(datasette):
 
 
 @pytest.mark.asyncio
-async def test_dashboard_chart_unknown_dashboard(datasette):
+async def test_dashboard_chart_unknown_dashboard(datasette: Datasette) -> None:
     dashboards = datasette._metadata["plugins"]["datasette-dashboards"]
     dashboard = list(dashboards.values())[0]
     chart_slug = list(dashboard["charts"].items())[0][0]
@@ -31,7 +33,7 @@ async def test_dashboard_chart_unknown_dashboard(datasette):
 
 
 @pytest.mark.asyncio
-async def test_dashboard_chart_unknown_chart(datasette):
+async def test_dashboard_chart_unknown_chart(datasette: Datasette) -> None:
     dashboards = datasette._metadata["plugins"]["datasette-dashboards"]
     slug = list(dashboards.keys())[0]
 
@@ -40,7 +42,7 @@ async def test_dashboard_chart_unknown_chart(datasette):
 
 
 @pytest.mark.asyncio
-async def test_dashboard_chart_parameters(datasette):
+async def test_dashboard_chart_parameters(datasette: Datasette) -> None:
     response = await datasette.client.get(
         "/-/dashboards/job-dashboard/offers-day?date_start=2021-01-01"
     )
@@ -52,7 +54,7 @@ async def test_dashboard_chart_parameters(datasette):
 
 
 @pytest.mark.asyncio
-async def test_dashboard_chart_parameters_empty(datasette):
+async def test_dashboard_chart_parameters_empty(datasette: Datasette) -> None:
     response = await datasette.client.get(
         "/-/dashboards/job-dashboard/offers-day?date_start="
     )
