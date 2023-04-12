@@ -154,6 +154,34 @@ jobs:
             --project=${{ secrets.VERCEL_PROJECT }} \
             --token=${{ secrets.VERCEL_TOKEN }}
 
+  publish-package-test:
+    runs-on: ubuntu-latest
+    needs: [test]
+    if: contains(github.ref, 'master')
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.10"
+      - uses: actions/cache@v3
+        name: Configure pip caching
+        with:
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-publish-pip-${{ hashFiles('**/setup.py') }}
+          restore-keys: |
+            ${{ runner.os }}-publish-pip-
+      - name: Install dependencies
+        run: |
+          pip install setuptools wheel twine
+      - name: Publish package on PyPI
+        env:
+          TWINE_USERNAME: __token__
+          TWINE_PASSWORD: ${{ secrets.PYPI_TOKEN_TEST }}
+        run: |
+          python setup.py sdist bdist_wheel
+          twine upload -r testpypi dist/*
+
   publish-package:
     runs-on: ubuntu-latest
     needs: [test]
