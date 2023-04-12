@@ -180,7 +180,7 @@ jobs:
           TWINE_PASSWORD: ${{ secrets.PYPI_TOKEN_TEST }}
         run: |
           python setup.py sdist bdist_wheel
-          twine upload -r testpypi dist/*
+          twine upload -r testpypi --skip-existing dist/*
 
   publish-package:
     runs-on: ubuntu-latest
