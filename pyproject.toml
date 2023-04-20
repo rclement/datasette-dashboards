@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "datasette-dashboards"
-version = "0.4.0"
+version = "0.5.0"
 description = "Datasette plugin providing data dashboards from metadata"
 repository = "https://github.com/rclement/datasette-dashboards"
 authors = ["Romain Clement"]
