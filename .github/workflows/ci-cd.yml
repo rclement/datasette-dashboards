@@ -25,23 +25,23 @@ jobs:
         uses: actions/cache@v3
         with:
           path: ~/.cache/pip
-          key: ${{ runner.os }}-pip-${{ hashFiles('**/Pipfile.lock') }}
+          key: ${{ runner.os }}-pip-${{ hashFiles('**/poetry.lock') }}
           restore-keys: |
             ${{ runner.os }}-pip-
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          python -m pip install --upgrade pipenv
-          pipenv install --dev --deploy
+          python -m pip install --upgrade poetry
+          poetry install
       - name: Run linting
         run: |
-          pipenv run black --check datasette_dashboards tests
-          pipenv run flake8 datasette_dashboards tests
-          pipenv run mypy datasette_dashboards tests
+          poetry run black --check datasette_dashboards tests
+          poetry run flake8 datasette_dashboards tests
+          poetry run mypy datasette_dashboards tests
       - name: Run tests
         run: |
-          pipenv run pytest -v --cov=datasette_dashboards --cov=tests --cov-branch --cov-report=term-missing tests
-          pipenv run coverage xml
+          poetry run pytest -v --cov=datasette_dashboards --cov=tests --cov-branch --cov-report=term-missing tests
+          poetry run coverage xml
       - name: Publish code coverage to Codecov
         uses: codecov/codecov-action@v3
         with:
@@ -98,12 +98,12 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          python -m pip install --upgrade pipenv
-          pipenv install --dev --deploy
+          python -m pip install --upgrade poetry
+          poetry install
       - name: Deploy to Vercel
         run: |-
           VERCEL_ALIAS=${GITHUB_REF_SLUG_URL}-${DEMO_BASE_URL_PREVIEW}
-          VERCEL_URL=$(pipenv run datasette publish vercel demo/jobs.db \
+          VERCEL_URL=$(poetry run datasette publish vercel demo/jobs.db \
             --metadata demo/metadata.yml \
             --template-dir demo/templates \
             --install=datasette-cluster-map \
@@ -140,11 +140,11 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          python -m pip install --upgrade pipenv
-          pipenv install --dev --deploy
+          python -m pip install --upgrade poetry
+          poetry install --dev --deploy
       - name: Deploy to Vercel
         run: |-
-          pipenv run datasette publish vercel demo/jobs.db \
+          poetry run datasette publish vercel demo/jobs.db \
             --metadata demo/metadata.yml \
             --template-dir demo/templates \
             --install=datasette-cluster-map \
@@ -168,19 +168,23 @@ jobs:
         name: Configure pip caching
         with:
           path: ~/.cache/pip
-          key: ${{ runner.os }}-publish-pip-${{ hashFiles('**/setup.py') }}
+          key: ${{ runner.os }}-publish-pip-${{ hashFiles('**/pyproject.toml') }}
           restore-keys: |
             ${{ runner.os }}-publish-pip-
       - name: Install dependencies
         run: |
-          pip install setuptools wheel twine
-      - name: Publish package on PyPI
+          python -m pip install --upgrade pip
+          python -m pip install --upgrade poetry
+          poetry install
+      - name: Build Python package
+        run: poetry build
+      - name: Publish Python package on PyPI
         env:
-          TWINE_USERNAME: __token__
-          TWINE_PASSWORD: ${{ secrets.PYPI_TOKEN_TEST }}
-        run: |
-          python setup.py sdist bdist_wheel
-          twine upload -r testpypi --skip-existing dist/*
+          POETRY_REPOSITORIES_TESTPYPI_URL: https://test.pypi.org/legacy/
+          POETRY_PYPI_TOKEN_TESTPYPI: ${{ secrets.PYPI_TOKEN_TEST }}
+          POETRY_HTTP_BASIC_TESTPYPI_USERNAME: __token__
+          POETRY_HTTP_BASIC_TESTPYPI_PASSWORD: ${{ secrets.PYPI_TOKEN_TEST }}
+        run: poetry publish -r testpypi --skip-existing
 
   publish-package:
     runs-on: ubuntu-latest
@@ -196,19 +200,22 @@ jobs:
         name: Configure pip caching
         with:
           path: ~/.cache/pip
-          key: ${{ runner.os }}-publish-pip-${{ hashFiles('**/setup.py') }}
+          key: ${{ runner.os }}-publish-pip-${{ hashFiles('**/pyproject.toml') }}
           restore-keys: |
             ${{ runner.os }}-publish-pip-
       - name: Install dependencies
         run: |
-          pip install setuptools wheel twine
-      - name: Publish package on PyPI
+          python -m pip install --upgrade pip
+          python -m pip install --upgrade poetry
+          poetry install
+      - name: Build Python package
+        run: poetry build
+      - name: Publish Python package on PyPI
         env:
-          TWINE_USERNAME: __token__
-          TWINE_PASSWORD: ${{ secrets.PYPI_TOKEN }}
-        run: |
-          python setup.py sdist bdist_wheel
-          twine upload dist/*
+          POETRY_PYPI_TOKEN_PYPI: ${{ secrets.PYPI_TOKEN }}
+          POETRY_HTTP_BASIC_PYPI_USERNAME: __token__
+          POETRY_HTTP_BASIC_PYPI_PASSWORD: ${{ secrets.PYPI_TOKEN }}
+        run: poetry publish
 
   take-shots:
     runs-on: ubuntu-latest
