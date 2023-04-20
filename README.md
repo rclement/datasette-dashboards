@@ -271,8 +271,8 @@ To set up this plugin locally, first checkout the code.
 Then create a new virtual environment and the required dependencies:
 
 ```bash
-pipenv install -d
-pipenv shell
+poetry install
+poetry shell
 ```
 
 To run the tests:
