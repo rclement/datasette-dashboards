@@ -29,5 +29,5 @@ setup(
     extras_require={"test": ["faker", "pytest", "pytest-asyncio", "sqlite-utils"]},
     tests_require=["datasette_dashboards[test]"],
     python_requires=">=3.7",
-    package_data={"datasette_dashboards": ["templates/*.html", "static/*"]},
+    package_data={"datasette_dashboards": ["templates/*.html", "static/*", "py.typed"]},
 )
