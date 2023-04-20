@@ -227,8 +227,8 @@ jobs:
 
     steps:
       - uses: actions/checkout@v3
-        with:
-          token: ${{ secrets.GH_PERSONAL_TOKEN }}
+        # with:
+        #   token: ${{ secrets.GH_PERSONAL_TOKEN }}
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
@@ -261,11 +261,11 @@ jobs:
         with:
           name: screenshot
           path: demo/datasette-dashboards-demo.png
-      - name: Commit and push changes
-        run: |
-          git config user.name "Automated"
-          git config user.email "actions@users.noreply.github.com"
-          git add -A
-          timestamp=$(date -u)
-          git commit -m "Latest data: ${timestamp}" || exit 0
-          git push
+      # - name: Commit and push changes
+      #   run: |
+      #     git config user.name "Automated"
+      #     git config user.email "actions@users.noreply.github.com"
+      #     git add -A
+      #     timestamp=$(date -u)
+      #     git commit -m "Latest data: ${timestamp}" || exit 0
+      #     git push
