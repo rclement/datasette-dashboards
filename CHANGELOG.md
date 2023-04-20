@@ -13,6 +13,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 - Updated README demo dashboard screenshot
+- BREAKING: Removed support for Python 3.7
 
 ### Internal
 - Automatic demo dashboard screenshot
