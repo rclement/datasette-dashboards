@@ -79,3 +79,7 @@
   width: 100%;
   height: 70vh;
 }
+
+#vg-tooltip-element * {
+  all: revert;
+}
