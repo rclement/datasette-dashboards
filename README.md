@@ -275,10 +275,13 @@ poetry install
 poetry shell
 ```
 
-To run the tests:
+To run the QA suite:
 
 ```bash
-pytest
+black --check datasette_dashboards tests
+flake8 datasette_dashboards tests
+mypy datasette_dashboards tests
+pytest -v --cov=datasette_dashboards --cov=tests --cov-branch --cov-report=term-missing tests
 ```
 
 ## Demo
