@@ -127,7 +127,7 @@
   <script src="{{ urls.static_plugins('datasette_dashboards', 'dashboards.js') }}"></script>
   <script type="text/javascript">
     {% for chart_slug, chart in dashboard.charts.items() %}
-    renderChart('#chart-{{ chart_slug }}', {{ chart|tojson }}, '{{ query_string|safe }}')
+    renderChart('#chart-{{ chart_slug }}', {{ chart|tojson }}, '{{ query_string|safe }}', '{{ absolute_url }}')
     {% endfor %}
 
     {% if settings.autorefresh %}

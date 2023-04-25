@@ -98,6 +98,7 @@ async def dashboard_list(request: Request, datasette: "Datasette") -> Response:
         await datasette.render_template(
             "dashboard_list.html",
             {"dashboards": config},
+            request=request,
         )
     )
 
@@ -146,12 +147,14 @@ async def _dashboard_view(
             "dashboard_view.html",
             {
                 "settings": settings,
+                "absolute_url": datasette.absolute_url(request, datasette.urls.instance()),
                 "slug": slug,
                 "query_parameters": query_parameters,
                 "query_string": query_string,
                 "dashboard": dashboard,
                 "embed": embed,
             },
+            request=request,
         )
     )
 
@@ -197,12 +200,14 @@ async def _dashboard_chart(
         await datasette.render_template(
             "dashboard_chart.html",
             {
+                "absolute_url": datasette.absolute_url(request, datasette.urls.instance()),
                 "slug": slug,
                 "query_string": query_string,
                 "dashboard": dashboard,
                 "chart": chart,
                 "embed": embed,
             },
+            request=request,
         )
     )
 

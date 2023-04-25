@@ -67,6 +67,6 @@
   <script src="{{ urls.static_plugins('datasette_dashboards', 'vega-embed.min.js') }}"></script>
   <script src="{{ urls.static_plugins('datasette_dashboards', 'dashboards.js') }}"></script>
   <script type="text/javascript">
-    renderChart('#chart', {{ chart|tojson }}, '{{ query_string|safe }}', true)
+    renderChart('#chart', {{ chart|tojson }}, '{{ query_string|safe }}', '{{ absolute_url }}', true)
   </script>
 {% endblock %}
