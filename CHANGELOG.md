@@ -7,6 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 ### Fixed
 - Vega-Lite chart tooltip style rendering
+- Charts data URL are absolute and use optional `base_url` setting
 
 ## [0.5.0] - 2023-04-20
 ### Added
