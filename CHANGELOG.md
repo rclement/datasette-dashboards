@@ -9,6 +9,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Vega-Lite chart tooltip style rendering
 - Charts data URL are absolute and use optional `base_url` setting
 
+### Changed
+- Update dependencies
+
 ## [0.5.0] - 2023-04-20
 ### Added
 - Missing `py.typed` file to distribute type information
