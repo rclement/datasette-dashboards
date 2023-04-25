@@ -5,14 +5,35 @@
 {% block content %}
   <h1>Embedded Dashboard</h1>
 
-  <p>Dashboards can be embedded within an `iframe` element:</p>
+  <p>Dashboards can be embedded within an <code>iframe</code> element:</p>
 
   <iframe
-    src="/-/dashboards/job-offers-stats/embed?start_date=2023-01-01&end_date=2023-12-31"
+    src="/-/dashboards/job-offers-stats/embed?date_start=2021-01-01&date_end=2021-12-31"
     frameborder="0"
     width="100%"
-    height="600"
+    height="800"
     allowtransparency
   >
   </iframe>
+
+  <hr>
+
+  <details>
+    <summary>HTML source</summary>
+    The above dashboard is embedded using the following HTML snippet (note the use of predefined filter values):
+    <blockquote>
+      <pre>
+        <code>
+&lt;iframe
+  src="/-/dashboards/job-offers-stats/embed?date_start=2021-01-01&amp;date_end=2021-12-31"
+  frameborder="0"
+  width="100%"
+  height="600"
+  allowtransparency
+&gt;
+&lt;/iframe&gt;
+        </code>
+      </pre>
+    </blockquote>
+  </details>
 {% endblock %}

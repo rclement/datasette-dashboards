@@ -385,6 +385,24 @@ markdown = "*"
 test = ["pytest", "pytest-asyncio"]
 
 [[package]]
+name = "datasette-sqlite-http"
+version = "0.1.0a2"
+description = ""
+category = "dev"
+optional = false
+python-versions = ">=3.7"
+files = [
+    {file = "datasette_sqlite_http-0.1.0a2-py3-none-any.whl", hash = "sha256:034f4da9c65d4580f72f98e4a21021d5f5b4b65bb04d8c1ce9e897a24ca8a6a8"},
+]
+
+[package.dependencies]
+datasette = "*"
+sqlite-http = "*"
+
+[package.extras]
+test = ["pytest"]
+
+[[package]]
 name = "datasette-vega"
 version = "0.6.2"
 description = "A Datasette plugin that provides tools for generating charts using Vega"
@@ -533,14 +551,14 @@ files = [
 
 [[package]]
 name = "importlib-metadata"
-version = "6.5.0"
+version = "6.6.0"
 description = "Read metadata from Python packages"
 category = "main"
 optional = false
 python-versions = ">=3.7"
 files = [
-    {file = "importlib_metadata-6.5.0-py3-none-any.whl", hash = "sha256:03ba783c3a2c69d751b109fc0c94a62c51f581b3d6acf8ed1331b6d5729321ff"},
-    {file = "importlib_metadata-6.5.0.tar.gz", hash = "sha256:7a8bdf1bc3a726297f5cfbc999e6e7ff6b4fa41b26bba4afc580448624460045"},
+    {file = "importlib_metadata-6.6.0-py3-none-any.whl", hash = "sha256:43dd286a2cd8995d5eaef7fee2066340423b818ed3fd70adf0bad5f1fac53fed"},
+    {file = "importlib_metadata-6.6.0.tar.gz", hash = "sha256:92501cdf9cc66ebd3e612f1b4f0c0765dfa42f0fa38ffb319b6bd84dd675d705"},
 ]
 
 [package.dependencies]
@@ -816,19 +834,19 @@ xarray = ["xarray"]
 
 [[package]]
 name = "platformdirs"
-version = "3.2.0"
+version = "3.3.0"
 description = "A small Python package for determining appropriate platform-specific dirs, e.g. a \"user data dir\"."
 category = "dev"
 optional = false
 python-versions = ">=3.7"
 files = [
-    {file = "platformdirs-3.2.0-py3-none-any.whl", hash = "sha256:ebe11c0d7a805086e99506aa331612429a72ca7cd52a1f0d277dc4adc20cb10e"},
-    {file = "platformdirs-3.2.0.tar.gz", hash = "sha256:d5b638ca397f25f979350ff789db335903d7ea010ab28903f57b27e1b16c2b08"},
+    {file = "platformdirs-3.3.0-py3-none-any.whl", hash = "sha256:ea61fd7b85554beecbbd3e9b37fb26689b227ffae38f73353cbcc1cf8bd01878"},
+    {file = "platformdirs-3.3.0.tar.gz", hash = "sha256:64370d47dc3fca65b4879f89bdead8197e93e05d696d6d1816243ebae8595da5"},
 ]
 
 [package.extras]
-docs = ["furo (>=2022.12.7)", "proselint (>=0.13)", "sphinx (>=6.1.3)", "sphinx-autodoc-typehints (>=1.22,!=1.23.4)"]
-test = ["appdirs (==1.4.4)", "covdefaults (>=2.3)", "pytest (>=7.2.2)", "pytest-cov (>=4)", "pytest-mock (>=3.10)"]
+docs = ["furo (>=2023.3.27)", "proselint (>=0.13)", "sphinx (>=6.1.3)", "sphinx-autodoc-typehints (>=1.23,!=1.23.4)"]
+test = ["appdirs (==1.4.4)", "covdefaults (>=2.3)", "pytest (>=7.3.1)", "pytest-cov (>=4)", "pytest-mock (>=3.10)"]
 
 [[package]]
 name = "pluggy"
@@ -1051,6 +1069,22 @@ files = [
 test = ["pytest"]
 
 [[package]]
+name = "sqlite-http"
+version = "0.1.0a2"
+description = ""
+category = "dev"
+optional = false
+python-versions = ">=3.7"
+files = [
+    {file = "sqlite_http-0.1.0a2-py3-none-macosx_10_6_x86_64.whl", hash = "sha256:7eb16229c5e22a9dbdb40cc4e26a2328e62f8750363aba597a05e303105f0247"},
+    {file = "sqlite_http-0.1.0a2-py3-none-manylinux_2_17_x86_64.manylinux2014_x86_64.manylinux1_x86_64.whl", hash = "sha256:9c10547edc0a4204957a8d095d12fb18941c0ba7c568cc2b63fecf2617f5805c"},
+    {file = "sqlite_http-0.1.0a2-py3-none-win_amd64.whl", hash = "sha256:38ca4406ca945e3239aaf0b5aad8999856064a266a041b8bc71fde05fb5cc35f"},
+]
+
+[package.extras]
+test = ["pytest"]
+
+[[package]]
 name = "sqlite-utils"
 version = "3.30"
 description = "CLI tool and Python utility functions for manipulating SQLite databases"
@@ -1164,4 +1198,4 @@ testing = ["big-O", "flake8 (<5)", "jaraco.functools", "jaraco.itertools", "more
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.8.1"
-content-hash = "c8aa1b20e5428fe8dddb80ce5bc96357e17385c53919b39eadb19a28eb2beec4"
+content-hash = "1e7b3fbdd7e471b65b87ca4f01898911d87fce49b4c483f1dfa2063a0cd3ddc9"
