@@ -109,6 +109,7 @@ jobs:
             --install=datasette-cluster-map \
             --install=datasette-vega \
             --install=datasette-block-robots \
+            --install=datasette-sqlite-http \
             --install=https://github.com/rclement/datasette-dashboards/archive/${GITHUB_SHA}.zip \
             --project=${{ secrets.VERCEL_PROJECT }} \
             --token=${{ secrets.VERCEL_TOKEN }} \

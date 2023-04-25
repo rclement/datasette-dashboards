@@ -10,7 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Charts data URL are absolute and use optional `base_url` setting
 
 ### Changed
-- Update embedded dashboard and chart pages in demo
+- Update demo
 - Update dependencies
 
 ## [0.5.0] - 2023-04-20
