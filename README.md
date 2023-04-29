@@ -74,9 +74,9 @@ plugins:
           title: Number of events by source
           db: jobs
           query: SELECT source, count(*) as count FROM events WHERE TRUE [[ AND date >= date(:date_start) ]] [[ AND date <= date(:date_end) ]] GROUP BY source ORDER BY count DESC
-          library: vega
+          library: vega-lite
           display:
-            mark: { type: bar, tooltip: true }
+            mark: { type: arc, tooltip: true }
             encoding:
               color: { field: source, type: nominal }
               theta: { field: count, type: quantitative }
