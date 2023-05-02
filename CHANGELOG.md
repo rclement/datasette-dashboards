@@ -5,6 +5,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+
+## [0.5.2] - 2023-05-02
 ### Fixed
 - Update vega-lite definition in README.md (thanks @hydrosquall) (PR #107)
 - Make dashboard filters form compatible with Datasette-Lite
@@ -152,7 +154,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - Initial release of `datasette-dashboards`
 
-[Unreleased]: https://github.com/rclement/datasette-dashboards/compare/0.5.1...HEAD
+[Unreleased]: https://github.com/rclement/datasette-dashboards/compare/0.5.2...HEAD
+[0.5.2]: https://github.com/rclement/datasette-dashboards/compare/0.5.1...0.5.2
 [0.5.1]: https://github.com/rclement/datasette-dashboards/compare/0.5.0...0.5.1
 [0.5.0]: https://github.com/rclement/datasette-dashboards/compare/0.4.0...0.5.0
 [0.4.0]: https://github.com/rclement/datasette-dashboards/compare/0.3.0...0.4.0
