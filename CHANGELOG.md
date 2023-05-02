@@ -7,6 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 ### Fixed
 - Update vega-lite definition in README.md (thanks @hydrosquall) (PR #107)
+- Make dashboard filters form compatible with Datasette-Lite
 
 ## Changed
 - Update dependencies
