@@ -69,7 +69,7 @@
 
     {% if dashboard.filters %}
     <div class="dashboard-filters">
-      <form method="GET">
+      <form method="GET" action="{{ urls.path('-/dashboards') }}/{{ slug }}">
         <div class="dashboard-filters-boxes">
           {% for key, dfilter in dashboard.filters.items() %}
           {% set dfilter_type = dfilter.type if dfilter.type in ['text', 'date', 'number', 'select'] else 'text' %}
