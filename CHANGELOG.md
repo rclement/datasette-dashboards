@@ -5,6 +5,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+### Fixed
+- Update vega-lite definition in README.md (thanks @hydrosquall) (PR #107)
+
+## Changed
+- Update dependencies
 
 ## [0.5.1] - 2023-04-25
 ### Fixed
