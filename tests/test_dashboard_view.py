@@ -170,6 +170,32 @@ async def test_dashboard_view_unknown_chart_db(
 
 
 @pytest.mark.asyncio
+async def test_dashboard_view_no_filters(
+    datasette_db: Path, datasette_metadata: t.Dict[str, t.Any]
+) -> None:
+    metadata = copy.deepcopy(datasette_metadata)
+    metadata["plugins"]["datasette-dashboards"]["job-dashboard"].pop("filters")
+    datasette = Datasette([str(datasette_db)], metadata=metadata)
+
+    response = await datasette.client.get("/-/dashboards/job-dashboard")
+    assert response.status_code == 200
+
+
+@pytest.mark.asyncio
+async def test_dashboard_view_no_charts(
+    datasette_db: Path, datasette_metadata: t.Dict[str, t.Any]
+) -> None:
+    metadata = copy.deepcopy(datasette_metadata)
+    metadata["plugins"]["datasette-dashboards"]["job-dashboard"].pop("charts")
+    datasette = Datasette([str(datasette_db)], metadata=metadata)
+
+    response = await datasette.client.get(
+        "/-/dashboards/job-dashboard", follow_redirects=True
+    )
+    assert response.status_code == 200
+
+
+@pytest.mark.asyncio
 async def test_dashboard_view_allow_fullscreen(
     datasette_db: Path, datasette_metadata: t.Dict[str, t.Any]
 ) -> None:
