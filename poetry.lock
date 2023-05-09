@@ -1086,14 +1086,14 @@ test = ["pytest"]
 
 [[package]]
 name = "sqlite-utils"
-version = "3.30"
-description = "CLI tool and Python utility functions for manipulating SQLite databases"
+version = "3.31"
+description = "CLI tool and Python library for manipulating SQLite databases"
 category = "dev"
 optional = false
-python-versions = ">=3.6"
+python-versions = ">=3.7"
 files = [
-    {file = "sqlite-utils-3.30.tar.gz", hash = "sha256:30005c12d5f13445659f791766beb6a9900c25f442bea1f980f21d38b75f6e33"},
-    {file = "sqlite_utils-3.30-py3-none-any.whl", hash = "sha256:e2113e5ce8e9c69822fff419145d7144034b0bd7bb6bf9b8bf92bcc6de859705"},
+    {file = "sqlite-utils-3.31.tar.gz", hash = "sha256:54989f3d09ed121f9df97831d041738ae48771d3ca85008946f1bc1884109a8a"},
+    {file = "sqlite_utils-3.31-py3-none-any.whl", hash = "sha256:95849cf62a9d6aa7df2dd27dfc615c0ee71c515516284a7d85e2c061021893c9"},
 ]
 
 [package.dependencies]
@@ -1198,4 +1198,4 @@ testing = ["big-O", "flake8 (<5)", "jaraco.functools", "jaraco.itertools", "more
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.8.1"
-content-hash = "68578899653068c2de257d764aeb83848559326491d3fbbff7ce851416f9b6af"
+content-hash = "074295c636e23ab1e7f5a547b2d9fc2b39c3cc6839756e56b5202c1ec58317c5"
