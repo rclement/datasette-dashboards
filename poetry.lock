@@ -1086,14 +1086,14 @@ test = ["pytest"]
 
 [[package]]
 name = "sqlite-utils"
-version = "3.31"
+version = "3.32.1"
 description = "CLI tool and Python library for manipulating SQLite databases"
 category = "dev"
 optional = false
 python-versions = ">=3.7"
 files = [
-    {file = "sqlite-utils-3.31.tar.gz", hash = "sha256:54989f3d09ed121f9df97831d041738ae48771d3ca85008946f1bc1884109a8a"},
-    {file = "sqlite_utils-3.31-py3-none-any.whl", hash = "sha256:95849cf62a9d6aa7df2dd27dfc615c0ee71c515516284a7d85e2c061021893c9"},
+    {file = "sqlite-utils-3.32.1.tar.gz", hash = "sha256:6c28fe32fcebd658a1691dedfa4d111499ad302cc0139c5a5893a590d461848a"},
+    {file = "sqlite_utils-3.32.1-py3-none-any.whl", hash = "sha256:dfa124c4f752d67b2a36aa41929c51c699d81364b7b076218885a5ea714610d0"},
 ]
 
 [package.dependencies]
@@ -1108,6 +1108,7 @@ docs = ["beanbag-docutils (>=2.0)", "codespell", "furo", "sphinx-autobuild", "sp
 flake8 = ["flake8"]
 mypy = ["data-science-types", "mypy", "types-click", "types-python-dateutil", "types-tabulate"]
 test = ["black", "cogapp", "hypothesis", "pytest"]
+tui = ["trogon"]
 
 [[package]]
 name = "tabulate"
@@ -1198,4 +1199,4 @@ testing = ["big-O", "flake8 (<5)", "jaraco.functools", "jaraco.itertools", "more
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.8.1"
-content-hash = "0849ef6b659c6aa4cfaaaa67b76a7687c66514d0408012493ceb41ff407bb4c3"
+content-hash = "08c515efaf7a9c371d972536279b374027e60ea1e2cc0ef4f0eacf192703f547"
