@@ -10,6 +10,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 - Allow dashboard metadata without filters and charts sections
 
+### Changed
+- Update dependencies
+
 ## [0.5.2] - 2023-05-02
 ### Fixed
 - Update vega-lite definition in README.md (thanks @hydrosquall) (PR #107)
