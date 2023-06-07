@@ -386,13 +386,13 @@ test = ["pytest", "pytest-asyncio"]
 
 [[package]]
 name = "datasette-sqlite-http"
-version = "0.1.0a2"
+version = "0.1.0a5"
 description = ""
 category = "dev"
 optional = false
 python-versions = ">=3.7"
 files = [
-    {file = "datasette_sqlite_http-0.1.0a2-py3-none-any.whl", hash = "sha256:034f4da9c65d4580f72f98e4a21021d5f5b4b65bb04d8c1ce9e897a24ca8a6a8"},
+    {file = "datasette_sqlite_http-0.1.0a5-py3-none-any.whl", hash = "sha256:b7fe0552df66fd6dfdc6129b2e9d8e35d96f3cdc05aaaa1d396aa4e597fff5a1"},
 ]
 
 [package.dependencies]
@@ -1199,4 +1199,4 @@ testing = ["big-O", "flake8 (<5)", "jaraco.functools", "jaraco.itertools", "more
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.8.1"
-content-hash = "d98ba835173c756ef949212404d69ebf0a2ba98df5da45cf721b3471e1ee08bc"
+content-hash = "63aaf4561cb58f7e42981e4805e8cf5664cc6c9a926a87a27f27a711e1cb6452"
