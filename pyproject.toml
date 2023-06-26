@@ -30,7 +30,7 @@ mypy = "==1.4.0"
 pytest = "==7.4.0"
 pytest-asyncio = "==0.21.0"
 pytest-cov = "==4.1.0"
-sqlite-utils = "==3.32.1"
+sqlite-utils = "==3.33"
 
 [tool.poetry.plugins."datasette"]
 "dashboards" = "datasette_dashboards"
