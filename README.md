@@ -238,7 +238,9 @@ define the `layout` array property as a grid / matrix:
 - Each column is referring a chart by its property name
 - An empty slot in the grid can be specified using the `.` (_full stop_) placeholder
 
-**WARNING**: all rows must specify the same number of columns!
+**WARNINGS**:
+- All rows must specify the same number of columns
+- All charts must be placed somewhere on the custom layout
 
 Here is a simple 2x3 grid example with 4 different charts:
 
