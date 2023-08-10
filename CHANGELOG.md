@@ -12,6 +12,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Enable extra extensions for Markdown rendering
 
 ### Changed
+- Update README with dashboard layout examples
 - Update dependencies
 
 ## [0.5.3] - 2023-06-05
