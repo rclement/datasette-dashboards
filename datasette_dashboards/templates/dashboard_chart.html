@@ -55,7 +55,12 @@
     <div class="dashboard-card">
       <div id="chart" class="chart-container">
         {% if chart.library == 'markdown' %}
-        {{ render_markdown(chart.display) }}
+        {{ render_markdown(
+              chart.display,
+              extensions=["extra"],
+              extra_tags=["table", "thead", "tr", "th", "td", "tbody"]
+            )
+        }}
         {% endif %}
       </div>
     </div>
