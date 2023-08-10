@@ -236,6 +236,27 @@ define the `layout` array property as a grid / matrix:
 
 - Each entry represents a row of charts
 - Each column is referring a chart by its property name
+- An empty slot in the grid can be specified using the `.` (_full stop_) placeholder
+
+**WARNINGS**:
+- All rows must specify the same number of columns
+- All charts must be placed somewhere on the custom layout
+
+Here is a simple 2x3 grid example with 4 different charts:
+
+```yaml
+layout:
+  - [chart1, chart2, chart3]
+  - [chart1, chart4, chart4]
+```
+
+Here is a more subtle example involving an empty spot at the end of the second row:
+
+```yaml
+layout:
+  - [chart1, chart2, chart3]
+  - [chart1, chart4, .]
+```
 
 ### Embedding dashboards and charts
 
