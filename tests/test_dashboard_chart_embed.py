@@ -15,4 +15,4 @@ async def test_dashboard_chart_embed(datasette: Datasette) -> None:
             assert response.status_code == 200
             assert f'<h1>{dashboard["title"]}</h1>' in response.text
             if "title" in props:
-                assert f'<p>{chart["title"]}</p>' in response.text
+                assert f'{chart["title"]}' in response.text

@@ -17,10 +17,9 @@ async def test_dashboard_chart(datasette: Datasette) -> None:
             assert '<li><a href="/-/dashboards">Dashboards</a></li>' in response.text
             assert f'<h1>{dashboard["title"]}</h1>' in response.text
             if "title" in props:
-                assert f'<p>{chart["title"]}</p>' in response.text
+                assert chart["title"] in response.text
             if "db" in props and "query" in props:
-                assert f'<a href="/{chart["db"]}?sql={chart["query"]}">'
-                assert "View and edit SQL"
+                assert "View and edit SQL" in response.text
 
 
 @pytest.mark.asyncio

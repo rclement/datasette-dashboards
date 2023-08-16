@@ -106,6 +106,10 @@
             {% if not embed %}
             </a>
             {% endif%}
+            <span id="chart-tooltip-{{ chart_slug}}" class="chart-tooltip">
+              ⚠️
+              <span class="chart-tooltip-text">SQL query returning more than {{ row_limit }} rows</span>
+            </span>
           </p>
         </div>
         {% endif %}
@@ -132,7 +136,7 @@
   <script src="{{ urls.static_plugins('datasette_dashboards', 'dashboards.js') }}"></script>
   <script type="text/javascript">
     {% for chart_slug, chart in dashboard.charts.items() %}
-    renderChart('#chart-{{ chart_slug }}', {{ chart|tojson }}, '{{ query_string|safe }}', '{{ absolute_url }}')
+    renderChart('{{ chart_slug }}', {{ chart|tojson }}, '{{ query_string|safe }}', '{{ absolute_url }}')
     {% endfor %}
 
     {% if settings.autorefresh %}

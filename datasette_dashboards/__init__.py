@@ -158,6 +158,7 @@ async def _dashboard_view(
                 "query_string": query_string,
                 "dashboard": dashboard,
                 "embed": embed,
+                "row_limit": datasette.settings_dict().get("max_returned_rows"),
             },
             request=request,
         )
@@ -216,6 +217,7 @@ async def _dashboard_chart(
                 "dashboard": dashboard,
                 "chart": chart,
                 "embed": embed,
+                "row_limit": datasette.settings_dict().get("max_returned_rows"),
             },
             request=request,
         )

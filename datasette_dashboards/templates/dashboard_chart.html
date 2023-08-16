@@ -38,9 +38,15 @@
         <div class="page-header" style="border-color: black">
           <h1>{{ dashboard.title }}</h1>
         </div>
-        {% if chart.title %}
-        <p>{{ chart.title }}</p>
-        {% endif %}
+        <p>
+          {% if chart.title %}
+          {{ chart.title }}
+          {% endif %}
+          <span id="chart-tooltip-{{ slug }}" class="chart-tooltip">
+            ⚠️
+            <span class="chart-tooltip-text">SQL query returning more than {{ row_limit }} rows</span>
+          </span>
+        </p>
       </div>
     </div>
 
@@ -53,7 +59,7 @@
     {% endif %}
 
     <div class="dashboard-card">
-      <div id="chart" class="chart-container">
+      <div id="chart-{{ slug }}" class="chart-container">
         {% if chart.library == 'markdown' %}
         {{ render_markdown(
               chart.display,
@@ -72,6 +78,6 @@
   <script src="{{ urls.static_plugins('datasette_dashboards', 'vega-embed.min.js') }}"></script>
   <script src="{{ urls.static_plugins('datasette_dashboards', 'dashboards.js') }}"></script>
   <script type="text/javascript">
-    renderChart('#chart', {{ chart|tojson }}, '{{ query_string|safe }}', '{{ absolute_url }}', true)
+    renderChart('{{ slug }}', {{ chart|tojson }}, '{{ query_string|safe }}', '{{ absolute_url }}', true)
   </script>
 {% endblock %}
