@@ -53,7 +53,7 @@ async def fill_dynamic_filters(
 def get_dashboard_filters_keys(
     request: Request, dashboard: t.Dict[str, t.Any]
 ) -> t.Set[str]:
-    filters_keys = dashboard.get("filters", {}).keys()
+    filters_keys = dashboard["filters"].keys()
     return set(filters_keys) & set(request.args.keys())
 
 
@@ -185,6 +185,9 @@ async def _dashboard_chart(
         dashboard = config[slug]
     except KeyError:
         raise NotFound(f"Dashboard not found: {slug}")
+
+    dashboard["filters"] = dashboard.get("filters", {})
+    dashboard["charts"] = dashboard.get("charts", {})
 
     try:
         chart = dashboard["charts"][chart_slug]
