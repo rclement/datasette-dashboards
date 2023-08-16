@@ -1,5 +1,8 @@
+import copy
+import typing as t
 import pytest
 
+from pathlib import Path
 from datasette.app import Datasette
 
 
@@ -63,3 +66,15 @@ async def test_dashboard_chart_parameters_empty(datasette: Datasette) -> None:
         "SELECT date(date) as day, count(*) as count FROM offers_view WHERE TRUE   GROUP BY day ORDER BY day"
         in response.text
     )
+
+
+@pytest.mark.asyncio
+async def test_dashboard_chart_no_filters(
+    datasette_db: Path, datasette_metadata: t.Dict[str, t.Any]
+) -> None:
+    metadata = copy.deepcopy(datasette_metadata)
+    metadata["plugins"]["datasette-dashboards"]["job-dashboard"].pop("filters")
+    datasette = Datasette([str(datasette_db)], metadata=metadata)
+
+    response = await datasette.client.get("/-/dashboards/job-dashboard/offers-day")
+    assert response.status_code == 200

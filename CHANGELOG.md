@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 - Markdown lists rendering
 - Text filter style
+- Chart page display with no filters defined
 
 ### Added
 - Enable extra extensions for Markdown rendering
