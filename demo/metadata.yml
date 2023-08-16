@@ -11,6 +11,14 @@ description_html: |-
     </ul>
   </div>
 
+databases:
+  jobs:
+    tables:
+      offers_view:
+        fts_table: offers_fts
+        fts_pk: id
+        searchmode: raw
+
 plugins:
   datasette-sqlite-http:
     UNSAFE_allow_http_requests: true
@@ -43,6 +51,9 @@ plugins:
           type: select
           db: jobs
           query: SELECT DISTINCT region FROM offers_view WHERE region IS NOT NULL ORDER BY region ASC
+        search:
+          name: Search
+          type: text
       charts:
         analysis-note:
           library: markdown
@@ -80,7 +91,15 @@ plugins:
         offers-count:
           title: Total number of offers
           db: jobs
-          query: SELECT count(*) as count FROM offers_view WHERE TRUE [[ AND date >= date(:date_start) ]] [[ AND date <= date(:date_end) ]] [[ AND source = :source ]] [[ AND region = :region ]];
+          query: >-
+            SELECT count(*) as count
+            FROM offers_view
+            WHERE TRUE
+              [[ AND date >= date(:date_start) ]]
+              [[ AND date <= date(:date_end) ]]
+              [[ AND source = :source ]]
+              [[ AND region = :region ]]
+              [[ AND id IN (SELECT rowid FROM offers_fts WHERE offers_fts MATCH :search) ]]
           library: metric
           display:
             field: count
@@ -90,7 +109,19 @@ plugins:
         offers-day:
           title: Number of offers by day
           db: jobs
-          query: SELECT date(date) as day, count(*) as count FROM offers_view WHERE TRUE [[ AND date >= date(:date_start) ]] [[ AND date <= date(:date_end) ]] [[ AND source = :source ]] [[ AND region = :region ]] GROUP BY day ORDER BY day
+          query: >-
+            SELECT
+              date(date) as day,
+              count(*) as count
+            FROM offers_view
+            WHERE TRUE
+              [[ AND date >= date(:date_start) ]]
+              [[ AND date <= date(:date_end) ]]
+              [[ AND source = :source ]]
+              [[ AND region = :region ]]
+              [[ AND id IN (SELECT rowid FROM offers_fts WHERE offers_fts MATCH :search) ]]
+            GROUP BY day
+            ORDER BY day
           library: vega-lite
           display:
             mark: { type: line, tooltip: true }
@@ -101,7 +132,18 @@ plugins:
         offers-source:
           title: Number of offers by source
           db: jobs
-          query: SELECT source, count(*) as count FROM offers_view WHERE TRUE [[ AND date >= date(:date_start) ]] [[ AND date <= date(:date_end) ]] [[ AND region = :region ]] GROUP BY source ORDER BY count DESC
+          query: >-
+            SELECT
+              source,
+              count(*) as count
+            FROM offers_view
+            WHERE TRUE
+              [[ AND date >= date(:date_start) ]]
+              [[ AND date <= date(:date_end) ]]
+              [[ AND region = :region ]]
+              [[ AND id IN (SELECT rowid FROM offers_fts WHERE offers_fts MATCH :search) ]]
+            GROUP BY source
+            ORDER BY count DESC
           library: vega-lite
           display:
             mark: { type: arc, tooltip: true }
@@ -119,7 +161,19 @@ plugins:
         offers-day-source:
           title: Offers by day by source
           db: jobs
-          query: SELECT date(date) as day, source, count(*) as count FROM offers_view WHERE TRUE [[ AND date >= date(:date_start) ]] [[ AND date <= date(:date_end) ]] [[ AND region = :region ]] GROUP BY day, source ORDER BY day
+          query: >-
+            SELECT
+              date(date) as day,
+              source,
+              count(*) as count
+            FROM offers_view
+            WHERE TRUE
+              [[ AND date >= date(:date_start) ]]
+              [[ AND date <= date(:date_end) ]]
+              [[ AND region = :region ]]
+              [[ AND id IN (SELECT rowid FROM offers_fts WHERE offers_fts MATCH :search) ]]
+            GROUP BY day, source
+            ORDER BY day
           library: vega-lite
           display:
             mark: { type: bar, tooltip: true }
@@ -162,6 +216,7 @@ plugins:
                 [[ AND date <= date(:date_end) ]]
                 [[ AND source = :source ]]
                 [[ AND region = :region ]]
+                [[ AND id IN (SELECT rowid FROM offers_fts WHERE offers_fts MATCH :search) ]]
               GROUP BY
                 region
             )
@@ -205,7 +260,12 @@ plugins:
             FROM (
                 SELECT '["' || lower(replace(trim(title), ' ', '", "')) || '"]' AS array
                 FROM offers_view
-                WHERE TRUE [[ AND date >= date(:date_start) ]] [[ AND date <= date(:date_end) ]] [[ AND source = :source ]] [[ AND region = :region ]]
+                WHERE TRUE
+                  [[ AND date >= date(:date_start) ]]
+                  [[ AND date <= date(:date_end) ]]
+                  [[ AND source = :source ]]
+                  [[ AND region = :region ]]
+                  [[ AND id IN (SELECT rowid FROM offers_fts WHERE offers_fts MATCH :search) ]]
               ) a,
               json_each(a.array) b
             WHERE length(b.value) > 3
@@ -259,6 +319,7 @@ plugins:
               [[ AND date <= date(:date_end) ]]
               [[ AND source = :source ]]
               [[ AND region = :region ]]
+              [[ AND id IN (SELECT rowid FROM offers_fts WHERE offers_fts MATCH :search) ]]
             ORDER BY date DESC
             LIMIT 5
           library: table
@@ -282,5 +343,6 @@ plugins:
               [[ AND date <= date(:date_end) ]]
               [[ AND source = :source ]]
               [[ AND region = :region ]]
+              [[ AND id IN (SELECT rowid FROM offers_fts WHERE offers_fts MATCH :search) ]]
           library: map
           display:

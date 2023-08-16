@@ -25,6 +25,10 @@
   margin-bottom: 1rem;
 }
 
+.dashboard-filters > form input[type="text"] {
+  all: revert;
+}
+
 .dashboard-filters-boxes {
   display: flex;
   flex-direction: row;
