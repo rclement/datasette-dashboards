@@ -53,7 +53,7 @@ async def fill_dynamic_filters(
 def get_dashboard_filters_keys(
     request: Request, dashboard: t.Dict[str, t.Any]
 ) -> t.Set[str]:
-    filters_keys = dashboard["filters"].keys()
+    filters_keys = dashboard.get("filters", {}).keys()
     return set(filters_keys) & set(request.args.keys())
 
 
