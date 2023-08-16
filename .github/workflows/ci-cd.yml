@@ -37,7 +37,7 @@ jobs:
         run: |
           poetry run black --check datasette_dashboards tests
           poetry run flake8 datasette_dashboards tests
-          poetry run mypy datasette_dashboards tests
+          poetry run mypy --strict datasette_dashboards tests
       - name: Run tests
         run: |
           poetry run pytest -v --cov=datasette_dashboards --cov=tests --cov-branch --cov-report=term-missing tests
