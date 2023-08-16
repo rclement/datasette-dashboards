@@ -14,6 +14,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 - Update README with dashboard layout examples
+- Update README demo dashboard screenshot
 - Update demo with full-text search filter for job titles
 - Update dependencies
 
