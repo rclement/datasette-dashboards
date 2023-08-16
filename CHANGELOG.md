@@ -7,12 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 ### Fixed
 - Markdown lists rendering
+- Text filter style
 
 ### Added
 - Enable extra extensions for Markdown rendering
 
 ### Changed
 - Update README with dashboard layout examples
+- Update demo with full-text search filter for job titles
 - Update dependencies
 
 ## [0.5.3] - 2023-06-05
