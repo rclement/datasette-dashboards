@@ -48,6 +48,10 @@ no_implicit_reexport = "True"
 disallow_untyped_defs = "True"
 
 [[tool.mypy.overrides]]
+module = "datasette_dashboards"
+disallow_untyped_decorators = "False"
+
+[[tool.mypy.overrides]]
 module = "datasette.*"
 ignore_missing_imports = "True"
 

@@ -19,6 +19,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Update demo with full-text search filter for job titles
 - Update dependencies
 
+### Internal
+- Enable strict `mypy` check
+
 ## [0.5.3] - 2023-06-05
 ### Fixed
 - Allow dashboard metadata without filters and charts sections
