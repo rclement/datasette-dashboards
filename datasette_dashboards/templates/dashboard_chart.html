@@ -42,9 +42,8 @@
           {% if chart.title %}
           {{ chart.title }}
           {% endif %}
-          <span id="chart-tooltip-{{ slug }}" class="chart-tooltip">
+          <span id="chart-tooltip-{{ slug }}" class="chart-tooltip" title="SQL query returning more than {{ row_limit }} rows">
             ⚠️
-            <span class="chart-tooltip-text">SQL query returning more than {{ row_limit }} rows</span>
           </span>
         </p>
       </div>

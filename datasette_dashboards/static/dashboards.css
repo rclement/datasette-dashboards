@@ -104,23 +104,3 @@
   position: relative;
   display: inline-block;
 }
-
-/* Tooltip text */
-.chart-tooltip .chart-tooltip-text {
-  visibility: hidden;
-  width: 350px;
-  background-color: rgb(36, 36, 36);
-  color: #e8e8e8;
-  text-align: center;
-  padding: 10px 4px;
-  border-radius: 6px;
-  position: absolute;
-  top: -10px;
-  left: 120%;
-  z-index: 1;
-}
-
-/* Show the tooltip text when you mouse over the tooltip container */
-.chart-tooltip:hover .chart-tooltip-text {
-  visibility: visible;
-}

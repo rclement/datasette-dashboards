@@ -106,9 +106,8 @@
             {% if not embed %}
             </a>
             {% endif%}
-            <span id="chart-tooltip-{{ chart_slug}}" class="chart-tooltip">
+            <span id="chart-tooltip-{{ chart_slug}}" class="chart-tooltip" title="SQL query returning more than {{ row_limit }} rows">
               ⚠️
-              <span class="chart-tooltip-text">SQL query returning more than {{ row_limit }} rows</span>
             </span>
           </p>
         </div>
