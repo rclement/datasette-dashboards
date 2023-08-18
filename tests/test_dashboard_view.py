@@ -150,6 +150,33 @@ async def test_dashboard_view_parameters_empty(datasette: Datasette) -> None:
 
 
 @pytest.mark.asyncio
+async def test_dashboard_filter_select_autocomplete(
+    datasette_db: Path, datasette_metadata: t.Dict[str, t.Any]
+) -> None:
+    filter_key = "select_filter"
+    filter_options = [f"Option {i}" for i in range(1, 102)]
+
+    metadata = copy.deepcopy(datasette_metadata)
+    metadata["plugins"]["datasette-dashboards"]["job-dashboard"]["filters"][filter_key][
+        "options"
+    ] = filter_options
+    datasette = Datasette([str(datasette_db)], metadata=metadata)
+
+    response = await datasette.client.get(
+        "/-/dashboards/job-dashboard", follow_redirects=True
+    )
+    assert response.status_code == 200
+
+    assert (
+        f'<input id="{filter_key}" name="{filter_key}" type="text" list="{filter_key}-list"'
+        in response.text
+    )
+    assert f'<datalist id="{filter_key}-list">' in response.text
+    for option in filter_options:
+        assert f'<option value="{option}">{option}</option>' in response.text
+
+
+@pytest.mark.asyncio
 async def test_dashboard_view_unknown(datasette: Datasette) -> None:
     response = await datasette.client.get("/-/dashboards/unknown-dashboard")
     assert response.status_code == 404

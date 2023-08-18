@@ -137,6 +137,10 @@ SELECT * FROM mytable [[ WHERE col >= :my_filter ]]
 SELECT * FROM mytable WHERE TRUE [[ AND col1 = :my_filter_1 ]] [[ AND col2 = :my_filter_2 ]]
 ```
 
+**Important notes:**
+
+- When a `select` filter has more than 100 options, the dropdown list will be automatically converted to a text filter with autocompletion
+
 #### Vega properties
 
 Available configuration for `vega` charts:

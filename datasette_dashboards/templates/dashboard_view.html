@@ -76,12 +76,21 @@
           <fieldset>
             <legend>{{ dfilter.name }}</legend>
             {% if dfilter_type == 'select' %}
-            <select id="{{ key }}" name="{{ key }}">
-              <option value="" {% if (key in query_parameters.keys() and query_parameters[key] == '') or  (key not in query_parameters.keys() and not dfilter.default) %}selected{% endif %}></option>
-              {% for option in dfilter.options %}
-              <option value="{{ option }}" {% if (key in query_parameters.keys() and query_parameters[key] == option) or (key not in query_parameters.keys() and dfilter.default == option) %}selected{% endif %}>{{ option }}</option>
-              {% endfor %}
-            </select>
+              {% if dfilter.options | length > 100 %}
+              <input id="{{ key }}" name="{{ key }}" type="text" list="{{ key }}-list" value="{% if key in query_parameters.keys() %}{{ query_parameters[key] }}{% else %}{{ dfilter.default }}{% endif %}">
+              <datalist id="{{ key }}-list">
+                {% for option in dfilter.options %}
+                <option value="{{ option }}">{{ option }}</option>
+                {% endfor %}
+              </datalist>
+              {% else %}
+              <select id="{{ key }}" name="{{ key }}">
+                <option value="" {% if (key in query_parameters.keys() and query_parameters[key] == '') or  (key not in query_parameters.keys() and not dfilter.default) %}selected{% endif %}></option>
+                {% for option in dfilter.options %}
+                <option value="{{ option }}" {% if (key in query_parameters.keys() and query_parameters[key] == option) or (key not in query_parameters.keys() and dfilter.default == option) %}selected{% endif %}>{{ option }}</option>
+                {% endfor %}
+              </select>
+              {% endif %}
             {% else %}
             <input id="{{ key }}" name="{{ key }}" type="{{ dfilter_type }}"{% if dfilter.min is defined %} min="{{ dfilter.min }}"{% endif %}{% if dfilter.max is defined %} max="{{ dfilter.max }}"{% endif %}{% if dfilter.step is defined %} step="{{ dfilter.step }}"{% endif %} value="{% if key in query_parameters.keys() %}{{ query_parameters[key] }}{% else %}{{ dfilter.default }}{% endif %}">
             {% endif %}
