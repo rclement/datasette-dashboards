@@ -1,5 +1,18 @@
-function renderVegaChart(el, chart, query_string, absolute_url, full_height) {
+function getDataUrl(chart, query_string, absolute_url) {
   const query = encodeURIComponent(chart.query)
+  return `${absolute_url}${chart.db}.json?sql=${query}&${query_string}&_shape=objects`
+}
+
+function enableChartTooltip(chart_slug) {
+  let tooltip = document.querySelector(`#chart-tooltip-${chart_slug}`)
+  tooltip.style.visibility = 'visible'
+}
+
+async function renderVegaChart(chart_slug, chart, query_string, absolute_url, full_height) {
+  const dataUrl = getDataUrl(chart, query_string, absolute_url)
+  const results = await fetch(dataUrl)
+  const data = await results.json()
+
   let defaultSignals = [
     {
       'name': 'width',
@@ -32,19 +45,27 @@ function renderVegaChart(el, chart, query_string, absolute_url, full_height) {
     data: [
       {
         name: 'table',
-        url: `${absolute_url}${chart.db}.csv?sql=${query}&${query_string}`,
-        format: { 'type': 'csv', 'parse': 'auto' }
+        values: data.rows,
+        format: { 'type': 'json' }
       }
     ],
     signals: defaultSignals,
     ...chart.display
   };
 
-  vegaEmbed(el, spec);
+  const el = document.querySelector(`#chart-${chart_slug}`)
+  vegaEmbed(el, spec)
+
+  if (data.truncated) {
+    enableChartTooltip(chart_slug)
+  }
 }
 
-function renderVegaLiteChart(el, chart, query_string, absolute_url, full_height) {
-  const query = encodeURIComponent(chart.query)
+async function renderVegaLiteChart(chart_slug, chart, query_string, absolute_url, full_height) {
+  const dataUrl = getDataUrl(chart, query_string, absolute_url)
+  const results = await fetch(dataUrl)
+  const data = await results.json()
+
   const spec = {
     $schema: 'https://vega.github.io/schema/vega-lite/v5.json',
     description: chart.title,
@@ -61,20 +82,25 @@ function renderVegaLiteChart(el, chart, query_string, absolute_url, full_height)
       }
     },
     data: {
-      url: `${absolute_url}${chart.db}.csv?sql=${query}&${query_string}`,
-      format: { 'type': 'csv' }
+      values: data.rows,
+      format: { 'type': 'json' }
     },
     ...chart.display
   };
 
-  vegaEmbed(el, spec);
+  const el = document.querySelector(`#chart-${chart_slug}`)
+  vegaEmbed(el, spec)
+
+  if (data.truncated) {
+    enableChartTooltip(chart_slug)
+  }
 }
 
-async function renderMetricChart(el, chart, query_string, absolute_url, full_height) {
-  const query = encodeURIComponent(chart.query)
-  const results = await fetch(`${absolute_url}${chart.db}.json?sql=${query}&${query_string}&_shape=array`)
+async function renderMetricChart(chart_slug, chart, query_string, absolute_url, full_height) {
+  const dataUrl = getDataUrl(chart, query_string, absolute_url)
+  const results = await fetch(dataUrl)
   const data = await results.json()
-  const metric = data[0][chart.display.field]
+  const metric = data.rows[0][chart.display.field]
 
   const prefix = chart.display.prefix || ''
   const suffix = chart.display.suffix || ''
@@ -97,12 +123,17 @@ async function renderMetricChart(el, chart, query_string, absolute_url, full_hei
   wrapper.style.whiteSpace = 'nowrap'
   wrapper.style.textOverflow = 'ellipsis'
 
-  document.querySelector(el).appendChild(wrapper)
+  const el = document.querySelector(`#chart-${chart_slug}`)
+  el.appendChild(wrapper)
+
+  if (data.truncated) {
+    enableChartTooltip(chart_slug)
+  }
 }
 
-async function renderTableChart(el, chart, query_string, absolute_url, full_height) {
-  const query = encodeURIComponent(chart.query)
-  const results = await fetch(`${absolute_url}${chart.db}.json?sql=${query}&${query_string}`)
+async function renderTableChart(chart_slug, chart, query_string, absolute_url, full_height) {
+  const dataUrl = getDataUrl(chart, query_string, absolute_url)
+  const results = await fetch(dataUrl)
   const data = await results.json()
 
   const thead = document.createElement('thead')
@@ -117,7 +148,7 @@ async function renderTableChart(el, chart, query_string, absolute_url, full_heig
   const tbody = document.createElement('tbody')
   data.rows.forEach(row => {
     const tbody_tr = document.createElement('tr')
-    row.forEach(col => {
+    Object.values(row).forEach(col => {
       const tbody_td = document.createElement('td')
       tbody_td.innerHTML = col
       tbody_tr.appendChild(tbody_td)
@@ -135,20 +166,27 @@ async function renderTableChart(el, chart, query_string, absolute_url, full_heig
   wrapper.style.overflow = 'auto'
   wrapper.appendChild(table)
 
-  document.querySelector(el).appendChild(wrapper)
+  const el = document.querySelector(`#chart-${chart_slug}`)
+  el.appendChild(wrapper)
+
+  if (data.truncated) {
+    enableChartTooltip(chart_slug)
+  }
 }
 
-async function renderMapChart(el, chart, query_string, absolute_url, full_height) {
+async function renderMapChart(chart_slug, chart, query_string, absolute_url, full_height) {
   document.addEventListener("DOMContentLoaded", async () => {
-    const query = encodeURIComponent(chart.query)
-    const results = await fetch(`${absolute_url}${chart.db}.json?sql=${query}&${query_string}&_shape=array`)
+    const dataUrl = getDataUrl(chart, query_string, absolute_url)
+    const results = await fetch(dataUrl)
     const data = await results.json()
 
     const wrapper = document.createElement('div')
     wrapper.style.width = '100%'
     wrapper.style.height = '100%'
     wrapper.style.minHeight = '200px'
-    document.querySelector(el).appendChild(wrapper)
+
+    const el = document.querySelector(`#chart-${chart_slug}`)
+    el.appendChild(wrapper)
 
     const map = L.map(wrapper, { zoom: 12 })
 
@@ -164,7 +202,7 @@ async function renderMapChart(el, chart, query_string, absolute_url, full_height
     const longitude_column = options.longitude_column || 'longitude'
     const show_latlng_popup = options.show_latlng_popup || false
 
-    data.forEach(row => {
+    data.rows.forEach(row => {
       const marker = L.marker([row[latitude_column], row[longitude_column]])
       const popup = Object.entries(row)
         .filter(e => (e[0] === latitude_column || e[0] === longitude_column) ? show_latlng_popup : true)
@@ -173,13 +211,17 @@ async function renderMapChart(el, chart, query_string, absolute_url, full_height
       map.addLayer(marker)
     })
 
-    const coords = data.map(row => [row[latitude_column], row[longitude_column]])
+    const coords = data.rows.map(row => [row[latitude_column], row[longitude_column]])
     const bounds = new L.LatLngBounds(coords)
     map.fitBounds(bounds)
+
+    if (data.truncated) {
+      enableChartTooltip(chart_slug)
+    }
   })
 }
 
-async function renderChart(el, chart, query_string, absolute_url, full_height = false) {
+async function renderChart(chart_slug, chart, query_string, absolute_url, full_height = false) {
   renderers = new Map()
   renderers.set('vega', renderVegaChart)
   renderers.set('vega-lite', renderVegaLiteChart)
@@ -189,7 +231,7 @@ async function renderChart(el, chart, query_string, absolute_url, full_height = 
 
   render = renderers.get(chart.library)
   if (render) {
-    await render(el, chart, query_string, absolute_url, full_height)
+    await render(chart_slug, chart, query_string, absolute_url, full_height)
   }
 }
 

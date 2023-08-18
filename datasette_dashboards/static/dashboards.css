@@ -98,3 +98,9 @@
 #vg-tooltip-element * {
   all: revert;
 }
+
+.chart-tooltip {
+  visibility: hidden;
+  position: relative;
+  display: inline-block;
+}

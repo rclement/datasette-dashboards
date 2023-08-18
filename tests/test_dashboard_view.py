@@ -63,7 +63,7 @@ async def test_dashboard_views(datasette: Datasette) -> None:
             if chart["library"] != "markdown":
                 assert f'<a href="/-/dashboards/{slug}/{chart_slug}?' in response.text
                 assert f'{chart["title"]}' in response.text
-            assert f"renderChart('#chart-{chart_slug}', " in response.text
+            assert f"renderChart('{chart_slug}', " in response.text
 
 
 @pytest.mark.asyncio
