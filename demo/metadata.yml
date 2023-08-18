@@ -51,8 +51,13 @@ plugins:
           type: select
           db: jobs
           query: SELECT DISTINCT region FROM offers_view WHERE region IS NOT NULL ORDER BY region ASC
-        search:
-          name: Search
+        company:
+          name: Company
+          type: select
+          db: jobs
+          query: SELECT DISTINCT company FROM offers_view WHERE company IS NOT NULL ORDER BY company ASC
+        job_title:
+          name: Job Title
           type: text
       charts:
         analysis-note:
@@ -99,7 +104,8 @@ plugins:
               [[ AND date <= date(:date_end) ]]
               [[ AND source = :source ]]
               [[ AND region = :region ]]
-              [[ AND id IN (SELECT rowid FROM offers_fts WHERE offers_fts MATCH :search) ]]
+              [[ AND company = :company ]]
+              [[ AND id IN (SELECT rowid FROM offers_fts WHERE offers_fts MATCH :job_title) ]]
           library: metric
           display:
             field: count
@@ -119,7 +125,8 @@ plugins:
               [[ AND date <= date(:date_end) ]]
               [[ AND source = :source ]]
               [[ AND region = :region ]]
-              [[ AND id IN (SELECT rowid FROM offers_fts WHERE offers_fts MATCH :search) ]]
+              [[ AND company = :company ]]
+              [[ AND id IN (SELECT rowid FROM offers_fts WHERE offers_fts MATCH :job_title) ]]
             GROUP BY day
             ORDER BY day
           library: vega-lite
@@ -141,7 +148,8 @@ plugins:
               [[ AND date >= date(:date_start) ]]
               [[ AND date <= date(:date_end) ]]
               [[ AND region = :region ]]
-              [[ AND id IN (SELECT rowid FROM offers_fts WHERE offers_fts MATCH :search) ]]
+              [[ AND company = :company ]]
+              [[ AND id IN (SELECT rowid FROM offers_fts WHERE offers_fts MATCH :job_title) ]]
             GROUP BY source
             ORDER BY count DESC
           library: vega-lite
@@ -171,7 +179,8 @@ plugins:
               [[ AND date >= date(:date_start) ]]
               [[ AND date <= date(:date_end) ]]
               [[ AND region = :region ]]
-              [[ AND id IN (SELECT rowid FROM offers_fts WHERE offers_fts MATCH :search) ]]
+              [[ AND company = :company ]]
+              [[ AND id IN (SELECT rowid FROM offers_fts WHERE offers_fts MATCH :job_title) ]]
             GROUP BY day, source
             ORDER BY day
           library: vega-lite
@@ -216,7 +225,8 @@ plugins:
                 [[ AND date <= date(:date_end) ]]
                 [[ AND source = :source ]]
                 [[ AND region = :region ]]
-                [[ AND id IN (SELECT rowid FROM offers_fts WHERE offers_fts MATCH :search) ]]
+                [[ AND company = :company ]]
+                [[ AND id IN (SELECT rowid FROM offers_fts WHERE offers_fts MATCH :job_title) ]]
               GROUP BY
                 region
             )
@@ -265,7 +275,8 @@ plugins:
                   [[ AND date <= date(:date_end) ]]
                   [[ AND source = :source ]]
                   [[ AND region = :region ]]
-                  [[ AND id IN (SELECT rowid FROM offers_fts WHERE offers_fts MATCH :search) ]]
+                  [[ AND company = :company ]]
+                  [[ AND id IN (SELECT rowid FROM offers_fts WHERE offers_fts MATCH :job_title) ]]
               ) a,
               json_each(a.array) b
             WHERE length(b.value) > 3
@@ -319,7 +330,8 @@ plugins:
               [[ AND date <= date(:date_end) ]]
               [[ AND source = :source ]]
               [[ AND region = :region ]]
-              [[ AND id IN (SELECT rowid FROM offers_fts WHERE offers_fts MATCH :search) ]]
+              [[ AND company = :company ]]
+              [[ AND id IN (SELECT rowid FROM offers_fts WHERE offers_fts MATCH :job_title) ]]
             ORDER BY date DESC
             LIMIT 5
           library: table
@@ -343,6 +355,7 @@ plugins:
               [[ AND date <= date(:date_end) ]]
               [[ AND source = :source ]]
               [[ AND region = :region ]]
-              [[ AND id IN (SELECT rowid FROM offers_fts WHERE offers_fts MATCH :search) ]]
+              [[ AND company = :company ]]
+              [[ AND id IN (SELECT rowid FROM offers_fts WHERE offers_fts MATCH :job_title) ]]
           library: map
           display:
