@@ -5,6 +5,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+
+## [0.6.1] - 2023-08-21
 ### Changed
 - Switch `select` filter to autocomplete text filter when more than 100 options are provided
 
@@ -182,7 +184,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - Initial release of `datasette-dashboards`
 
-[Unreleased]: https://github.com/rclement/datasette-dashboards/compare/0.6.0...HEAD
+[Unreleased]: https://github.com/rclement/datasette-dashboards/compare/0.6.1...HEAD
+[0.6.1]: https://github.com/rclement/datasette-dashboards/compare/0.6.0...0.6.1
 [0.6.0]: https://github.com/rclement/datasette-dashboards/compare/0.5.3...0.6.0
 [0.5.3]: https://github.com/rclement/datasette-dashboards/compare/0.5.2...0.5.3
 [0.5.2]: https://github.com/rclement/datasette-dashboards/compare/0.5.1...0.5.2
