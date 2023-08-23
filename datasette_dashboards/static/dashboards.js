@@ -138,7 +138,7 @@ async function renderTableChart(chart_slug, chart, query_string, absolute_url, f
 
   const thead = document.createElement('thead')
   const thead_tr = document.createElement('tr')
-  data.columns.forEach(col => {
+  Object.keys(data.rows[0]).forEach(col => {
     const thead_th = document.createElement('th')
     thead_th.innerHTML = col
     thead_tr.appendChild(thead_th)
