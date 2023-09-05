@@ -16,7 +16,7 @@ jobs:
       matrix:
         python-version: ["3.8", "3.9", "3.10", "3.11"]
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: Set up Python ${{ matrix.python-version }}
         uses: actions/setup-python@v4
         with:
@@ -81,7 +81,7 @@ jobs:
       url: ${{ needs.deploy-demo-setup.outputs.deployment_url }}
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: Inject slug/short variables
         uses: rlespinasse/github-slug-action@v4
       - name: Set up Python
@@ -126,7 +126,7 @@ jobs:
       url: ${{ needs.deploy-demo-setup.outputs.deployment_url }}
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
@@ -161,7 +161,7 @@ jobs:
     needs: [test]
     if: contains(github.ref, 'master')
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
@@ -193,7 +193,7 @@ jobs:
     needs: [test]
     if: contains(github.ref, 'tags')
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
@@ -228,7 +228,7 @@ jobs:
       contents: write
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
         # with:
         #   token: ${{ secrets.GH_PERSONAL_TOKEN }}
       - name: Set up Python
