@@ -2,12 +2,14 @@
   "name": "datasette-dashboard",
   "private": true,
   "dependencies": {
-    "rollup": "3.29.2",
     "vega": "5.24.0",
     "vega-embed": "6.21.3",
     "vega-lite": "5.6.1"
   },
   "scripts": {
-    "postinstall": "./utils/bundle_js.sh"
+    "vendor:vega": "cp node_modules/vega/build/vega.min.js datasette_dashboards/static/vega.min.js",
+    "vendor:vega-embed": "cp node_modules/vega-embed/build/vega-embed.min.js datasette_dashboards/static/vega-embed.min.js",
+    "vendor:vega-lite": "cp node_modules/vega-lite/build/vega-lite.min.js datasette_dashboards/static/vega-lite.min.js",
+    "postinstall": "npm run vendor:vega && npm run vendor:vega-embed && npm run vendor:vega-lite"
   }
 }
