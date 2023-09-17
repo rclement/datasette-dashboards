@@ -130,3 +130,6 @@ Thumbs.db
 # Docker
 .docker/
 .vercel
+
+# NPM
+node_modules/
