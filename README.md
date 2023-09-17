@@ -309,6 +309,14 @@ mypy datasette_dashboards tests
 pytest -v --cov=datasette_dashboards --cov=tests --cov-branch --cov-report=term-missing tests
 ```
 
+## Updating JS dependencies
+
+External JS dependencies are tracked and bundled using NPM and `package.json`:
+
+```bash
+npm install
+```
+
 ## Demo
 
 With the developmnent environment setup, you can run the demo locally:
