@@ -161,6 +161,24 @@ files = [
 colorama = {version = "*", markers = "platform_system == \"Windows\""}
 
 [[package]]
+name = "click-default-group"
+version = "1.2.4"
+description = "click_default_group"
+category = "dev"
+optional = false
+python-versions = ">=2.7"
+files = [
+    {file = "click_default_group-1.2.4-py2.py3-none-any.whl", hash = "sha256:9b60486923720e7fc61731bdb32b617039aba820e22e1c88766b1125592eaa5f"},
+    {file = "click_default_group-1.2.4.tar.gz", hash = "sha256:eb3f3c99ec0d456ca6cd2a7f08f7d4e91771bef51b01bdd9580cc6450fe1251e"},
+]
+
+[package.dependencies]
+click = "*"
+
+[package.extras]
+test = ["pytest"]
+
+[[package]]
 name = "click-default-group-wheel"
 version = "1.2.2"
 description = "Extends click.Group to invoke a command without explicit subcommand name (packaged as a wheel)"
@@ -1084,19 +1102,19 @@ test = ["pytest"]
 
 [[package]]
 name = "sqlite-utils"
-version = "3.35"
+version = "3.35.1"
 description = "CLI tool and Python library for manipulating SQLite databases"
 category = "dev"
 optional = false
 python-versions = ">=3.7"
 files = [
-    {file = "sqlite-utils-3.35.tar.gz", hash = "sha256:8f6fe7f8d12772cd5cf4594703a98dcd0c37c0fd6820dd20541ba74b9fca363a"},
-    {file = "sqlite_utils-3.35-py3-none-any.whl", hash = "sha256:d95591db18716ce7eac9a6359f4958598944d9e6640ccc42a2be6ab8456edddf"},
+    {file = "sqlite-utils-3.35.1.tar.gz", hash = "sha256:e0f03e6976b05bdb7a5c56454971a0e980fc16dbfd3512bbd3bdcac4f0e4370e"},
+    {file = "sqlite_utils-3.35.1-py3-none-any.whl", hash = "sha256:58da19f64b37fd47e33158ac4dadf2616701cd17d825a1625866d04647f72805"},
 ]
 
 [package.dependencies]
 click = "*"
-click-default-group-wheel = "*"
+click-default-group = ">=1.2.3"
 pluggy = "*"
 python-dateutil = "*"
 sqlite-fts4 = "*"
@@ -1198,4 +1216,4 @@ testing = ["big-O", "flake8 (<5)", "jaraco.functools", "jaraco.itertools", "more
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.8.1"
-content-hash = "77cf8822832c8b2907440bea188aae05bb04fed20b993a80a3e40dd5548d43a6"
+content-hash = "23435c205903780875f57d0995aad07ad762c657dfbf529bf87d6504abbe9f13"
