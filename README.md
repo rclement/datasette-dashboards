@@ -311,10 +311,10 @@ pytest -v --cov=datasette_dashboards --cov=tests --cov-branch --cov-report=term-
 
 ## Updating JS dependencies
 
-External JS dependencies are tracked and bundled using NPM and `package.json`:
+External JS dependencies are tracked and bundled using NPM and `package.json` (`package-lock.json` is not needed here):
 
 ```bash
-npm install
+npm install --no-package-lock
 ```
 
 ## Demo
