@@ -8,6 +8,6 @@
     "vega-lite": "5.6.1"
   },
   "scripts": {
-    "postinstall": "./bundle_js.sh"
+    "postinstall": "./utils/bundle_js.sh"
   }
 }
