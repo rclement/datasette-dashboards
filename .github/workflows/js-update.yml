@@ -10,6 +10,8 @@ jobs:
 
     steps:
       - uses: actions/checkout@v3
+        with:
+          token: ${{ secrets.GH_PERSONAL_TOKEN }}
       - name: Install dependencies
         run: npm install --no-package-lock
       - name: Commit and push changes
