@@ -23,7 +23,7 @@ jobs:
       - name: Remove Vercel alias
         run: vercel alias --token ${VERCEL_TOKEN} rm ${VERCEL_ALIAS} -y
       - name: Delete GitHub environment
-        uses: actions/github-script@v6
+        uses: actions/github-script@v7
         with:
           github-token: ${{ secrets.GH_PERSONAL_TOKEN }}
           script: |
