@@ -259,7 +259,7 @@ jobs:
             --width 1440 \
             --retina
       - name: Upload screenshot artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: screenshot
           path: demo/datasette-dashboards-demo.png
