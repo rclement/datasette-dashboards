@@ -3,7 +3,7 @@
   "private": true,
   "dependencies": {
     "vega": "5.26.1",
-    "vega-embed": "6.23.0",
+    "vega-embed": "6.24.0",
     "vega-lite": "5.16.3"
   },
   "scripts": {
