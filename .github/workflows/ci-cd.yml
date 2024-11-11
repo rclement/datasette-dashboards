@@ -59,7 +59,7 @@ jobs:
 
     steps:
       - name: Inject slug/short variables
-        uses: rlespinasse/github-slug-action@v4
+        uses: rlespinasse/github-slug-action@v5
       - name: Set preview deployment url variable
         if: ${{ !contains(github.ref, 'master') && !contains(github.ref, 'tags') }}
         run: echo "DEPLOYMENT_URL=https://${GITHUB_REF_SLUG_URL}-${DEMO_BASE_URL_PREVIEW}" >> ${GITHUB_ENV}
@@ -83,7 +83,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Inject slug/short variables
-        uses: rlespinasse/github-slug-action@v4
+        uses: rlespinasse/github-slug-action@v5
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
