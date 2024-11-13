@@ -6,10 +6,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 ### Added
+- Add Python 3.12 and 3.13 support
 - Use `package.json` to track and bundle external JS dependencies
 
 ### Changed
 - Update dependencies
+
+### Removed
+- BREAKING: drop Python 3.8 support
 
 ## [0.6.2] - 2023-08-23
 ### Fixed
