@@ -43,7 +43,7 @@ jobs:
           poetry run pytest -v --cov=datasette_dashboards --cov=tests --cov-branch --cov-report=term-missing tests
           poetry run coverage xml
       - name: Publish code coverage to Codecov
-        uses: codecov/codecov-action@v4
+        uses: codecov/codecov-action@v5
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
           file: ./coverage.xml
