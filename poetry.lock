@@ -1135,13 +1135,13 @@ test = ["pytest"]
 
 [[package]]
 name = "sqlite-utils"
-version = "3.37"
+version = "3.38"
 description = "CLI tool and Python library for manipulating SQLite databases"
 optional = false
 python-versions = ">=3.8"
 files = [
-    {file = "sqlite_utils-3.37-py3-none-any.whl", hash = "sha256:4fb0dc9e61b1f9226a14eb1f072e984cf3cb69058dc2838887600a0771e9624f"},
-    {file = "sqlite_utils-3.37.tar.gz", hash = "sha256:542a71033d4e7936fe909230ac9794d3e200021838ab63dbaf3ce8f5bc2273a4"},
+    {file = "sqlite_utils-3.38-py3-none-any.whl", hash = "sha256:8a27441015c3b2ef475f555861f7a2592f73bc60d247af9803a11b65fc605bf9"},
+    {file = "sqlite_utils-3.38.tar.gz", hash = "sha256:1ae77b931384052205a15478d429464f6c67a3ac3b4eafd3c674ac900f623aab"},
 ]
 
 [package.dependencies]
@@ -1247,4 +1247,4 @@ type = ["pytest-mypy"]
 [metadata]
 lock-version = "2.0"
 python-versions = ">=3.9,<3.14"
-content-hash = "28e4abbb1eea9fb9bab28824c7c3e00c01dfb00d75fe3e83a8659b8c7051436c"
+content-hash = "bd76f8496d7985c66091cf229fc2ecaa0890d9de76caf4134babde26a24b2dd8"
