@@ -113,6 +113,7 @@ jobs:
             --install=https://github.com/rclement/datasette-dashboards/archive/${GITHUB_SHA}.zip \
             --project=${{ secrets.VERCEL_PROJECT }} \
             --token=${{ secrets.VERCEL_TOKEN }} \
+            --vercel-json=demo/vercel.json \
             --no-prod)
           vercel alias --token ${{ secrets.VERCEL_TOKEN }} set ${VERCEL_URL} ${VERCEL_ALIAS}
 
@@ -154,7 +155,8 @@ jobs:
             --install=datasette-sqlite-http \
             --install=https://github.com/rclement/datasette-dashboards/archive/${GITHUB_SHA}.zip \
             --project=${{ secrets.VERCEL_PROJECT }} \
-            --token=${{ secrets.VERCEL_TOKEN }}
+            --token=${{ secrets.VERCEL_TOKEN }} \
+            --vercel-json=demo/vercel.json
 
   publish-package-test:
     runs-on: ubuntu-latest

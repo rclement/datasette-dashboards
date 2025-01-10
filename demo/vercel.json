@@ -1,0 +1,15 @@
+{
+    "name": "datasette-dashboards-demo",
+    "builds": [
+        {
+            "src": "index.py",
+            "use": "@vercel/python@4.6.0"
+        }
+    ],
+    "routes": [
+        {
+            "src": "(.*)",
+            "dest": "index.py"
+        }
+    ]
+}
