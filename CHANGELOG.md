@@ -6,6 +6,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 ### Fixed
+- Support bracketed fields in query parameters replacement
 - Demo Vercel deployment resulting in error 500
 
 ### Changed

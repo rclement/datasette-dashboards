@@ -10,7 +10,7 @@ if t.TYPE_CHECKING:  # pragma: no cover
     from datasette.app import Datasette
 
 
-sql_opt_pattern = re.compile(r"(?P<opt>\[\[[^\]]*\]\])")
+sql_opt_pattern = re.compile(r"(?P<opt>\[\[.*?\]\])")
 sql_var_pattern = re.compile(r"\:(?P<var>[a-zA-Z0-9_]+)")
 
 
