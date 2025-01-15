@@ -56,6 +56,28 @@ async def test_dashboard_chart_parameters(datasette: Datasette) -> None:
 
 
 @pytest.mark.asyncio
+async def test_dashboard_chart_parameters_bracket_field(
+    datasette_db: Path, datasette_metadata: t.Dict[str, t.Any]
+) -> None:
+    metadata = copy.deepcopy(datasette_metadata)
+    metadata["plugins"]["datasette-dashboards"]["job-dashboard"]["charts"][
+        "offers-day"
+    ][
+        "query"
+    ] = "SELECT date(date) as day, count(*) as count FROM offers_view WHERE TRUE [[ AND [date] >= date(:date_start) ]] [[ AND [date] <= date(:date_end) ]] GROUP BY day ORDER BY day"
+    datasette = Datasette([str(datasette_db)], metadata=metadata)
+
+    response = await datasette.client.get(
+        "/-/dashboards/job-dashboard/offers-day?date_start=2021-01-01"
+    )
+    assert response.status_code == 200
+    assert (
+        "SELECT date(date) as day, count(*) as count FROM offers_view WHERE TRUE  AND [date] \\u003e= date(:date_start)   GROUP BY day ORDER BY day"
+        in response.text
+    )
+
+
+@pytest.mark.asyncio
 async def test_dashboard_chart_parameters_empty(datasette: Datasette) -> None:
     response = await datasette.client.get(
         "/-/dashboards/job-dashboard/offers-day?date_start="
