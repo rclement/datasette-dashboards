@@ -100,6 +100,8 @@ jobs:
           python -m pip install --upgrade pip
           python -m pip install --upgrade poetry
           poetry install
+      - name: Install Vercel CLI
+        run: npm install --global vercel@latest
       - name: Deploy to Vercel
         run: |-
           VERCEL_ALIAS=${GITHUB_REF_SLUG_URL}-${DEMO_BASE_URL_PREVIEW}
@@ -144,6 +146,8 @@ jobs:
           python -m pip install --upgrade pip
           python -m pip install --upgrade poetry
           poetry install
+      - name: Install Vercel CLI
+        run: npm install --global vercel@latest
       - name: Deploy to Vercel
         run: |-
           poetry run datasette publish vercel demo/jobs.db \
