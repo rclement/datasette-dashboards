@@ -2,7 +2,7 @@
   "name": "datasette-dashboard",
   "private": true,
   "dependencies": {
-    "vega": "5.30.0",
+    "vega": "5.31.0",
     "vega-embed": "6.29.0",
     "vega-lite": "5.23.0"
   },
