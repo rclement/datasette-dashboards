@@ -124,10 +124,13 @@
 
         <div id="chart-{{ chart_slug }}" class="dashboard-card-chart">
           {% if chart.library == 'markdown' %}
+          {% set settings = chart.settings|d({}) %}
           {{ render_markdown(
                chart.display,
-               extensions=["extra"],
-               extra_tags=["table", "thead", "tr", "th", "td", "tbody"]
+               extensions=settings.extensions|d(["extra"]),
+               extra_tags=settings.extra_tags|d(
+                 ["table", "thead", "tr", "th", "td", "tbody"]),
+               extra_attrs=settings.extra_attrs,
              )
           }}
           {% endif %}

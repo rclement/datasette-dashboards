@@ -56,8 +56,14 @@ plugins:
       charts:
         analysis-note:
           library: markdown
+          settings:
+            extensions:
+              - attr_list
+            extra_attrs:
+              h1:
+                - name
           display: |-
-            # Analysis notes
+            # Analysis notes {: name="notes" }
             > A quick rundown of events statistics and KPIs
 
         events-count:
@@ -177,16 +183,33 @@ Notes about the `display` property:
 
 Available configuration for `markdown` chart:
 
-| Property  | Type     | Description                                       |
-| --------- | -------- | ------------------------------------------------- |
-| `library` | `string` | Must be set to `markdown`                         |
-| `display` | `string` | Multi-line string containing the Markdown content |
+| Property   | Type     | Description                                       |
+| ---------- | -------- | ------------------------------------------------- |
+| `library`  | `string` | Must be set to `markdown`                         |
+| `display`  | `string` | Multi-line string containing the Markdown content |
+| `settings` | `object` | Markdown settings                                 |
 
 Note :
 
 - Some common properties do not apply and can be omitted: `title`, `db`, `query`
 - Markdown rendering is done by [`datasette-render-markdown`](https://datasette.io/plugins/datasette-render-markdown)
-- To configure Markdown rendering, extensions can be enabled in [metadata](https://datasette.io/plugins/datasette-render-markdown#user-content-markdown-extensions)
+- To configure Markdown rendering, use `settings`.
+
+##### Markdown settings
+
+Available configuration for Markdown rendering:
+
+| Property      | Type     | Description                                          |
+| ------------- | -------- | ---------------------------------------------------- |
+| `extensions`  | `array`  | List of extension entry points to enable             |
+| `extra_tags`  | `array`  | List of extra tags to allow                          |
+| `extra_attrs` | `object` | Mapping of tags to extra attributes allowed for them |
+
+Note :
+
+- These arguments are passed to the [`render_markdown()` function](https://github.com/simonw/datasette-render-markdown/blob/main/README.md#markdown-in-templates).
+- The `extra_tags` and `extra_attrs` are passed to [Bleach](https://bleach.readthedocs.io/).
+  + `extra_attrs` is indeed required to be given [as a dict](https://bleach.readthedocs.io/en/latest/clean.html#as-a-dict).
 
 #### Metric properties
 
