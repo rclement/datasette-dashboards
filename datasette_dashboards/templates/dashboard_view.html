@@ -128,8 +128,7 @@
           {{ render_markdown(
                chart.display,
                extensions=settings.extensions|d(["extra"]),
-               extra_tags=settings.extra_tags|d(
-                 ["table", "thead", "tr", "th", "td", "tbody"]),
+               extra_tags=settings.extra_tags|d(["table", "thead", "tr", "th", "td", "tbody"]),
                extra_attrs=settings.extra_attrs,
              )
           }}

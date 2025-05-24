@@ -187,13 +187,13 @@ Available configuration for `markdown` chart:
 | ---------- | -------- | ------------------------------------------------- |
 | `library`  | `string` | Must be set to `markdown`                         |
 | `display`  | `string` | Multi-line string containing the Markdown content |
-| `settings` | `object` | Markdown settings                                 |
+| `settings` | `object` | Markdown settings (see below)                     |
 
 Note :
 
 - Some common properties do not apply and can be omitted: `title`, `db`, `query`
 - Markdown rendering is done by [`datasette-render-markdown`](https://datasette.io/plugins/datasette-render-markdown)
-- To configure Markdown rendering, use `settings`.
+- To configure Markdown rendering, use the `settings` property.
 
 ##### Markdown settings
 
