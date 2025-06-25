@@ -1,6 +1,6 @@
 # datasette-dashboards
 
-> Datasette plugin providing data dashboards from metadata
+> Datasette plugin to create interactive data dashboards
 
 [![PyPI](https://img.shields.io/pypi/v/datasette-dashboards.svg)](https://pypi.org/project/datasette-dashboards/)
 [![CI/CD](https://github.com/rclement/datasette-dashboards/actions/workflows/ci-cd.yml/badge.svg)](https://github.com/rclement/datasette-dashboards/actions/workflows/ci-cd.yml)
