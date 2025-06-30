@@ -2,9 +2,9 @@ name: Update JS dependencies
 
 on:
   workflow_dispatch:
-  push:
-    branches:
-      - 'renovate/**'
+  pull_request:
+    paths:
+      - 'package.json'
 
 jobs:
   update:
@@ -13,6 +13,8 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.ref }}
       - name: Install dependencies
         run: npm install --no-package-lock
       - name: Commit and push changes
