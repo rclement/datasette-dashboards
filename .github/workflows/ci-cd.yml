@@ -1,7 +1,6 @@
 name: CI/CD
 
 on:
-  push:
   pull_request:
   workflow_dispatch:
 
@@ -54,21 +53,27 @@ jobs:
     needs: test
 
     outputs:
-      github_ref_slug: ${{ steps.output_step.outputs.github_ref_slug }}
+      branch_name_slug: ${{ steps.output_step.outputs.branch_name_slug }}
       deployment_url: ${{ steps.output_step.outputs.deployment_url }}
 
     steps:
       - name: Inject slug/short variables
         uses: rlespinasse/github-slug-action@v5
+      - name: Get current branch name slug
+        # retrieving the branch name depends on the event type:
+        # - pull_request events: GITHUB_HEAD_REF_SLUG_URL
+        # - push events: GITHUB_REF_SLUG_URL
+        # - delete events: GITHUB_EVENT_REF_SLUG_URL
+        run: echo "BRANCH_NAME_SLUG=${GITHUB_HEAD_REF_SLUG_URL:-${GITHUB_REF_SLUG_URL}}" >> $GITHUB_ENV
       - name: Set preview deployment url variable
         if: ${{ !contains(github.ref, 'master') && !contains(github.ref, 'tags') }}
-        run: echo "DEPLOYMENT_URL=https://${GITHUB_REF_SLUG_URL}-${DEMO_BASE_URL_PREVIEW}" >> ${GITHUB_ENV}
+        run: echo "DEPLOYMENT_URL=https://${BRANCH_NAME_SLUG}-${DEMO_BASE_URL_PREVIEW}" >> $GITHUB_ENV
       - name: Set production deployment url variable
         if: ${{ contains(github.ref, 'master') }}
         run: echo "DEPLOYMENT_URL=https://${DEMO_BASE_URL_PRODUCTION}" >> ${GITHUB_ENV}
       - id: output_step
         run: |
-          echo "github_ref_slug=${GITHUB_REF_SLUG_URL}" >> $GITHUB_OUTPUT
+          echo "branch_name_slug=${BRANCH_NAME_SLUG}" >> $GITHUB_OUTPUT
           echo "deployment_url=${DEPLOYMENT_URL}" >> $GITHUB_OUTPUT
 
   deploy-demo-preview:
@@ -77,13 +82,14 @@ jobs:
     if: ${{ !contains(github.ref, 'master') && !contains(github.ref, 'tags') }}
 
     environment:
-      name: preview/${{ needs.deploy-demo-setup.outputs.github_ref_slug }}
+      name: preview/${{ needs.deploy-demo-setup.outputs.branch_name_slug }}
       url: ${{ needs.deploy-demo-setup.outputs.deployment_url }}
+
+    env:
+      BRANCH_NAME_SLUG: ${{ needs.deploy-demo-setup.outputs.branch_name_slug }}
 
     steps:
       - uses: actions/checkout@v4
-      - name: Inject slug/short variables
-        uses: rlespinasse/github-slug-action@v5
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
@@ -104,7 +110,7 @@ jobs:
         run: npm install --global vercel@latest
       - name: Deploy to Vercel
         run: |-
-          VERCEL_ALIAS=${GITHUB_REF_SLUG_URL}-${DEMO_BASE_URL_PREVIEW}
+          VERCEL_ALIAS=${BRANCH_NAME_SLUG}-${DEMO_BASE_URL_PREVIEW}
           VERCEL_URL=$(poetry run datasette publish vercel demo/jobs.db \
             --metadata demo/metadata.yml \
             --template-dir demo/templates \
