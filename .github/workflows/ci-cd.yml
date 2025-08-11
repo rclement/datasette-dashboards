@@ -20,7 +20,7 @@ jobs:
       matrix:
         python-version: ["3.9", "3.10", "3.11", "3.12", "3.13"]
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - name: Set up Python ${{ matrix.python-version }}
         uses: actions/setup-python@v5
         with:
@@ -94,7 +94,7 @@ jobs:
       BRANCH_NAME_SLUG: ${{ needs.deploy-demo-setup.outputs.branch_name_slug }}
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
@@ -140,7 +140,7 @@ jobs:
       url: ${{ needs.deploy-demo-setup.outputs.deployment_url }}
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
@@ -178,7 +178,7 @@ jobs:
     needs: [test]
     if: contains(github.ref, 'master')
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
@@ -210,7 +210,7 @@ jobs:
     needs: [test]
     if: contains(github.ref, 'tags')
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
@@ -245,7 +245,7 @@ jobs:
       contents: write
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
         # with:
         #   token: ${{ secrets.GH_PERSONAL_TOKEN }}
       - name: Set up Python
