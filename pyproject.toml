@@ -18,7 +18,7 @@ datasette-leaflet = "*"
 datasette-render-markdown = "*"
 
 [tool.poetry.group.dev.dependencies]
-black = "==25.1.0"
+black = "==25.9.0"
 datasette-block-robots = "==1.1"
 datasette-cluster-map = "==0.18.2"
 datasette-publish-vercel = "==0.14.2"
