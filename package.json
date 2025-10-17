@@ -4,7 +4,7 @@
   "dependencies": {
     "vega": "6.1.2",
     "vega-embed": "7.0.2",
-    "vega-lite": "6.2.0"
+    "vega-lite": "6.3.0"
   },
   "scripts": {
     "vendor:vega": "cp node_modules/vega/build/vega.min.js datasette_dashboards/static/vega.min.js",
