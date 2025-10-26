@@ -12,7 +12,7 @@ packages = [{include = "datasette_dashboards"}]
 "Changelog" = "https://github.com/rclement/datasette-dashboards/blob/master/CHANGELOG.md"
 
 [tool.poetry.dependencies]
-python = ">=3.9,<3.14"
+python = ">=3.9,<3.15"
 datasette = "*"
 datasette-leaflet = "*"
 datasette-render-markdown = "*"
