@@ -302,8 +302,7 @@ uv sync
 To run the QA suite:
 
 ```bash
-uv run black --check datasette_dashboards tests
-uv run flake8 datasette_dashboards tests
+uv run ruff check datasette_dashboards tests
 uv run mypy --strict datasette_dashboards tests
 uv run pytest -v --cov=datasette_dashboards --cov=tests --cov-branch --cov-report=term-missing tests
 ```

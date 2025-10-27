@@ -14,6 +14,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 - Update dependencies
 - Migrate from `poetry` to `uv` package manager
+- Migrate from `black` and `poetry` to `ruff`
 
 ## [0.7.1] - 2025-03-10
 ### Fixed

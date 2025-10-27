@@ -31,8 +31,7 @@ jobs:
         run: uv sync --all-extras --dev
       - name: Run linting
         run: |
-          uv run black --check datasette_dashboards tests
-          uv run flake8 datasette_dashboards tests
+          uv run ruff check datasette_dashboards tests
           uv run mypy --strict datasette_dashboards tests
       - name: Run tests
         run: |

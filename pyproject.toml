@@ -37,18 +37,17 @@ Changelog = "https://github.com/rclement/datasette-dashboards/blob/main/CHANGELO
 
 [dependency-groups]
 dev = [
-    "black==25.9.0",
     "datasette-block-robots==1.1",
     "datasette-cluster-map==0.18.2",
     "datasette-publish-vercel==0.14.2",
     "datasette-sqlite-http==0.1.1",
     "datasette-vega==0.6.2",
     "faker==37.12.0",
-    "flake8==7.3.0",
     "mypy==1.18.2",
     "pytest==8.4.2",
     "pytest-asyncio==1.2.0",
     "pytest-cov==7.0.0",
+    "ruff==0.14.2",
     "sqlite-utils==3.38",
 ]
 
