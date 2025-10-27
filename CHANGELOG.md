@@ -8,6 +8,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - Support for Python 3.14
 
+### Removed
+- BREAKING: drop support for Python 3.9 (end-of-life)
+
 ## [0.7.1] - 2025-03-10
 ### Fixed
 - Support bracketed fields in query parameters replacement
