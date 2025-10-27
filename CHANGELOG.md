@@ -11,6 +11,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Removed
 - BREAKING: drop support for Python 3.9 (end-of-life)
 
+### Changed
+- Update dependencies
+- Migrate from `poetry` to `uv` package manager
+
 ## [0.7.1] - 2025-03-10
 ### Fixed
 - Support bracketed fields in query parameters replacement

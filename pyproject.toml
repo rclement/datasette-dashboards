@@ -1,60 +1,75 @@
-[tool.poetry]
+[project]
 name = "datasette-dashboards"
-version = "0.7.1"
 description = "Datasette plugin to create interactive data dashboards"
-repository = "https://github.com/rclement/datasette-dashboards"
-authors = ["Romain Clement"]
-license = "Apache License, Version 2.0"
+version = "0.7.1"
+authors = [
+    { name = "Romain Clement", email = "git@romain-clement.net" }
+]
+license = "Apache-2.0"
 readme = "README.md"
-packages = [{include = "datasette_dashboards"}]
+requires-python = ">=3.10,<3.15"
+dependencies = [
+    "datasette",
+    "datasette-leaflet",
+    "datasette-render-markdown",
+]
+keywords = ["datasette", "dashboards", "visualization", "vega"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3.14",
+    "Intended Audience :: Developers",
+    "Intended Audience :: End Users/Desktop",
+    "Intended Audience :: Information Technology",
+    "Intended Audience :: Other Audience",
+    "Topic :: Database",
+    "Topic :: Scientific/Engineering :: Visualization",
+    "Topic :: Utilities",
+]
 
-[tool.poetry.urls]
-"Changelog" = "https://github.com/rclement/datasette-dashboards/blob/master/CHANGELOG.md"
+[project.urls]
+Repository = "https://github.com/rclement/datasette-dashboards"
+Issues = "https://github.com/rclement/datasette-dashboards/issues"
+Changelog = "https://github.com/rclement/datasette-dashboards/blob/main/CHANGELOG.md"
 
-[tool.poetry.dependencies]
-python = ">=3.10,<3.15"
-datasette = "*"
-datasette-leaflet = "*"
-datasette-render-markdown = "*"
+[dependency-groups]
+dev = [
+    "black==25.9.0",
+    "datasette-block-robots==1.1",
+    "datasette-cluster-map==0.18.2",
+    "datasette-publish-vercel==0.14.2",
+    "datasette-sqlite-http==0.1.1",
+    "datasette-vega==0.6.2",
+    "faker==37.12.0",
+    "flake8==7.3.0",
+    "mypy==1.18.2",
+    "pytest==8.4.2",
+    "pytest-asyncio==1.2.0",
+    "pytest-cov==7.0.0",
+    "sqlite-utils==3.38",
+]
 
-[tool.poetry.group.dev.dependencies]
-black = "==25.9.0"
-datasette-block-robots = "==1.1"
-datasette-cluster-map = "==0.18.2"
-datasette-publish-vercel = "==0.14.2"
-datasette-sqlite-http = "==0.1.1"
-datasette-vega = "==0.6.2"
-faker = "==37.12.0"
-flake8 = "==7.3.0"
-mypy = "==1.18.2"
-pytest = "==8.4.2"
-pytest-asyncio = "==1.2.0"
-pytest-cov = "==7.0.0"
-sqlite-utils = "==3.38"
-
-[tool.poetry.plugins."datasette"]
+[project.entry-points.'datasette']
 "dashboards" = "datasette_dashboards"
 
-[tool.mypy]
-show_error_codes = "True"
-pretty = "True"
-follow_imports = "silent"
-strict_optional = "True"
-warn_redundant_casts = "True"
-warn_unused_ignores = "True"
-disallow_any_generics = "True"
-check_untyped_defs = "True"
-no_implicit_reexport = "True"
-disallow_untyped_defs = "True"
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.sdist]
+include = [
+    "datasette_dashboards",
+    "pyproject.toml",
+    "README.md",
+]
 
 [[tool.mypy.overrides]]
 module = "datasette_dashboards"
-disallow_untyped_decorators = "False"
+disallow_untyped_decorators = false
 
 [[tool.mypy.overrides]]
 module = "datasette.*"
-ignore_missing_imports = "True"
-
-[build-system]
-requires = ["poetry-core"]
-build-backend = "poetry.core.masonry.api"
+ignore_missing_imports = true
