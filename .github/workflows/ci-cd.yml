@@ -43,6 +43,66 @@ jobs:
           token: ${{ secrets.CODECOV_TOKEN }}
           files: ./coverage.xml
 
+  build:
+    runs-on: ubuntu-latest
+    needs: test
+    steps:
+      - uses: actions/checkout@v5
+      - name: Install uv
+        uses: astral-sh/setup-uv@v7
+        with:
+          enable-cache: true
+          cache-dependency-glob: "uv.lock"
+      - name: Install dependencies
+        run: uv sync --all-extras --dev
+      - name: Build package
+        run: uv build
+      - name: Upload package build artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: build
+          path: dist
+          include-hidden-files: true
+
+  publish-package-test:
+    runs-on: ubuntu-latest
+    needs: build
+    if: contains(github.ref, 'master')
+    environment:
+      name: test-pypi
+      url: https://test.pypi.org/project/laketower/
+    permissions:
+      id-token: write
+    steps:
+      - name: Download package build artifacts
+        uses: actions/download-artifact@v5
+        with:
+          name: build
+          path: dist/
+      - name: Publish package distributions to Test PyPI
+        uses: pypa/gh-action-pypi-publish@release/v1
+        with:
+          repository-url: https://test.pypi.org/legacy/
+          skip-existing: true
+
+  publish-package:
+    runs-on: ubuntu-latest
+    needs: build
+    if: contains(github.ref, 'tags')
+    environment:
+      name: pypi
+      url: https://pypi.org/project/laketower/
+    permissions:
+      id-token: write
+    steps:
+      - name: Download package build artifacts
+        uses: actions/download-artifact@v5
+        with:
+          name: build
+          path: dist/
+      - name: Publish package distributions to PyPI
+        uses: pypa/gh-action-pypi-publish@release/v1
+
   deploy-demo-setup:
     name: Deployment setup
     runs-on: ubuntu-latest
@@ -74,7 +134,7 @@ jobs:
 
   deploy-demo-preview:
     runs-on: ubuntu-latest
-    needs: [deploy-demo-setup]
+    needs: deploy-demo-setup
     if: ${{ !contains(github.ref, 'master') && !contains(github.ref, 'tags') }}
 
     environment:
@@ -114,7 +174,7 @@ jobs:
 
   deploy-demo-production:
     runs-on: ubuntu-latest
-    needs: [deploy-demo-setup]
+    needs: deploy-demo-setup
     if: contains(github.ref, 'master')
 
     environment:
@@ -146,48 +206,9 @@ jobs:
             --token=${{ secrets.VERCEL_TOKEN }} \
             --vercel-json=demo/vercel.json
 
-  publish-package-test:
-    runs-on: ubuntu-latest
-    needs: [test]
-    if: contains(github.ref, 'master')
-    steps:
-      - uses: actions/checkout@v5
-      - name: Install uv
-        uses: astral-sh/setup-uv@v7
-        with:
-          enable-cache: true
-          cache-dependency-glob: "uv.lock"
-      - name: Install dependencies
-        run: uv sync --all-extras --dev
-      - name: Build Python package
-        run: uv build
-      - name: Publish package distributions to Test PyPI
-        uses: pypa/gh-action-pypi-publish@release/v1
-        with:
-          repository-url: https://test.pypi.org/legacy/
-          skip-existing: true
-
-  publish-package:
-    runs-on: ubuntu-latest
-    needs: [test]
-    if: contains(github.ref, 'tags')
-    steps:
-      - uses: actions/checkout@v5
-      - name: Install uv
-        uses: astral-sh/setup-uv@v7
-        with:
-          enable-cache: true
-          cache-dependency-glob: "uv.lock"
-      - name: Install dependencies
-        run: uv sync --all-extras --dev
-      - name: Build Python package
-        run: uv build
-      - name: Publish package distributions to PyPI
-        uses: pypa/gh-action-pypi-publish@release/v1
-
   take-shots:
     runs-on: ubuntu-latest
-    needs: [deploy-demo-production]
+    needs: deploy-demo-production
     if: contains(github.ref, 'master')
 
     permissions:
