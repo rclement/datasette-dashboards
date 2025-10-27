@@ -296,17 +296,16 @@ To set up this plugin locally, first checkout the code.
 Then create a new virtual environment and the required dependencies:
 
 ```bash
-poetry install
-poetry shell
+uv sync
 ```
 
 To run the QA suite:
 
 ```bash
-black --check datasette_dashboards tests
-flake8 datasette_dashboards tests
-mypy datasette_dashboards tests
-pytest -v --cov=datasette_dashboards --cov=tests --cov-branch --cov-report=term-missing tests
+uv run black --check datasette_dashboards tests
+uv run flake8 datasette_dashboards tests
+uv run mypy --strict datasette_dashboards tests
+uv run pytest -v --cov=datasette_dashboards --cov=tests --cov-branch --cov-report=term-missing tests
 ```
 
 ## Updating JS dependencies
@@ -322,7 +321,7 @@ npm install --no-package-lock
 With the developmnent environment setup, you can run the demo locally:
 
 ```bash
-datasette \
+uv run datasette \
   --metadata demo/metadata.yml \
   --template-dir demo/templates \
   demo/jobs.db
