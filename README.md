@@ -52,7 +52,12 @@ plugins:
           name: My Dynamic Category
           type: select
           db: jobs
-          query: SELECT region FROM jobs ORDER BY region ASC
+          query: SELECT DISTINCT col1 FROM mytable ORDER BY col1 ASC
+        dependent_filter:
+          name: My Dependent Filter
+          type: select
+          db: jobs
+          query: SELECT DISTINCT col2 FROM mytable WHERE col2 IS NOT NULL [[ AND col1 = :dynamic_category ]] ORDER BY col2 ASC
       charts:
         analysis-note:
           library: markdown

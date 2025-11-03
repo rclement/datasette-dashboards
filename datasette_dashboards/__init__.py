@@ -14,6 +14,27 @@ sql_opt_pattern = re.compile(r"(?P<opt>\[\[.*?\]\])")
 sql_var_pattern = re.compile(r"\:(?P<var>[a-zA-Z0-9_]+)")
 
 
+def replace_opts_in_query(query: str, options: dict[str, str]) -> str:
+    to_replace: list[dict[str, str]] = []
+    for opt_match in re.finditer(sql_opt_pattern, query):
+        opt_group = opt_match.group("opt")
+        var_match = re.search(sql_var_pattern, opt_group)
+        var_group = var_match.group("var") if var_match is not None else ""
+        opt_keep = var_group in options and options[var_group] != ""
+        to_replace.append(
+            {
+                "opt": opt_group,
+                "replacement": opt_group.strip("[[]]") if opt_keep else "",
+            }
+        )
+
+    result = query
+    for r in to_replace:
+        result = result.replace(r["opt"], r["replacement"])
+
+    return result
+
+
 async def check_permission_instance(request: Request, datasette: "Datasette") -> None:
     if (
         await datasette.permission_allowed(
@@ -40,12 +61,14 @@ async def check_permission_execute_sql(
 
 
 async def fill_dynamic_filters(
-    datasette: "Datasette", dashboard: dict[str, t.Any]
+    datasette: "Datasette", dashboard: dict[str, t.Any], options: dict[str, str]
 ) -> None:
     for flt in dashboard["filters"].values():
         if flt["type"] == "select" and {"db", "query"} & flt.keys():
+            query = replace_opts_in_query(flt["query"], options)
             values = [
-                row[0] for row in await datasette.execute(flt["db"], flt["query"])
+                row[0]
+                for row in await datasette.execute(flt["db"], query, params=options)
             ]
             flt["options"] = values
 
@@ -69,24 +92,7 @@ def fill_chart_query_options(chart: dict[str, t.Any], options: dict[str, str]) -
     query: str | None = chart.get("query")
     if query is None:
         return
-
-    to_replace: list[dict[str, str]] = []
-    for opt_match in re.finditer(sql_opt_pattern, query):
-        opt_group = opt_match.group("opt")
-        var_match = re.search(sql_var_pattern, opt_group)
-        var_group = var_match.group("var") if var_match is not None else ""
-        opt_keep = var_group in options and options[var_group] != ""
-        to_replace.append(
-            {
-                "opt": opt_group,
-                "replacement": opt_group.strip("[[]]") if opt_keep else "",
-            }
-        )
-
-    for r in to_replace:
-        query = query.replace(r["opt"], r["replacement"])
-
-    chart["query"] = query
+    chart["query"] = replace_opts_in_query(query, options)
 
 
 async def dashboard_list(request: Request, datasette: "Datasette") -> Response:
@@ -125,10 +131,10 @@ async def _dashboard_view(
             raise NotFound(f"Database does not exist: {db}")
         await check_permission_execute_sql(request, datasette, database.name)
 
-    await fill_dynamic_filters(datasette, dashboard)
     options_keys = get_dashboard_filters_keys(request, dashboard)
     query_parameters = get_dashboard_filters(request, options_keys)
     query_string = generate_dashboard_filters_qs(request, options_keys)
+    await fill_dynamic_filters(datasette, dashboard, query_parameters)
 
     default_filters = {
         k: v["default"] for k, v in dashboard["filters"].items() if v.get("default")
