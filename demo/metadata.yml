@@ -45,17 +45,18 @@ plugins:
         source:
           name: Source
           type: select
-          options: [Apec, RegionsJob, Indeed]
+          db: jobs
+          query: SELECT DISTINCT source FROM offers_view WHERE source IS NOT NULL ORDER BY source ASC
         region:
           name: Region
           type: select
           db: jobs
-          query: SELECT DISTINCT region FROM offers_view WHERE region IS NOT NULL ORDER BY region ASC
+          query: SELECT DISTINCT region FROM offers_view WHERE region IS NOT NULL [[ AND source = :source ]] ORDER BY region ASC
         company:
           name: Company
           type: select
           db: jobs
-          query: SELECT DISTINCT company FROM offers_view WHERE company IS NOT NULL ORDER BY company ASC
+          query: SELECT DISTINCT company FROM offers_view WHERE company IS NOT NULL [[ AND source = :source ]] [[ AND region = :region ]] ORDER BY company ASC
         job_title:
           name: Job Title
           type: text

@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - Support for Python 3.14
 - Support for extra settings in markdown chart definition (thanks @shaib) (PR #289)
+- Support for dependent query filters
 
 ### Removed
 - BREAKING: drop support for Python 3.9 (end-of-life)
