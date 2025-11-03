@@ -40,7 +40,7 @@ async def check_permission_execute_sql(
 
 
 async def fill_dynamic_filters(
-    datasette: "Datasette", dashboard: t.Dict[str, t.Any]
+    datasette: "Datasette", dashboard: dict[str, t.Any]
 ) -> None:
     for flt in dashboard["filters"].values():
         if flt["type"] == "select" and {"db", "query"} & flt.keys():
@@ -51,13 +51,13 @@ async def fill_dynamic_filters(
 
 
 def get_dashboard_filters_keys(
-    request: Request, dashboard: t.Dict[str, t.Any]
+    request: Request, dashboard: dict[str, t.Any]
 ) -> t.Set[str]:
     filters_keys = dashboard["filters"].keys()
     return set(filters_keys) & set(request.args.keys())
 
 
-def get_dashboard_filters(request: Request, opts_keys: t.Set[str]) -> t.Dict[str, str]:
+def get_dashboard_filters(request: Request, opts_keys: t.Set[str]) -> dict[str, str]:
     return {key: request.args[key] for key in opts_keys}
 
 
@@ -65,14 +65,12 @@ def generate_dashboard_filters_qs(request: Request, opts_keys: t.Set[str]) -> st
     return urllib.parse.urlencode({key: request.args[key] for key in opts_keys})
 
 
-def fill_chart_query_options(
-    chart: t.Dict[str, t.Any], options: t.Dict[str, str]
-) -> None:
-    query: t.Optional[str] = chart.get("query")
+def fill_chart_query_options(chart: dict[str, t.Any], options: dict[str, str]) -> None:
+    query: str | None = chart.get("query")
     if query is None:
         return
 
-    to_replace: t.List[t.Dict[str, str]] = []
+    to_replace: list[dict[str, str]] = []
     for opt_match in re.finditer(sql_opt_pattern, query):
         opt_group = opt_match.group("opt")
         var_match = re.search(sql_var_pattern, opt_group)
@@ -233,9 +231,9 @@ async def dashboard_chart_embed(request: Request, datasette: "Datasette") -> Res
 
 
 @hookimpl
-def register_routes() -> (
-    t.Iterable[t.Tuple[str, t.Callable[..., t.Coroutine[t.Any, t.Any, Response]]]]
-):
+def register_routes() -> t.Iterable[
+    tuple[str, t.Callable[..., t.Coroutine[t.Any, t.Any, Response]]]
+]:
     return (
         ("^/-/dashboards$", dashboard_list),
         ("^/-/dashboards/(?P<slug>[^/]+)$", dashboard_view),
@@ -250,8 +248,8 @@ def register_routes() -> (
 
 @hookimpl
 def menu_links(
-    datasette: "Datasette", actor: t.Optional[t.Dict[str, t.Any]]
-) -> t.Iterable[t.Dict[str, t.Any]]:
+    datasette: "Datasette", actor: dict[str, t.Any] | None
+) -> t.Iterable[dict[str, t.Any]]:
     return [
         {"href": datasette.urls.path("/-/dashboards"), "label": "Dashboards"},
     ]
