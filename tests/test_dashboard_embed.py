@@ -11,8 +11,8 @@ async def test_dashboard_embed(datasette: Datasette) -> None:
             f"/-/dashboards/{slug}/embed", follow_redirects=True
         )
         assert response.status_code == 200
-        assert f'<h1>{dashboard["title"]}</h1>' in response.text
-        assert f'<p>{dashboard["description"]}</p>' in response.text
+        assert f"<h1>{dashboard['title']}</h1>" in response.text
+        assert f"<p>{dashboard['description']}</p>" in response.text
 
 
 @pytest.mark.asyncio

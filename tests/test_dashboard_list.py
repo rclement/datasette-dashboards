@@ -18,7 +18,7 @@ async def test_dashboard_list_index(datasette: Datasette) -> None:
         assert (
             f'<a href="/-/dashboards/{slug}">{dashboard["title"]}</a>' in response.text
         )
-        assert f'<p>{dashboard["description"]}</p>' in response.text
+        assert f"<p>{dashboard['description']}</p>" in response.text
 
 
 @pytest.mark.asyncio
