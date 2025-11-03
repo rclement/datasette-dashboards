@@ -15,8 +15,8 @@ async def test_dashboard_views(datasette: Datasette) -> None:
         )
         assert response.status_code == 200
         assert '<li><a href="/-/dashboards">Dashboards</a></li>' in response.text
-        assert f'<h1>{dashboard["title"]}</h1>' in response.text
-        assert f'<p>{dashboard["description"]}</p>' in response.text
+        assert f"<h1>{dashboard['title']}</h1>" in response.text
+        assert f"<p>{dashboard['description']}</p>" in response.text
         assert "grid-template-columns: repeat(2, 1fr);" in response.text
         assert "grid-template-areas" not in response.text
         assert "grid-area:" not in response.text
@@ -35,7 +35,7 @@ async def test_dashboard_views(datasette: Datasette) -> None:
                 if flt["type"] in ["text", "date", "number", "select"]
                 else "text"
             )
-            assert f'<legend>{flt["name"]}</legend>' in response.text
+            assert f"<legend>{flt['name']}</legend>" in response.text
             if flt["type"] == "select":
                 assert f'<select id="{key}" name="{key}">' in response.text
                 assert '<option value="" selected></option>' in response.text
@@ -62,7 +62,7 @@ async def test_dashboard_views(datasette: Datasette) -> None:
 
             if chart["library"] != "markdown":
                 assert f'<a href="/-/dashboards/{slug}/{chart_slug}?' in response.text
-                assert f'{chart["title"]}' in response.text
+                assert f"{chart['title']}" in response.text
             assert f"renderChart('{chart_slug}', " in response.text
 
 
