@@ -70,7 +70,7 @@ jobs:
     if: contains(github.ref, 'master')
     environment:
       name: test-pypi
-      url: https://test.pypi.org/project/laketower/
+      url: https://test.pypi.org/project/datasette-dashboards/
     permissions:
       id-token: write
     steps:
@@ -91,7 +91,7 @@ jobs:
     if: contains(github.ref, 'tags')
     environment:
       name: pypi
-      url: https://pypi.org/project/laketower/
+      url: https://pypi.org/project/datasette-dashboards/
     permissions:
       id-token: write
     steps:
