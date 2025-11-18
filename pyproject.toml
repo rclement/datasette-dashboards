@@ -16,18 +16,26 @@ dependencies = [
 keywords = ["datasette", "dashboards", "visualization", "vega"]
 classifiers = [
     "Development Status :: 4 - Beta",
+    "Environment :: Web Environment",
+    "Framework :: Datasette",
+    "Intended Audience :: Developers",
+    "Intended Audience :: End Users/Desktop",
+    "Intended Audience :: Information Technology",
+    "Intended Audience :: Science/Research",
+    "Intended Audience :: Other Audience",
+    "Operating System :: OS Independent",
+    "Programming Language :: JavaScript",
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
     "Programming Language :: Python :: 3.13",
     "Programming Language :: Python :: 3.14",
-    "Intended Audience :: Developers",
-    "Intended Audience :: End Users/Desktop",
-    "Intended Audience :: Information Technology",
-    "Intended Audience :: Other Audience",
+    "Programming Language :: SQL",
     "Topic :: Database",
+    "Topic :: Database :: Front-Ends",
     "Topic :: Scientific/Engineering :: Visualization",
     "Topic :: Utilities",
+    "Typing :: Typed",
 ]
 
 [project.urls]
