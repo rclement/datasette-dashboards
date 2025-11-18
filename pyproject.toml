@@ -1,7 +1,7 @@
 [project]
 name = "datasette-dashboards"
 description = "Datasette plugin to create interactive data dashboards"
-version = "0.7.1"
+version = "0.8.0"
 authors = [
     { name = "Romain Clement", email = "git@romain-clement.net" }
 ]
