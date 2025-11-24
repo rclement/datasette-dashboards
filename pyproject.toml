@@ -56,7 +56,7 @@ dev = [
     "pytest-asyncio==1.3.0",
     "pytest-cov==7.0.0",
     "ruff==0.14.6",
-    "sqlite-utils==3.38",
+    "sqlite-utils==3.39",
 ]
 
 [project.entry-points.'datasette']
