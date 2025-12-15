@@ -51,7 +51,7 @@ dev = [
     "datasette-sqlite-http==0.1.1",
     "datasette-vega==0.6.2",
     "faker==38.2.0",
-    "mypy==1.19.0",
+    "mypy==1.19.1",
     "pytest==9.0.2",
     "pytest-asyncio==1.3.0",
     "pytest-cov==7.0.0",
