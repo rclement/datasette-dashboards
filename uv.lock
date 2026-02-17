@@ -289,7 +289,6 @@ dev = [
     { name = "datasette-block-robots" },
     { name = "datasette-cluster-map" },
     { name = "datasette-publish-vercel" },
-    { name = "datasette-sqlite-http" },
     { name = "datasette-vega" },
     { name = "faker" },
     { name = "mypy" },
@@ -312,7 +311,6 @@ dev = [
     { name = "datasette-block-robots", specifier = "==1.1" },
     { name = "datasette-cluster-map", specifier = "==0.18.2" },
     { name = "datasette-publish-vercel", specifier = "==0.14.2" },
-    { name = "datasette-sqlite-http", specifier = "==0.1.1" },
     { name = "datasette-vega", specifier = "==0.6.2" },
     { name = "faker", specifier = "==40.4.0" },
     { name = "mypy", specifier = "==1.19.1" },
@@ -359,18 +357,6 @@ dependencies = [
 sdist = { url = "https://files.pythonhosted.org/packages/4f/99/3074dc4a0129d2dbe12f8492daa392c47d927b380e9d96ffd781b22f887b/datasette-render-markdown-2.2.1.tar.gz", hash = "sha256:97eca47769ad81a1d225a0c32efe50a2f6f54fbeaa97b883855dd0591ba5b8f5", size = 11876, upload-time = "2023-08-15T03:11:42.739Z" }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/c3/71/c504d5fa9786601f6292386bd230a641d64faf891d3d91e8481b4f082937/datasette_render_markdown-2.2.1-py3-none-any.whl", hash = "sha256:6e72641b11568afd61e10ec2813c07661cdb1f26ce2935982b30860392bf94dc", size = 10326, upload-time = "2023-08-15T03:11:41.172Z" },
-]
-
-[[package]]
-name = "datasette-sqlite-http"
-version = "0.1.1"
-source = { registry = "https://pypi.org/simple" }
-dependencies = [
-    { name = "datasette" },
-    { name = "sqlite-http" },
-]
-wheels = [
-    { url = "https://files.pythonhosted.org/packages/78/3a/747d7d8e5efefbb86537da9584b35b06a2b86e1ef3c4da2f9129384f0391/datasette_sqlite_http-0.1.1-py3-none-any.whl", hash = "sha256:834c188282b5c1d130a5a56561f58ade211f701c916fd19a2ccd952d7ec57cf1", size = 2245, upload-time = "2023-08-06T01:08:46.279Z" },
 ]
 
 [[package]]
@@ -1001,17 +987,6 @@ source = { registry = "https://pypi.org/simple" }
 sdist = { url = "https://files.pythonhosted.org/packages/c2/6d/9dad6c3b433ab8912ace969c66abd595f8e0a2ccccdb73602b1291dbda29/sqlite-fts4-1.0.3.tar.gz", hash = "sha256:78b05eeaf6680e9dbed8986bde011e9c086a06cb0c931b3cf7da94c214e8930c", size = 9718, upload-time = "2022-07-30T01:14:26.943Z" }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/51/29/0096e8b1811aaa78cfb296996f621f41120c21c2f5cd448ae1d54979d9fc/sqlite_fts4-1.0.3-py3-none-any.whl", hash = "sha256:0359edd8dea6fd73c848989e1e2b1f31a50fe5f9d7272299ff0e8dbaa62d035f", size = 9972, upload-time = "2022-07-30T01:14:24.942Z" },
-]
-
-[[package]]
-name = "sqlite-http"
-version = "0.1.1"
-source = { registry = "https://pypi.org/simple" }
-wheels = [
-    { url = "https://files.pythonhosted.org/packages/29/27/ed0822e7c08548ea89a9692d47617b67cbf24afd65547115732cb955d0a5/sqlite_http-0.1.1-py3-none-macosx_10_6_x86_64.whl", hash = "sha256:0b3d8bafd78e3bdb2633b41cabb36cc8cd83ca53a5d960e7a141050e562859bf", size = 5401639, upload-time = "2023-08-06T01:08:48.462Z" },
-    { url = "https://files.pythonhosted.org/packages/f5/6b/17b7a04c24515b1ff61cda8ed32636d81b8112531b2a22ee3fcbe6908d6b/sqlite_http-0.1.1-py3-none-macosx_11_0_arm64.whl", hash = "sha256:b957586b6224cd283e84662748402f13e5ed691659d21c47e97df86d17d203ec", size = 5017892, upload-time = "2023-08-06T01:08:50.834Z" },
-    { url = "https://files.pythonhosted.org/packages/6c/94/cab9d5dab868c8df67ce7fce4d0af6fddf6ce5d5a56edad242a447d2c04b/sqlite_http-0.1.1-py3-none-manylinux_2_17_x86_64.manylinux2014_x86_64.manylinux1_x86_64.whl", hash = "sha256:7fd2604955b94426b9c7a8de638e79e07a24b1f25adebab69184f41b2c2de49f", size = 5075229, upload-time = "2023-08-06T01:08:52.602Z" },
-    { url = "https://files.pythonhosted.org/packages/d0/d1/48a59612a0ee9eb895363052b2014d015b523d6140a3361d00827744e597/sqlite_http-0.1.1-py3-none-win_amd64.whl", hash = "sha256:eadbb59c84779e141cd40df744ad8262f6c55ef939baa66d3668a7eea6b679fb", size = 5033240, upload-time = "2023-08-06T01:08:54.846Z" },
 ]
 
 [[package]]
