@@ -335,180 +335,316 @@ plugins:
           library: map
           display:
 
-    job-offers-simple:
-      title: Job offers (simple charts)
-      description: Same dashboard using configurable chart types
+    chart-types:
+      title: Chart types showcase
+      description: All available chart types with inline sample data
       settings:
         allow_fullscreen: true
       layout:
-        - [simple-note, offers-line, offers-line, offers-count]
-        - [simple-note, offers-pie, offers-bar, offers-scatter]
-        - [offers-choropleth, offers-choropleth, offers-wordcloud, offers-wordcloud]
-      filters:
-        date_start:
-          name: Date Start
-          type: date
-          default: "2021-01-01"
-        date_end:
-          name: Date End
-          type: date
-        source:
-          name: Source
-          type: select
-          db: jobs
-          query: SELECT DISTINCT source FROM offers_view WHERE source IS NOT NULL ORDER BY source ASC
+        - [intro-note, intro-note, metric-visitors, metric-revenue]
+        - [line-chart, line-chart, area-chart, area-chart]
+        - [bar-chart, pie-chart, scatter-chart, table-chart]
+        - [wordcloud-chart, wordcloud-chart, choropleth-chart, choropleth-chart]
+        - [vega-lite-chart, vega-lite-chart, vega-chart, vega-chart]
+        - [map-chart, map-chart, map-chart, map-chart]
       charts:
-        simple-note:
+        intro-note:
           library: markdown
           display: |-
-            # Simple chart types
+            # Chart types showcase
 
-            This dashboard demonstrates the **configurable chart widgets**:
-            `line`, `bar`, `area`, `scatter`, `pie`, `choropleth`,
-            and `wordcloud`.
+            This dashboard demonstrates **all available chart types** using inline sample data,
+            so you can see the expected data shape for each type.
 
-            These provide a simpler YAML configuration compared to
-            raw Vega/Vega-Lite, while converting under the hood.
+            **Shorthand types** (semantic YAML → Vega/Vega-Lite):
+            `line`, `area`, `bar`, `scatter`, `pie`, `wordcloud`, `choropleth`
 
-        offers-count:
-          title: Total number of offers
+            **Raw specification types:**
+            `vega-lite`, `vega`
+
+            **Other types:**
+            `metric`, `table`, `map`, `markdown`
+
+        metric-visitors:
+          title: Monthly visitors (metric)
           db: jobs
-          query: >-
-            SELECT count(*) as count
-            FROM offers_view
-            WHERE TRUE
-              [[ AND date >= date(:date_start) ]]
-              [[ AND date <= date(:date_end) ]]
-              [[ AND source = :source ]]
+          query: SELECT 84320 as visitors
           library: metric
           display:
-            field: count
+            field: visitors
             prefix:
-            suffix: " offers"
+            suffix: " visitors"
 
-        offers-line:
-          title: Offers by day (line)
+        metric-revenue:
+          title: Monthly revenue (metric)
+          db: jobs
+          query: SELECT 12450 as revenue
+          library: metric
+          display:
+            field: revenue
+            prefix: "$"
+            suffix:
+
+        line-chart:
+          title: Average temperature by month (line)
           db: jobs
           query: >-
-            SELECT
-              date(date) as day,
-              count(*) as count
-            FROM offers_view
-            WHERE TRUE
-              [[ AND date >= date(:date_start) ]]
-              [[ AND date <= date(:date_end) ]]
-              [[ AND source = :source ]]
-            GROUP BY day
-            ORDER BY day
+            SELECT column1 as month, column2 as avg_temp
+            FROM (VALUES
+            ('2024-01', 3.5),
+            ('2024-02', 4.2),
+            ('2024-03', 8.7),
+            ('2024-04', 13.1),
+            ('2024-05', 17.8),
+            ('2024-06', 22.4),
+            ('2024-07', 24.8),
+            ('2024-08', 24.1),
+            ('2024-09', 19.5),
+            ('2024-10', 13.8),
+            ('2024-11', 8.2),
+            ('2024-12', 4.6))
           library: line
           display:
-            x: day
-            y: count
+            x: month
+            y: avg_temp
 
-        offers-bar:
-          title: Offers by source (bar)
+        area-chart:
+          title: Monthly sales by product (area)
           db: jobs
           query: >-
-            SELECT
-              source,
-              count(*) as count
-            FROM offers_view
-            WHERE TRUE
-              [[ AND date >= date(:date_start) ]]
-              [[ AND date <= date(:date_end) ]]
-            GROUP BY source
-            ORDER BY count DESC
+            SELECT column1 as month, column2 as product, column3 as sales
+            FROM (VALUES
+            ('2024-01', 'Widgets', 80),
+            ('2024-01', 'Gadgets', 40),
+            ('2024-02', 'Widgets', 95),
+            ('2024-02', 'Gadgets', 55),
+            ('2024-03', 'Widgets', 110),
+            ('2024-03', 'Gadgets', 70),
+            ('2024-04', 'Widgets', 85),
+            ('2024-04', 'Gadgets', 55),
+            ('2024-05', 'Widgets', 120),
+            ('2024-05', 'Gadgets', 80),
+            ('2024-06', 'Widgets', 135),
+            ('2024-06', 'Gadgets', 90))
+          library: area
+          display:
+            x: month
+            y: sales
+            color: product
+
+        bar-chart:
+          title: Programming language popularity (bar)
+          db: jobs
+          query: >-
+            SELECT column1 as language, column2 as share
+            FROM (VALUES
+            ('Python', 30.3),
+            ('JavaScript', 25.1),
+            ('Java', 18.5),
+            ('C#', 12.4),
+            ('Go', 8.7),
+            ('Rust', 5.0))
           library: bar
           display:
-            x: source
-            y: count
-            color: source
+            x: language
+            y: share
+            color: language
 
-        offers-pie:
-          title: Offers by source (pie)
+        pie-chart:
+          title: Browser market share (pie)
           db: jobs
           query: >-
-            SELECT
-              source,
-              count(*) as count
-            FROM offers_view
-            WHERE TRUE
-              [[ AND date >= date(:date_start) ]]
-              [[ AND date <= date(:date_end) ]]
-            GROUP BY source
-            ORDER BY count DESC
+            SELECT column1 as browser, column2 as share
+            FROM (VALUES
+            ('Chrome', 65.0),
+            ('Safari', 18.5),
+            ('Edge', 5.5),
+            ('Firefox', 4.0),
+            ('Other', 7.0))
           library: pie
           display:
-            label: source
-            value: count
+            label: browser
+            value: share
 
-        offers-scatter:
-          title: Offers count vs date (scatter)
+        scatter-chart:
+          title: Ad spend vs revenue by channel (scatter)
           db: jobs
           query: >-
-            SELECT
-              date(date) as day,
-              count(*) as count,
-              source
-            FROM offers_view
-            WHERE TRUE
-              [[ AND date >= date(:date_start) ]]
-              [[ AND date <= date(:date_end) ]]
-              [[ AND source = :source ]]
-            GROUP BY day, source
+            SELECT column1 as ad_spend, column2 as revenue, column3 as channel
+            FROM (VALUES
+            (10, 42, 'Online'),
+            (20, 78, 'Online'),
+            (15, 55, 'Online'),
+            (30, 95, 'Online'),
+            (25, 85, 'Online'),
+            (5, 30, 'Print'),
+            (10, 40, 'Print'),
+            (15, 48, 'Print'),
+            (20, 52, 'Print'),
+            (8, 35, 'Print'))
           library: scatter
           display:
-            x: day
-            y: count
-            color: source
-            xtype: temporal
+            x: ad_spend
+            y: revenue
+            color: channel
 
-        offers-choropleth:
-          title: Offers by region (choropleth)
+        table-chart:
+          title: Largest cities by population (table)
           db: jobs
           query: >-
-            SELECT
-              region,
-              count(*) as count
-            FROM
-              offers_view
-            WHERE
-              TRUE
-              [[ AND date >= date(:date_start) ]]
-              [[ AND date <= date(:date_end) ]]
-              [[ AND source = :source ]]
-            GROUP BY
-              region
-            ORDER BY
-              count DESC
-          library: choropleth
+            SELECT column1 as City, column2 as Country, column3 as Population
+            FROM (VALUES
+            ('Tokyo', 'Japan', 13960000),
+            ('Delhi', 'India', 16314000),
+            ('Shanghai', 'China', 24280000),
+            ('São Paulo', 'Brazil', 12325000),
+            ('Mexico City', 'Mexico', 9209944))
+          library: table
           display:
-            label: region
-            value: count
-            geodata_url: https://raw.githubusercontent.com/gregoiredavid/france-geojson/master/regions.geojson
-            geodata_key: properties.nom
 
-        offers-wordcloud:
-          title: Word cloud of job titles (wordcloud)
+        wordcloud-chart:
+          title: Technology keywords (wordcloud)
           db: jobs
           query: >-
-            SELECT
-              b.value AS word,
-              COUNT(*) AS frequency
-            FROM (
-                SELECT '["' || lower(replace(trim(title), ' ', '", "')) || '"]' AS array
-                FROM offers_view
-                WHERE TRUE
-                  [[ AND date >= date(:date_start) ]]
-                  [[ AND date <= date(:date_end) ]]
-                  [[ AND source = :source ]]
-              ) a,
-              json_each(a.array) b
-            WHERE length(b.value) > 3
-            GROUP BY b.value
-            ORDER BY frequency DESC
-            LIMIT 100
+            SELECT column1 as word, column2 as frequency
+            FROM (VALUES
+            ('AI', 95),
+            ('Python', 90),
+            ('Machine Learning', 85),
+            ('Cloud', 80),
+            ('Kubernetes', 70),
+            ('Docker', 68),
+            ('React', 65),
+            ('TypeScript', 60),
+            ('DevOps', 55),
+            ('Serverless', 45),
+            ('GraphQL', 40),
+            ('Rust', 38),
+            ('Blockchain', 30),
+            ('IoT', 28),
+            ('WebAssembly', 25))
           library: wordcloud
           display:
             text: word
             size: frequency
+
+        choropleth-chart:
+          title: GDP index by French region (choropleth)
+          db: jobs
+          query: >-
+            SELECT column1 as region, column2 as gdp_index
+            FROM (VALUES
+            ('Île-de-France', 100),
+            ('Auvergne-Rhône-Alpes', 78),
+            ('Provence-Alpes-Côte d''Azur', 82),
+            ('Hauts-de-France', 65),
+            ('Nouvelle-Aquitaine', 72),
+            ('Occitanie', 68),
+            ('Grand Est', 70),
+            ('Pays de la Loire', 71),
+            ('Normandie', 63),
+            ('Bretagne', 66),
+            ('Bourgogne-Franche-Comté', 60),
+            ('Centre-Val de Loire', 62),
+            ('Corse', 58))
+          library: choropleth
+          display:
+            label: region
+            value: gdp_index
+            geodata_url: https://raw.githubusercontent.com/gregoiredavid/france-geojson/master/regions.geojson
+            geodata_key: properties.nom
+
+        vega-lite-chart:
+          title: Sales heatmap by month and category (vega-lite)
+          db: jobs
+          query: >-
+            SELECT column1 as month, column2 as category, column3 as sales
+            FROM (VALUES
+            ('Jan', 'Electronics', 45),
+            ('Jan', 'Clothing', 30),
+            ('Jan', 'Food', 60),
+            ('Feb', 'Electronics', 55),
+            ('Feb', 'Clothing', 40),
+            ('Feb', 'Food', 50),
+            ('Mar', 'Electronics', 35),
+            ('Mar', 'Clothing', 65),
+            ('Mar', 'Food', 45),
+            ('Apr', 'Electronics', 70),
+            ('Apr', 'Clothing', 55),
+            ('Apr', 'Food', 40))
+          library: vega-lite
+          display:
+            mark: { type: rect, tooltip: true }
+            encoding:
+              x: { field: month, type: ordinal }
+              y: { field: category, type: ordinal }
+              color: { field: sales, type: quantitative, scale: { scheme: blues } }
+
+        vega-chart:
+          title: Customer satisfaction scores (vega)
+          db: jobs
+          query: >-
+            SELECT column1 as category, column2 as score
+            FROM (VALUES
+            ('Product Quality', 4.5),
+            ('Customer Service', 4.2),
+            ('Value for Money', 3.8),
+            ('Ease of Use', 4.7),
+            ('Documentation', 3.5))
+          library: vega
+          display:
+            height: 200
+            scales:
+              - name: xscale
+                type: linear
+                domain: [0, 5]
+                range: width
+              - name: yscale
+                type: band
+                domain: { data: table, field: category }
+                range: height
+                padding: 0.1
+              - name: color
+                type: ordinal
+                domain: { data: table, field: category }
+                range: { scheme: category10 }
+            axes:
+              - orient: bottom
+                scale: xscale
+                title: Score (out of 5)
+              - orient: left
+                scale: yscale
+            marks:
+              - type: rect
+                from: { data: table }
+                encode:
+                  enter:
+                    y: { scale: yscale, field: category }
+                    height: { scale: yscale, band: 1 }
+                    x: { value: 0 }
+                    x2: { scale: xscale, field: score }
+                    fill: { scale: color, field: category }
+                  update:
+                    fillOpacity: { value: 1 }
+                  hover:
+                    fillOpacity: { value: 0.7 }
+
+        map-chart:
+          title: World capitals (map)
+          db: jobs
+          query: >-
+            SELECT column1 as City, column2 as Country, column3 as latitude, column4 as longitude
+            FROM (VALUES
+            ('Paris', 'France', 48.8566, 2.3522),
+            ('London', 'UK', 51.5074, -0.1278),
+            ('Berlin', 'Germany', 52.5200, 13.4050),
+            ('Tokyo', 'Japan', 35.6762, 139.6503),
+            ('New York', 'USA', 40.7128, -74.0060),
+            ('Sydney', 'Australia', -33.8688, 151.2093),
+            ('Cairo', 'Egypt', 30.0444, 31.2357),
+            ('São Paulo', 'Brazil', -23.5505, -46.6333),
+            ('Mumbai', 'India', 19.0760, 72.8777),
+            ('Beijing', 'China', 39.9042, 116.4074))
+          library: map
+          display:
+            show_latlng_popup: true

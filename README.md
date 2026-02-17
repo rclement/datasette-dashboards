@@ -13,7 +13,15 @@ Try out a live demo at [https://datasette-dashboards-demo.vercel.app](https://da
 Some breaking changes might happen between releases before reaching a stable version.
 Use it at your own risks!
 
-![Datasette Dashboards Demo](https://raw.githubusercontent.com/rclement/datasette-dashboards/master/demo/datasette-dashboards-demo.png)
+## Screenshots
+
+| Home | Dashboards list | Job offers dashboard |
+| --- | --- | --- |
+| [![Home](https://raw.githubusercontent.com/rclement/datasette-dashboards/master/demo/shots/home.png)](https://raw.githubusercontent.com/rclement/datasette-dashboards/master/demo/shots/home.png) | [![Dashboards list](https://raw.githubusercontent.com/rclement/datasette-dashboards/master/demo/shots/dashboards.png)](https://raw.githubusercontent.com/rclement/datasette-dashboards/master/demo/shots/dashboards.png) | [![Job offers dashboard](https://raw.githubusercontent.com/rclement/datasette-dashboards/master/demo/shots/dashboard-job-offers-stats.png)](https://raw.githubusercontent.com/rclement/datasette-dashboards/master/demo/shots/dashboard-job-offers-stats.png) |
+
+| Chart types showcase | Single chart view |
+| --- | --- |
+| [![Chart types showcase](https://raw.githubusercontent.com/rclement/datasette-dashboards/master/demo/shots/dashboard-chart-types.png)](https://raw.githubusercontent.com/rclement/datasette-dashboards/master/demo/shots/dashboard-chart-types.png) | [![Single chart view](https://raw.githubusercontent.com/rclement/datasette-dashboards/master/demo/shots/dashboard-single-chart.png)](https://raw.githubusercontent.com/rclement/datasette-dashboards/master/demo/shots/dashboard-single-chart.png) |
 
 ## Installation
 

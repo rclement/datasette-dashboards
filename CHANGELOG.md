@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Shorthand chart types: `line`, `bar`, `area`, `scatter`, `pie` (Vega-Lite powered)
 - Shorthand chart types: `choropleth` and `wordcloud` (Vega powered)
 - Interactive legend highlighting for line, bar, area, scatter, and pie charts
+- New demo dashboard for charts types showcasing
 
 ### Fixed
 - Remove dependency `datasette-sqlite-http` for demo
