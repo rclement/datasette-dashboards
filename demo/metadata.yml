@@ -20,9 +20,6 @@ databases:
         searchmode: raw
 
 plugins:
-  datasette-sqlite-http:
-    UNSAFE_allow_http_requests: true
-
   datasette-dashboards:
     job-offers-stats:
       title: Job offers statistics
@@ -203,42 +200,19 @@ plugins:
           title: Offers by region
           db: jobs
           query: >-
-            WITH regions AS (
-              SELECT
-                value ->> '$.properties.code' AS code,
-                value ->> '$.properties.nom' AS name
-              FROM
-                json_each(
-                  http_get_body(
-                    'https://raw.githubusercontent.com/gregoiredavid/france-geojson/master/regions.geojson'
-                  ) -> '$.features'
-                )
-            ),
-            region_offers AS (
-              SELECT
-                region,
-                count(*) as count
-              FROM
-                offers_view
-              WHERE
-                TRUE
-                [[ AND date >= date(:date_start) ]]
-                [[ AND date <= date(:date_end) ]]
-                [[ AND source = :source ]]
-                [[ AND region = :region ]]
-                [[ AND company = :company ]]
-                [[ AND id IN (SELECT rowid FROM offers_fts WHERE offers_fts MATCH :job_title) ]]
-              GROUP BY
-                region
-            )
             SELECT
-              regions.name AS region,
-              coalesce(region_offers.count, 0) AS count
-            FROM
-              regions
-              LEFT OUTER JOIN region_offers on region_offers.region = regions.name
-            ORDER BY
-              region_offers.count DESC
+              region,
+              count(*) AS count
+            FROM offers_view
+            WHERE region IS NOT NULL
+              [[ AND date >= date(:date_start) ]]
+              [[ AND date <= date(:date_end) ]]
+              [[ AND source = :source ]]
+              [[ AND region = :region ]]
+              [[ AND company = :company ]]
+              [[ AND id IN (SELECT rowid FROM offers_fts WHERE offers_fts MATCH :job_title) ]]
+            GROUP BY region
+            ORDER BY count DESC
           library: vega-lite
           display:
             mark: geoshape
