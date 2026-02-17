@@ -39,7 +39,7 @@ async function renderVegaChart(chart_slug, chart, query_string, absolute_url, fu
   }
 
   const spec = {
-    $schema: 'https://vega.github.io/schema/vega/v5.json',
+    $schema: 'https://vega.github.io/schema/vega/v6.json',
     description: chart.title,
     autosize: { 'type': 'fit', 'resize': true },
     data: [
@@ -67,7 +67,7 @@ async function renderVegaLiteChart(chart_slug, chart, query_string, absolute_url
   const data = await results.json()
 
   const spec = {
-    $schema: 'https://vega.github.io/schema/vega-lite/v5.json',
+    $schema: 'https://vega.github.io/schema/vega-lite/v6.json',
     description: chart.title,
     width: 'container',
     height: full_height ? 'container' : undefined,

@@ -99,3 +99,25 @@ async def test_dashboard_chart_no_filters(
 
     response = await datasette.client.get("/-/dashboards/job-dashboard/offers-day")
     assert response.status_code == 200
+
+
+@pytest.mark.asyncio
+async def test_dashboard_chart_misconfigured_chart_type(
+    datasette_db: Path, datasette_metadata: t.Dict[str, t.Any]
+) -> None:
+    metadata = copy.deepcopy(datasette_metadata)
+    metadata["plugins"]["datasette-dashboards"]["job-dashboard"]["charts"][
+        "bad-chart"
+    ] = {
+        "title": "Misconfigured line chart",
+        "db": "test",
+        "query": "SELECT 1",
+        "library": "line",
+        "display": {"y": "count"},  # missing required "x"
+    }
+    datasette = Datasette([str(datasette_db)], metadata=metadata)
+
+    response = await datasette.client.get("/-/dashboards/job-dashboard/bad-chart")
+    assert response.status_code == 404
+    assert "bad-chart" in response.text
+    assert "missing required field" in response.text

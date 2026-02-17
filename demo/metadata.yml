@@ -334,3 +334,181 @@ plugins:
               [[ AND id IN (SELECT rowid FROM offers_fts WHERE offers_fts MATCH :job_title) ]]
           library: map
           display:
+
+    job-offers-simple:
+      title: Job offers (simple charts)
+      description: Same dashboard using configurable chart types
+      settings:
+        allow_fullscreen: true
+      layout:
+        - [simple-note, offers-line, offers-line, offers-count]
+        - [simple-note, offers-pie, offers-bar, offers-scatter]
+        - [offers-choropleth, offers-choropleth, offers-wordcloud, offers-wordcloud]
+      filters:
+        date_start:
+          name: Date Start
+          type: date
+          default: "2021-01-01"
+        date_end:
+          name: Date End
+          type: date
+        source:
+          name: Source
+          type: select
+          db: jobs
+          query: SELECT DISTINCT source FROM offers_view WHERE source IS NOT NULL ORDER BY source ASC
+      charts:
+        simple-note:
+          library: markdown
+          display: |-
+            # Simple chart types
+
+            This dashboard demonstrates the **configurable chart widgets**:
+            `line`, `bar`, `area`, `scatter`, `pie`, `choropleth`,
+            and `wordcloud`.
+
+            These provide a simpler YAML configuration compared to
+            raw Vega/Vega-Lite, while converting under the hood.
+
+        offers-count:
+          title: Total number of offers
+          db: jobs
+          query: >-
+            SELECT count(*) as count
+            FROM offers_view
+            WHERE TRUE
+              [[ AND date >= date(:date_start) ]]
+              [[ AND date <= date(:date_end) ]]
+              [[ AND source = :source ]]
+          library: metric
+          display:
+            field: count
+            prefix:
+            suffix: " offers"
+
+        offers-line:
+          title: Offers by day (line)
+          db: jobs
+          query: >-
+            SELECT
+              date(date) as day,
+              count(*) as count
+            FROM offers_view
+            WHERE TRUE
+              [[ AND date >= date(:date_start) ]]
+              [[ AND date <= date(:date_end) ]]
+              [[ AND source = :source ]]
+            GROUP BY day
+            ORDER BY day
+          library: line
+          display:
+            x: day
+            y: count
+
+        offers-bar:
+          title: Offers by source (bar)
+          db: jobs
+          query: >-
+            SELECT
+              source,
+              count(*) as count
+            FROM offers_view
+            WHERE TRUE
+              [[ AND date >= date(:date_start) ]]
+              [[ AND date <= date(:date_end) ]]
+            GROUP BY source
+            ORDER BY count DESC
+          library: bar
+          display:
+            x: source
+            y: count
+            color: source
+
+        offers-pie:
+          title: Offers by source (pie)
+          db: jobs
+          query: >-
+            SELECT
+              source,
+              count(*) as count
+            FROM offers_view
+            WHERE TRUE
+              [[ AND date >= date(:date_start) ]]
+              [[ AND date <= date(:date_end) ]]
+            GROUP BY source
+            ORDER BY count DESC
+          library: pie
+          display:
+            label: source
+            value: count
+
+        offers-scatter:
+          title: Offers count vs date (scatter)
+          db: jobs
+          query: >-
+            SELECT
+              date(date) as day,
+              count(*) as count,
+              source
+            FROM offers_view
+            WHERE TRUE
+              [[ AND date >= date(:date_start) ]]
+              [[ AND date <= date(:date_end) ]]
+              [[ AND source = :source ]]
+            GROUP BY day, source
+          library: scatter
+          display:
+            x: day
+            y: count
+            color: source
+            xtype: temporal
+
+        offers-choropleth:
+          title: Offers by region (choropleth)
+          db: jobs
+          query: >-
+            SELECT
+              region,
+              count(*) as count
+            FROM
+              offers_view
+            WHERE
+              TRUE
+              [[ AND date >= date(:date_start) ]]
+              [[ AND date <= date(:date_end) ]]
+              [[ AND source = :source ]]
+            GROUP BY
+              region
+            ORDER BY
+              count DESC
+          library: choropleth
+          display:
+            label: region
+            value: count
+            geodata_url: https://raw.githubusercontent.com/gregoiredavid/france-geojson/master/regions.geojson
+            geodata_key: properties.nom
+
+        offers-wordcloud:
+          title: Word cloud of job titles (wordcloud)
+          db: jobs
+          query: >-
+            SELECT
+              b.value AS word,
+              COUNT(*) AS frequency
+            FROM (
+                SELECT '["' || lower(replace(trim(title), ' ', '", "')) || '"]' AS array
+                FROM offers_view
+                WHERE TRUE
+                  [[ AND date >= date(:date_start) ]]
+                  [[ AND date <= date(:date_end) ]]
+                  [[ AND source = :source ]]
+              ) a,
+              json_each(a.array) b
+            WHERE length(b.value) > 3
+            GROUP BY b.value
+            ORDER BY frequency DESC
+            LIMIT 100
+          library: wordcloud
+          display:
+            text: word
+            size: frequency
