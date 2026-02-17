@@ -155,6 +155,78 @@ def datasette_metadata() -> t.Dict[str, t.Any]:
                                 },
                             },
                         },
+                        "offers-line": {
+                            "title": "Offers over time (line)",
+                            "db": "test",
+                            "query": "SELECT date(date) as day, count(*) as count FROM jobs GROUP BY day ORDER BY day",
+                            "library": "line",
+                            "display": {
+                                "x": "day",
+                                "y": "count",
+                            },
+                        },
+                        "offers-bar": {
+                            "title": "Offers by source (bar)",
+                            "db": "test",
+                            "query": "SELECT source, count(*) as count FROM jobs GROUP BY source ORDER BY count DESC",
+                            "library": "bar",
+                            "display": {
+                                "x": "source",
+                                "y": "count",
+                            },
+                        },
+                        "offers-area": {
+                            "title": "Offers over time (area)",
+                            "db": "test",
+                            "query": "SELECT date(date) as day, count(*) as count FROM jobs GROUP BY day ORDER BY day",
+                            "library": "area",
+                            "display": {
+                                "x": "day",
+                                "y": "count",
+                            },
+                        },
+                        "offers-scatter": {
+                            "title": "Offers scatter",
+                            "db": "test",
+                            "query": "SELECT id, count(*) as count FROM jobs GROUP BY id",
+                            "library": "scatter",
+                            "display": {
+                                "x": "id",
+                                "y": "count",
+                            },
+                        },
+                        "offers-pie": {
+                            "title": "Offers by source (pie)",
+                            "db": "test",
+                            "query": "SELECT source, count(*) as count FROM jobs GROUP BY source ORDER BY count DESC",
+                            "library": "pie",
+                            "display": {
+                                "label": "source",
+                                "value": "count",
+                            },
+                        },
+                        "offers-choropleth": {
+                            "title": "Offers by region (choropleth)",
+                            "db": "test",
+                            "query": "SELECT source as region, count(*) as count FROM jobs GROUP BY source",
+                            "library": "choropleth",
+                            "display": {
+                                "label": "region",
+                                "value": "count",
+                                "geodata_url": "https://example.com/regions.geojson",
+                                "geodata_key": "properties.nom",
+                            },
+                        },
+                        "offers-wordcloud": {
+                            "title": "Word cloud of job titles (wordcloud)",
+                            "db": "test",
+                            "query": "SELECT job as word, count(*) as frequency FROM jobs GROUP BY job ORDER BY frequency DESC",
+                            "library": "wordcloud",
+                            "display": {
+                                "text": "word",
+                                "size": "frequency",
+                            },
+                        },
                     },
                 }
             }

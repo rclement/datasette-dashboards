@@ -135,7 +135,7 @@ Common chart properties for all chart types:
 | `title`   | `string` | Chart title                                                                           |
 | `db`      | `string` | Database name against which to run the query                                          |
 | `query`   | `string` | SQL query to run and extract data from                                                |
-| `library` | `string` | One of supported libraries: `vega`, `vega-lite`, `markdown`, `metric`, `table`, `map` |
+| `library` | `string` | One of supported libraries: `line`, `bar`, `area`, `scatter`, `pie`, `choropleth`, `wordcloud`, `vega`, `vega-lite`, `markdown`, `metric`, `table`, `map` |
 | `display` | `object` | Chart display specification (depend on the used library)                              |
 
 To define SQL queries using dashboard filters:
@@ -151,6 +151,91 @@ SELECT * FROM mytable WHERE TRUE [[ AND col1 = :my_filter_1 ]] [[ AND col2 = :my
 **Important notes:**
 
 - When a `select` filter has more than 100 options, the dropdown list will be automatically converted to a text filter with autocompletion
+
+#### Chart types
+
+The following **shorthand** chart types use a simple semantic YAML configuration
+that is automatically converted to Vega-Lite (or Vega, for `wordcloud`) under the hood,
+as opposed to providing a raw Vega / Vega-Lite specification directly.
+
+##### Line chart
+
+| Property        | Type     | Description                                                     |
+| --------------- | -------- | --------------------------------------------------------------- |
+| `library`       | `string` | Must be set to `line`                                           |
+| `display.x`     | `string` | Field name for the X axis (default type: `temporal`)            |
+| `display.y`     | `string` | Field name for the Y axis (default type: `quantitative`)        |
+| `display.color` | `string` | (optional) Field name for color grouping (type: `nominal`)      |
+| `display.xtype` | `string` | (optional) Vega-Lite type for X axis (overrides default)        |
+| `display.ytype` | `string` | (optional) Vega-Lite type for Y axis (overrides default)        |
+
+##### Area chart
+
+| Property        | Type     | Description                                                     |
+| --------------- | -------- | --------------------------------------------------------------- |
+| `library`       | `string` | Must be set to `area`                                           |
+| `display.x`     | `string` | Field name for the X axis (default type: `temporal`)            |
+| `display.y`     | `string` | Field name for the Y axis (default type: `quantitative`)        |
+| `display.color` | `string` | (optional) Field name for color grouping (type: `nominal`)      |
+| `display.xtype` | `string` | (optional) Vega-Lite type for X axis (overrides default)        |
+| `display.ytype` | `string` | (optional) Vega-Lite type for Y axis (overrides default)        |
+
+##### Bar chart
+
+| Property             | Type      | Description                                                        |
+| -------------------- | --------- | ------------------------------------------------------------------ |
+| `library`            | `string`  | Must be set to `bar`                                               |
+| `display.x`          | `string`  | Field name for the X axis (default type: `nominal`)                |
+| `display.y`          | `string`  | Field name for the Y axis (default type: `quantitative`)           |
+| `display.color`      | `string`  | (optional) Field name for color grouping (type: `nominal`)         |
+| `display.horizontal` | `boolean` | (optional) Flip axes for a horizontal bar chart (default: `false`) |
+| `display.xtype`      | `string`  | (optional) Vega-Lite type for X axis (overrides default)           |
+| `display.ytype`      | `string`  | (optional) Vega-Lite type for Y axis (overrides default)           |
+
+##### Scatter chart
+
+| Property        | Type     | Description                                                     |
+| --------------- | -------- | --------------------------------------------------------------- |
+| `library`       | `string` | Must be set to `scatter`                                        |
+| `display.x`     | `string` | Field name for the X axis (default type: `quantitative`)        |
+| `display.y`     | `string` | Field name for the Y axis (default type: `quantitative`)        |
+| `display.color` | `string` | (optional) Field name for color grouping (type: `nominal`)      |
+| `display.size`  | `string` | (optional) Field name for point size (type: `quantitative`)     |
+| `display.xtype` | `string` | (optional) Vega-Lite type for X axis (overrides default)        |
+| `display.ytype` | `string` | (optional) Vega-Lite type for Y axis (overrides default)        |
+
+##### Pie chart
+
+| Property        | Type     | Description                                            |
+| --------------- | -------- | ------------------------------------------------------ |
+| `library`       | `string` | Must be set to `pie`                                   |
+| `display.label` | `string` | Field name for slice labels (type: `nominal`)          |
+| `display.value` | `string` | Field name for slice values (type: `quantitative`)     |
+
+##### Choropleth chart
+
+| Property               | Type     | Description                                                                     |
+| ---------------------- | -------- | ------------------------------------------------------------------------------- |
+| `library`              | `string` | Must be set to `choropleth`                                                     |
+| `display.label`        | `string` | Field name containing feature labels to match against GeoJSON                   |
+| `display.value`        | `string` | Field name containing the numeric value used for coloring                       |
+| `display.geodata_url`  | `string` | URL to a GeoJSON file                                                           |
+| `display.geodata_key`  | `string` | Property path in GeoJSON features to match on (e.g. `properties.nom`)          |
+| `display.projection`   | `string` | (optional) Vega-Lite projection type (default: `mercator`)                      |
+| `display.color_scheme` | `string` | (optional) Vega color scheme name (default: `blues`)                            |
+
+##### Word cloud chart
+
+| Property                  | Type               | Description                                                                      |
+| ------------------------- | ------------------ | -------------------------------------------------------------------------------- |
+| `library`                 | `string`           | Must be set to `wordcloud`                                                       |
+| `display.text`            | `string`           | Field name containing the words                                                  |
+| `display.size`            | `string`           | Field name containing word frequency / size values                               |
+| `display.colors`          | `list`             | (optional) List of color hex strings (default: `["#d5a928", "#652c90", "#939597"]`) |
+| `display.font`            | `string`           | (optional) Font family (default: `Helvetica Neue, Arial`)                        |
+| `display.rotate`          | `number`           | (optional) Rotation angle in degrees (default: `0`)                              |
+| `display.font_size_range` | `[number, number]` | (optional) `[min, max]` font size range (default: `[12, 56]`)                    |
+| `display.height`          | `number`           | (optional) Chart height in pixels (default: `200`)                               |
 
 #### Vega properties
 

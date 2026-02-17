@@ -6,6 +6,8 @@ from datasette import hookimpl
 from datasette.database import Database
 from datasette.utils.asgi import Forbidden, NotFound, Request, Response
 
+from datasette_dashboards.chart_types import convert_chart_type
+
 if t.TYPE_CHECKING:  # pragma: no cover
     from datasette.app import Datasette
 
@@ -146,8 +148,18 @@ async def _dashboard_view(
             response.set_cookie(k, v)
         return response
 
-    for chart in dashboard["charts"].values():
+    charts = {}
+    for chart_slug, chart in dashboard["charts"].items():
+        try:
+            charts[chart_slug] = convert_chart_type(chart)
+        except KeyError as e:
+            raise NotFound(
+                f"Chart '{chart_slug}' configuration error: missing required field {e}"
+            )
+    for chart in charts.values():
         fill_chart_query_options(chart, query_parameters)
+
+    render_dashboard = dict(dashboard, charts=charts)
 
     return Response.html(
         await datasette.render_template(
@@ -160,7 +172,7 @@ async def _dashboard_view(
                 "slug": slug,
                 "query_parameters": query_parameters,
                 "query_string": query_string,
-                "dashboard": dashboard,
+                "dashboard": render_dashboard,
                 "embed": embed,
                 "row_limit": datasette.settings_dict().get("max_returned_rows"),
             },
@@ -207,6 +219,13 @@ async def _dashboard_chart(
     options_keys = get_dashboard_filters_keys(request, dashboard)
     query_parameters = get_dashboard_filters(request, options_keys)
     query_string = generate_dashboard_filters_qs(request, options_keys)
+
+    try:
+        chart = convert_chart_type(chart)
+    except KeyError as e:
+        raise NotFound(
+            f"Chart '{chart_slug}' configuration error: missing required field {e}"
+        )
     fill_chart_query_options(chart, query_parameters)
 
     return Response.html(

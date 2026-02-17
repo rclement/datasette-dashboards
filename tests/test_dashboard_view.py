@@ -302,3 +302,27 @@ async def test_dashboard_view_permissions(
         f"/-/dashboards/{slug}", cookies=cookies, follow_redirects=True
     )
     assert response.status_code == expected_status
+
+
+@pytest.mark.asyncio
+async def test_dashboard_view_misconfigured_chart_type(
+    datasette_db: Path, datasette_metadata: t.Dict[str, t.Any]
+) -> None:
+    metadata = copy.deepcopy(datasette_metadata)
+    metadata["plugins"]["datasette-dashboards"]["job-dashboard"]["charts"][
+        "bad-chart"
+    ] = {
+        "title": "Misconfigured line chart",
+        "db": "test",
+        "query": "SELECT 1",
+        "library": "line",
+        "display": {"y": "count"},  # missing required "x"
+    }
+    datasette = Datasette([str(datasette_db)], metadata=metadata)
+
+    response = await datasette.client.get(
+        "/-/dashboards/job-dashboard", follow_redirects=True
+    )
+    assert response.status_code == 404
+    assert "bad-chart" in response.text
+    assert "missing required field" in response.text
