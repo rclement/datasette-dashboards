@@ -50,6 +50,7 @@ dev = [
     "datasette-publish-vercel==0.14.2",
     "datasette-vega==0.6.2",
     "faker==40.4.0",
+    "invoke==2.2.1",
     "mypy==1.19.1",
     "pytest==9.0.2",
     "pytest-asyncio==1.3.0",

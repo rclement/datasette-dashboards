@@ -330,9 +330,17 @@ uv sync
 To run the QA suite:
 
 ```bash
-uv run ruff check datasette_dashboards tests
-uv run mypy --strict datasette_dashboards tests
-uv run pytest -v --cov=datasette_dashboards --cov=tests --cov-branch --cov-report=term-missing tests
+uv run invoke qa
+```
+
+Individual tasks are also available:
+
+```bash
+uv run invoke format   # auto-format code
+uv run invoke lint     # run ruff linter
+uv run invoke typing   # run mypy type checker
+uv run invoke test     # run test suite with coverage
+uv run invoke shots    # take screenshots of the local demo
 ```
 
 ## Updating JS dependencies
