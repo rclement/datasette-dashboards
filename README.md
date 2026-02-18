@@ -15,13 +15,18 @@ Use it at your own risks!
 
 ## Screenshots
 
-| Home | Dashboards list | Job offers dashboard |
-| --- | --- | --- |
-| [![Home](https://raw.githubusercontent.com/rclement/datasette-dashboards/master/demo/shots/home.png)](https://raw.githubusercontent.com/rclement/datasette-dashboards/master/demo/shots/home.png) | [![Dashboards list](https://raw.githubusercontent.com/rclement/datasette-dashboards/master/demo/shots/dashboards.png)](https://raw.githubusercontent.com/rclement/datasette-dashboards/master/demo/shots/dashboards.png) | [![Job offers dashboard](https://raw.githubusercontent.com/rclement/datasette-dashboards/master/demo/shots/dashboard-job-offers-stats.png)](https://raw.githubusercontent.com/rclement/datasette-dashboards/master/demo/shots/dashboard-job-offers-stats.png) |
-
-| Chart types showcase | Single chart view |
+| Home | Dashboards list |
 | --- | --- |
-| [![Chart types showcase](https://raw.githubusercontent.com/rclement/datasette-dashboards/master/demo/shots/dashboard-chart-types.png)](https://raw.githubusercontent.com/rclement/datasette-dashboards/master/demo/shots/dashboard-chart-types.png) | [![Single chart view](https://raw.githubusercontent.com/rclement/datasette-dashboards/master/demo/shots/dashboard-single-chart.png)](https://raw.githubusercontent.com/rclement/datasette-dashboards/master/demo/shots/dashboard-single-chart.png) |
+| [![Home](https://raw.githubusercontent.com/rclement/datasette-dashboards/master/demo/shots/home.png)](https://raw.githubusercontent.com/rclement/datasette-dashboards/master/demo/shots/home.png) | [![Dashboards list](https://raw.githubusercontent.com/rclement/datasette-dashboards/master/demo/shots/dashboards.png)](https://raw.githubusercontent.com/rclement/datasette-dashboards/master/demo/shots/dashboards.png) |
+
+| Job offers dashboard | Chart types showcase |
+| --- | --- |
+| [![Job offers dashboard](https://raw.githubusercontent.com/rclement/datasette-dashboards/master/demo/shots/dashboard-job-offers-stats.png)](https://raw.githubusercontent.com/rclement/datasette-dashboards/master/demo/shots/dashboard-job-offers-stats.png) | [![Chart types showcase](https://raw.githubusercontent.com/rclement/datasette-dashboards/master/demo/shots/dashboard-chart-types.png)](https://raw.githubusercontent.com/rclement/datasette-dashboards/master/demo/shots/dashboard-chart-types.png) |
+
+
+| Single chart view |
+| --- |
+| [![Single chart view](https://raw.githubusercontent.com/rclement/datasette-dashboards/master/demo/shots/dashboard-single-chart.png)](https://raw.githubusercontent.com/rclement/datasette-dashboards/master/demo/shots/dashboard-single-chart.png) |
 
 ## Installation
 
