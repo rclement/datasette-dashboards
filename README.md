@@ -7,6 +7,8 @@
 [![Coverage Status](https://img.shields.io/codecov/c/github/rclement/datasette-dashboards)](https://codecov.io/gh/rclement/datasette-dashboards)
 [![License](https://img.shields.io/github/license/rclement/datasette-dashboards)](https://github.com/rclement/datasette-dashboards/blob/master/LICENSE)
 
+The Datasette Dashboards plugin allows to create interactive data visualisation dashboards in a declarative manner using the Datasette metadata configuration file. Coupled with a version control system such as Git, it transforms you Datasette instance into a _BI as Code_ (_Business Intelligence as Code_) tool.
+
 Try out a live demo at [https://datasette-dashboards-demo.vercel.app](https://datasette-dashboards-demo.vercel.app/-/dashboards)
 
 ## Screenshots
