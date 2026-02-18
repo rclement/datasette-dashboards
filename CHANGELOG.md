@@ -9,6 +9,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 - Remove dependency `datasette-sqlite-http` for demo
 
+### Changed
+- Use `invoke` for task management, replacing direct `uv run` commands
+
 ## [0.8.0] - 2025-11-18
 ### Added
 - Support for Python 3.14
