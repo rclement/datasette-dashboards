@@ -69,7 +69,7 @@ def shots(ctx: Context) -> None:
     shots_yaml = "\n".join(
         f"- url: {base_url}{path}\n"
         f"  output: {demo_shots_dir}/{name}.png\n"
-        f"  wait: 1000\n"
+        f"  wait: 3000\n"
         f"  width: 1440\n"
         f"  retina: true"
         for name, path in pages
