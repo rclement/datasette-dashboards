@@ -127,12 +127,10 @@ plugins:
               [[ AND id IN (SELECT rowid FROM offers_fts WHERE offers_fts MATCH :job_title) ]]
             GROUP BY day
             ORDER BY day
-          library: vega-lite
+          library: line
           display:
-            mark: { type: line, tooltip: true }
-            encoding:
-              x: { field: day, type: temporal, timeUnit: yearmonthdate }
-              y: { field: count, type: quantitative }
+            x: { field: day, type: temporal, timeUnit: yearmonthdate }
+            y: count
 
         offers-source:
           title: Number of offers by source
@@ -150,19 +148,10 @@ plugins:
               [[ AND id IN (SELECT rowid FROM offers_fts WHERE offers_fts MATCH :job_title) ]]
             GROUP BY source
             ORDER BY count DESC
-          library: vega-lite
+          library: pie
           display:
-            mark: { type: arc, tooltip: true }
-            params:
-              - name: highlight
-                select: { fields: [source], type: point, "on": mouseover }
-                bind: legend
-            encoding:
-              color: { field: source, type: nominal }
-              theta: { field: count, type: quantitative }
-              opacity:
-                condition: { param: highlight, value: 1 }
-                value: 0.2
+            label: source
+            value: count
 
         offers-day-source:
           title: Offers by day by source
@@ -181,20 +170,11 @@ plugins:
               [[ AND id IN (SELECT rowid FROM offers_fts WHERE offers_fts MATCH :job_title) ]]
             GROUP BY day, source
             ORDER BY day
-          library: vega-lite
+          library: bar
           display:
-            mark: { type: bar, tooltip: true }
-            params:
-              - name: highlight
-                select: { fields: [source], type: point, "on": mouseover }
-                bind: legend
-            encoding:
-              x: { field: day, type: ordinal, timeUnit: yearmonthdate }
-              y: { field: count, type: quantitative }
-              color: { field: source, type: nominal }
-              opacity:
-                condition: { param: highlight, value: 1 }
-                value: 0.2
+            x: { field: day, type: temporal, timeUnit: yearmonthdate }
+            y: count
+            color: source
 
         offers-region:
           title: Offers by region
@@ -213,27 +193,14 @@ plugins:
               [[ AND id IN (SELECT rowid FROM offers_fts WHERE offers_fts MATCH :job_title) ]]
             GROUP BY region
             ORDER BY count DESC
-          library: vega-lite
+          library: choropleth
           display:
-            mark: geoshape
-            projection: { type: mercator }
-            transform:
-              - lookup: region
-                from:
-                  data:
-                    url: https://raw.githubusercontent.com/gregoiredavid/france-geojson/master/regions.geojson
-                    format: { type: json, property: features }
-                  key: properties.nom
-                  fields: [type, geometry]
-            encoding:
-              fill:
-                field: count
-                type: quantitative
-                scale: { scheme: blues }
-              stroke: { value: white }
-              tooltip:
-                - { field: region, type: nominal }
-                - { field: count, type: quantitative }
+            label: region
+            value: count
+            geodata_url: https://raw.githubusercontent.com/gregoiredavid/france-geojson/master/regions.geojson
+            geodata_key: properties.nom
+            projection: mercator
+            color_scheme: blues
 
         job-titles:
           title: Word cloud of job titles
@@ -258,37 +225,11 @@ plugins:
             GROUP BY b.value
             ORDER BY frequency DESC
             LIMIT 100
-          library: vega
+          library: wordcloud
           display:
             height: 150
-            scales:
-              - name: color
-                type: ordinal
-                domain: { data: table, field: word }
-                range: ["#d5a928", "#652c90", "#939597"]
-            marks:
-              - type: text
-                from: { data: table }
-                encode:
-                  enter:
-                    text: { field: word }
-                    align: { value: center }
-                    baseline: { value: alphabetic }
-                    fill: { scale: color, field: "word" }
-                  update:
-                    fillOpacity: { value: 1 }
-                  hover:
-                    fillOpacity: { value: 0.5 }
-                transform:
-                  - type: wordcloud
-                    size: [{ signal: width }, { signal: height }]
-                    text: { field: word }
-                    rotate: 0
-                    font: Helvetica Neue, Arial
-                    fontSize: { field: datum.frequency }
-                    fontWeight: "300"
-                    fontSizeRange: [12, 56]
-                    padding: 2
+            text: word
+            size: frequency
 
         latest-offers:
           title: Latest offers
