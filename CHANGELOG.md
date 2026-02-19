@@ -16,6 +16,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Remove dependency `datasette-sqlite-http` for demo
 
 ### Changed
+- Update demo dashboard "job-offers-stats" with shorthand chart types
 - Use `invoke` for task management, replacing direct `uv run` commands
 
 ## [0.8.0] - 2025-11-18
