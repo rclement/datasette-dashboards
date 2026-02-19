@@ -96,12 +96,10 @@ plugins:
           title: Number of events by source
           db: jobs
           query: SELECT source, count(*) as count FROM events WHERE TRUE [[ AND date >= date(:date_start) ]] [[ AND date <= date(:date_end) ]] GROUP BY source ORDER BY count DESC
-          library: vega-lite
+          library: pie
           display:
-            mark: { type: arc, tooltip: true }
-            encoding:
-              color: { field: source, type: nominal }
-              theta: { field: count, type: quantitative }
+            label: source
+            value: count
 ```
 
 A new menu entry is now available, pointing at `/-/dashboards` to access all defined dashboards.
