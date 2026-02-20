@@ -185,17 +185,19 @@ monthly-signups:
   title: Monthly signups
   db: demo
   query: |
-    WITH monthly_signups(month, signups, segment) AS (
-      VALUES ('2025-01-01', 120, 'Free'), ('2025-02-01', 150, 'Free'), ('2025-03-01', 180, 'Pro')
-    )
-    SELECT month, signups, segment FROM monthly_signups
+    SELECT month, signups, segment
+    FROM (VALUES
+      ('2025-01-01', 120, 'Free'),
+      ('2025-02-01', 150, 'Free'),
+      ('2025-03-01', 180, 'Pro')
+    ) AS monthly_signups(month, signups, segment)
   library: line
   display:
     x: month
     y: signups
-    color: segment # optional (default: no color grouping)
-    xtype: temporal # optional (default: temporal)
-    ytype: quantitative # optional (default: quantitative)
+    color: segment # optional
+    xtype: temporal # optional
+    ytype: quantitative # optional
 ```
 
 ##### Area chart
@@ -214,17 +216,19 @@ monthly-revenue:
   title: Monthly revenue
   db: demo
   query: |
-    WITH monthly_revenue(month, amount, plan) AS (
-      VALUES ('2025-01-01', 1200, 'Starter'), ('2025-02-01', 1600, 'Starter'), ('2025-03-01', 2100, 'Business')
-    )
-    SELECT month, amount, plan FROM monthly_revenue
+    SELECT month, amount, plan
+    FROM (VALUES
+      ('2025-01-01', 1200, 'Starter'),
+      ('2025-02-01', 1600, 'Starter'),
+      ('2025-03-01', 2100, 'Business')
+    ) AS monthly_revenue(month, amount, plan)
   library: area
   display:
     x: month
     y: amount
-    color: plan # optional (default: no color grouping)
-    xtype: temporal # optional (default: temporal)
-    ytype: quantitative # optional (default: quantitative)
+    color: plan # optional
+    xtype: temporal # optional
+    ytype: quantitative # optional
 ```
 
 ##### Bar chart
@@ -244,18 +248,20 @@ tickets-by-priority:
   title: Tickets by priority
   db: demo
   query: |
-    WITH ticket_totals(priority, ticket_count, team) AS (
-      VALUES ('P1', 7, 'Support'), ('P2', 14, 'Support'), ('P3', 23, 'Platform')
-    )
-    SELECT priority, ticket_count, team FROM ticket_totals
+    SELECT priority, ticket_count, team
+    FROM (VALUES
+      ('P1', 7, 'Support'),
+      ('P2', 14, 'Support'),
+      ('P3', 23, 'Platform')
+    ) AS ticket_totals(priority, ticket_count, team)
   library: bar
   display:
     x: priority
     y: ticket_count
-    color: team # optional (default: no color grouping)
-    horizontal: false # optional (default: false)
-    xtype: nominal # optional (default: nominal)
-    ytype: quantitative # optional (default: quantitative)
+    color: team # optional
+    horizontal: false # optional
+    xtype: nominal # optional
+    ytype: quantitative # optional
 ```
 
 ##### Scatter chart
@@ -275,18 +281,20 @@ price-vs-rating:
   title: Price versus rating
   db: demo
   query: |
-    WITH products(price, rating, category, sales) AS (
-      VALUES (19.0, 4.1, 'Books', 80), (49.0, 4.6, 'Gadgets', 120), (79.0, 4.8, 'Gadgets', 95)
-    )
-    SELECT price, rating, category, sales FROM products
+    SELECT price, rating, category, sales
+    FROM (VALUES
+      (19.0, 4.1, 'Books', 80),
+      (49.0, 4.6, 'Gadgets', 120),
+      (79.0, 4.8, 'Gadgets', 95)
+    ) AS products(price, rating, category, sales)
   library: scatter
   display:
     x: price
     y: rating
-    color: category # optional (default: no color grouping)
-    size: sales # optional (default: fixed point size)
-    xtype: quantitative # optional (default: quantitative)
-    ytype: quantitative # optional (default: quantitative)
+    color: category # optional
+    size: sales # optional
+    xtype: quantitative # optional
+    ytype: quantitative # optional
 ```
 
 ##### Pie chart
@@ -302,10 +310,12 @@ sales-share:
   title: Sales share by channel
   db: demo
   query: |
-    WITH channels(channel, revenue) AS (
-      VALUES ('Organic', 5400), ('Paid', 3100), ('Partner', 1500)
-    )
-    SELECT channel, revenue FROM channels
+    SELECT channel, revenue
+    FROM (VALUES
+      ('Organic', 5400),
+      ('Paid', 3100),
+      ('Partner', 1500)
+    ) AS channels(channel, revenue)
   library: pie
   display:
     label: channel
@@ -329,18 +339,20 @@ population-by-region:
   title: Population by region
   db: demo
   query: |
-    WITH region_stats(region_code, population) AS (
-      VALUES ('11', 12278210), ('24', 588000), ('32', 3315000)
-    )
-    SELECT region_code, population FROM region_stats
+    SELECT region_code, population
+    FROM (VALUES
+      ('11', 12278210),
+      ('24', 588000),
+      ('32', 3315000)
+    ) AS region_stats(region_code, population)
   library: choropleth
   display:
     label: region_code
     value: population
     geodata_url: https://example.com/fr-regions.geojson
     geodata_key: properties.code
-    projection: mercator # optional (default: mercator)
-    color_scheme: blues # optional (default: blues)
+    projection: mercator # optional
+    color_scheme: blues # optional
 ```
 
 ##### Word cloud chart
@@ -361,19 +373,21 @@ top-keywords:
   title: Top keywords
   db: demo
   query: |
-    WITH keyword_counts(keyword, frequency) AS (
-      VALUES ('sqlite', 42), ('datasette', 35), ('dashboard', 20)
-    )
-    SELECT keyword, frequency FROM keyword_counts
+    SELECT keyword, frequency
+    FROM (VALUES
+      ('sqlite', 42),
+      ('datasette', 35),
+      ('dashboard', 20)
+    ) AS keyword_counts(keyword, frequency)
   library: wordcloud
   display:
     text: keyword
     size: frequency
-    colors: ["#d5a928", "#652c90", "#939597"] # optional (default: ["#d5a928", "#652c90", "#939597"])
-    font: Helvetica Neue, Arial # optional (default: Helvetica Neue, Arial)
-    rotate: 0 # optional (default: 0)
-    font_size_range: [12, 56] # optional (default: [12, 56])
-    height: 200 # optional (default: 200)
+    colors: ["#d5a928", "#652c90", "#939597"] # optional
+    font: Helvetica Neue, Arial # optional
+    rotate: 0 # optional
+    font_size_range: [12, 56] # optional
+    height: 200 # optional
 ```
 
 #### Vega properties
@@ -397,13 +411,15 @@ vega-custom:
   title: Custom Vega chart
   db: demo
   query: |
-    WITH monthly_sales(month, amount) AS (
-      VALUES ('2025-01-01', 100), ('2025-02-01', 140), ('2025-03-01', 90)
-    )
-    SELECT month, amount FROM monthly_sales
+    SELECT month, amount
+    FROM (VALUES
+      ('2025-01-01', 100),
+      ('2025-02-01', 140),
+      ('2025-03-01', 90)
+    ) AS monthly_sales(month, amount)
   library: vega
   display:
-    width: container # optional (default: managed by built-in autosize)
+    width: container # optional
     mark: line
     encoding:
       x:
@@ -435,10 +451,12 @@ vegalite-custom:
   title: Custom Vega-Lite chart
   db: demo
   query: |
-    WITH browser_stats(browser, sessions) AS (
-      VALUES ('Firefox', 340), ('Chrome', 1020), ('Safari', 280)
-    )
-    SELECT browser, sessions FROM browser_stats
+    SELECT browser, sessions
+    FROM (VALUES
+      ('Firefox', 340),
+      ('Chrome', 1020),
+      ('Safari', 280)
+    ) AS browser_stats(browser, sessions)
   library: vega-lite
   display:
     mark: bar
@@ -470,8 +488,8 @@ notes-block:
     - Source: internal warehouse
   settings:
     extensions: [markdown.extensions.tables]
-    extra_tags: [details] # optional (default: [])
-    extra_attrs: {a: [target]} # optional (default: {})
+    extra_tags: [] # optional
+    extra_attrs: {} # optional
 ```
 
 Note :
@@ -512,8 +530,10 @@ active-users:
   title: Active users
   db: demo
   query: |
-    WITH totals(active_count) AS (VALUES (932))
-    SELECT active_count FROM totals
+    SELECT active_count
+    FROM (VALUES
+      (932)
+    ) AS totals(active_count)
   library: metric
   display:
     field: active_count
@@ -544,10 +564,13 @@ recent-orders:
   title: Recent orders
   db: demo
   query: |
-    WITH orders(order_id, customer, total) AS (
-      VALUES (101, 'A. Smith', 129.50), (102, 'B. Chen', 88.00), (103, 'C. Diaz', 244.10)
-    )
-    SELECT order_id, customer, total FROM orders ORDER BY order_id DESC
+    SELECT order_id, customer, total
+    FROM (VALUES
+      (101, 'A. Smith', 129.50),
+      (102, 'B. Chen', 88.00),
+      (103, 'C. Diaz', 244.10)
+    ) AS orders(order_id, customer, total)
+    ORDER BY order_id DESC
   library: table
   display: {}
 ```
@@ -568,15 +591,17 @@ warehouse-locations:
   title: Warehouse locations
   db: demo
   query: |
-    WITH warehouses(name, latitude, longitude) AS (
-      VALUES ('Paris', 48.8566, 2.3522), ('Lyon', 45.7640, 4.8357), ('Marseille', 43.2965, 5.3698)
-    )
-    SELECT name, latitude, longitude FROM warehouses
+    SELECT name, latitude, longitude
+    FROM (VALUES
+      ('Paris', 48.8566, 2.3522),
+      ('Lyon', 45.7640, 4.8357),
+      ('Marseille', 43.2965, 5.3698)
+    ) AS warehouses(name, latitude, longitude)
   library: map
   display:
-    latitude_column: latitude # optional (default: latitude)
-    longitude_column: longitude # optional (default: longitude)
-    show_latlng_popup: false # optional (default: false)
+    latitude_column: latitude # optional
+    longitude_column: longitude # optional
+    show_latlng_popup: false # optional
 ```
 
 **Warning**: do not try to load more than a thousand rows for a map at the risk of
