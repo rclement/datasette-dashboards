@@ -166,6 +166,8 @@ SELECT * FROM mytable WHERE TRUE [[ AND col1 = :my_filter_1 ]] [[ AND col2 = :my
 The following **shorthand** chart types use a simple semantic YAML configuration
 that is automatically converted to Vega-Lite (or Vega, for `wordcloud`) under the hood,
 as opposed to providing a raw Vega / Vega-Lite specification directly.
+Each example below includes a full chart definition with an inline SQL dataset so you
+can see how query column names are reused in `display`.
 
 ##### Line chart
 
@@ -178,6 +180,26 @@ as opposed to providing a raw Vega / Vega-Lite specification directly.
 | `display.xtype` | `string` | (optional) Vega-Lite type for X axis (overrides default)        |
 | `display.ytype` | `string` | (optional) Vega-Lite type for Y axis (overrides default)        |
 
+```yaml
+monthly-signups:
+  title: Monthly signups
+  db: demo
+  query: |
+    SELECT month, signups, segment
+    FROM (VALUES
+      ('2025-01-01', 120, 'Free'),
+      ('2025-02-01', 150, 'Free'),
+      ('2025-03-01', 180, 'Pro')
+    ) AS monthly_signups(month, signups, segment)
+  library: line
+  display:
+    x: month
+    y: signups
+    color: segment # optional
+    xtype: temporal # optional
+    ytype: quantitative # optional
+```
+
 ##### Area chart
 
 | Property        | Type     | Description                                                     |
@@ -188,6 +210,26 @@ as opposed to providing a raw Vega / Vega-Lite specification directly.
 | `display.color` | `string` | (optional) Field name for color grouping (type: `nominal`)      |
 | `display.xtype` | `string` | (optional) Vega-Lite type for X axis (overrides default)        |
 | `display.ytype` | `string` | (optional) Vega-Lite type for Y axis (overrides default)        |
+
+```yaml
+monthly-revenue:
+  title: Monthly revenue
+  db: demo
+  query: |
+    SELECT month, amount, plan
+    FROM (VALUES
+      ('2025-01-01', 1200, 'Starter'),
+      ('2025-02-01', 1600, 'Starter'),
+      ('2025-03-01', 2100, 'Business')
+    ) AS monthly_revenue(month, amount, plan)
+  library: area
+  display:
+    x: month
+    y: amount
+    color: plan # optional
+    xtype: temporal # optional
+    ytype: quantitative # optional
+```
 
 ##### Bar chart
 
@@ -201,6 +243,27 @@ as opposed to providing a raw Vega / Vega-Lite specification directly.
 | `display.xtype`      | `string`  | (optional) Vega-Lite type for X axis (overrides default)           |
 | `display.ytype`      | `string`  | (optional) Vega-Lite type for Y axis (overrides default)           |
 
+```yaml
+tickets-by-priority:
+  title: Tickets by priority
+  db: demo
+  query: |
+    SELECT priority, ticket_count, team
+    FROM (VALUES
+      ('P1', 7, 'Support'),
+      ('P2', 14, 'Support'),
+      ('P3', 23, 'Platform')
+    ) AS ticket_totals(priority, ticket_count, team)
+  library: bar
+  display:
+    x: priority
+    y: ticket_count
+    color: team # optional
+    horizontal: false # optional
+    xtype: nominal # optional
+    ytype: quantitative # optional
+```
+
 ##### Scatter chart
 
 | Property        | Type     | Description                                                     |
@@ -213,6 +276,27 @@ as opposed to providing a raw Vega / Vega-Lite specification directly.
 | `display.xtype` | `string` | (optional) Vega-Lite type for X axis (overrides default)        |
 | `display.ytype` | `string` | (optional) Vega-Lite type for Y axis (overrides default)        |
 
+```yaml
+price-vs-rating:
+  title: Price versus rating
+  db: demo
+  query: |
+    SELECT price, rating, category, sales
+    FROM (VALUES
+      (19.0, 4.1, 'Books', 80),
+      (49.0, 4.6, 'Gadgets', 120),
+      (79.0, 4.8, 'Gadgets', 95)
+    ) AS products(price, rating, category, sales)
+  library: scatter
+  display:
+    x: price
+    y: rating
+    color: category # optional
+    size: sales # optional
+    xtype: quantitative # optional
+    ytype: quantitative # optional
+```
+
 ##### Pie chart
 
 | Property        | Type     | Description                                            |
@@ -220,6 +304,23 @@ as opposed to providing a raw Vega / Vega-Lite specification directly.
 | `library`       | `string` | Must be set to `pie`                                   |
 | `display.label` | `string` | Field name for slice labels (type: `nominal`)          |
 | `display.value` | `string` | Field name for slice values (type: `quantitative`)     |
+
+```yaml
+sales-share:
+  title: Sales share by channel
+  db: demo
+  query: |
+    SELECT channel, revenue
+    FROM (VALUES
+      ('Organic', 5400),
+      ('Paid', 3100),
+      ('Partner', 1500)
+    ) AS channels(channel, revenue)
+  library: pie
+  display:
+    label: channel
+    value: revenue
+```
 
 ##### Choropleth chart
 
@@ -233,6 +334,27 @@ as opposed to providing a raw Vega / Vega-Lite specification directly.
 | `display.projection`   | `string` | (optional) Vega-Lite projection type (default: `mercator`)                      |
 | `display.color_scheme` | `string` | (optional) Vega color scheme name (default: `blues`)                            |
 
+```yaml
+population-by-region:
+  title: Population by region
+  db: demo
+  query: |
+    SELECT region_code, population
+    FROM (VALUES
+      ('11', 12278210),
+      ('24', 588000),
+      ('32', 3315000)
+    ) AS region_stats(region_code, population)
+  library: choropleth
+  display:
+    label: region_code
+    value: population
+    geodata_url: https://example.com/fr-regions.geojson
+    geodata_key: properties.code
+    projection: mercator # optional
+    color_scheme: blues # optional
+```
+
 ##### Word cloud chart
 
 | Property                  | Type               | Description                                                                      |
@@ -245,6 +367,28 @@ as opposed to providing a raw Vega / Vega-Lite specification directly.
 | `display.rotate`          | `number`           | (optional) Rotation angle in degrees (default: `0`)                              |
 | `display.font_size_range` | `[number, number]` | (optional) `[min, max]` font size range (default: `[12, 56]`)                    |
 | `display.height`          | `number`           | (optional) Chart height in pixels (default: `200`)                               |
+
+```yaml
+top-keywords:
+  title: Top keywords
+  db: demo
+  query: |
+    SELECT keyword, frequency
+    FROM (VALUES
+      ('sqlite', 42),
+      ('datasette', 35),
+      ('dashboard', 20)
+    ) AS keyword_counts(keyword, frequency)
+  library: wordcloud
+  display:
+    text: keyword
+    size: frequency
+    colors: ["#d5a928", "#652c90", "#939597"] # optional
+    font: Helvetica Neue, Arial # optional
+    rotate: 0 # optional
+    font_size_range: [12, 56] # optional
+    height: 200 # optional
+```
 
 #### Vega properties
 
@@ -262,6 +406,30 @@ Notes about the `display` property:
 - All fields are passed along as-is (overriding pre-defined fields if any)
 - Only `mark` and `encoding` fields are required as the bare-minimum
 
+```yaml
+vega-custom:
+  title: Custom Vega chart
+  db: demo
+  query: |
+    SELECT month, amount
+    FROM (VALUES
+      ('2025-01-01', 100),
+      ('2025-02-01', 140),
+      ('2025-03-01', 90)
+    ) AS monthly_sales(month, amount)
+  library: vega
+  display:
+    width: container # optional
+    mark: line
+    encoding:
+      x:
+        field: month
+        type: temporal
+      y:
+        field: amount
+        type: quantitative
+```
+
 #### Vega-Lite properties
 
 Available configuration for `vega-lite` charts:
@@ -278,6 +446,29 @@ Notes about the `display` property:
 - All fields are passed along as-is (overriding pre-defined fields if any)
 - Only `mark` and `encoding` fields are required as the bare-minimum
 
+```yaml
+vegalite-custom:
+  title: Custom Vega-Lite chart
+  db: demo
+  query: |
+    SELECT browser, sessions
+    FROM (VALUES
+      ('Firefox', 340),
+      ('Chrome', 1020),
+      ('Safari', 280)
+    ) AS browser_stats(browser, sessions)
+  library: vega-lite
+  display:
+    mark: bar
+    encoding:
+      x:
+        field: browser
+        type: nominal
+      y:
+        field: sessions
+        type: quantitative
+```
+
 #### Markdown properties
 
 Available configuration for `markdown` chart:
@@ -287,6 +478,19 @@ Available configuration for `markdown` chart:
 | `library`  | `string` | Must be set to `markdown`                         |
 | `display`  | `string` | Multi-line string containing the Markdown content |
 | `settings` | `object` | Markdown settings (see below)                     |
+
+```yaml
+notes-block:
+  library: markdown
+  display: |
+    ### Dashboard notes
+    - Data refreshed hourly
+    - Source: internal warehouse
+  settings:
+    extensions: [markdown.extensions.tables]
+    extra_tags: [] # optional
+    extra_attrs: {} # optional
+```
 
 Note :
 
@@ -321,6 +525,22 @@ Available configuration for `metric` chart:
 | `display.prefix` | `string` | Prefix to be displayed before metric      |
 | `display.suffix` | `string` | Prefix to be displayed after metric       |
 
+```yaml
+active-users:
+  title: Active users
+  db: demo
+  query: |
+    SELECT active_count
+    FROM (VALUES
+      (932)
+    ) AS totals(active_count)
+  library: metric
+  display:
+    field: active_count
+    prefix: "~"
+    suffix: " users"
+```
+
 Note:
 
 - The `display.field` must reference a single-numerical value from the SQL query
@@ -339,6 +559,22 @@ Some advice for a nice table chart:
 - Order the rows explicitely with the `ORDER BY` clause
 - Use SQLite string concatenation operator (`||`) to format column data (for instance to include HTML markup!)
 
+```yaml
+recent-orders:
+  title: Recent orders
+  db: demo
+  query: |
+    SELECT order_id, customer, total
+    FROM (VALUES
+      (101, 'A. Smith', 129.50),
+      (102, 'B. Chen', 88.00),
+      (103, 'C. Diaz', 244.10)
+    ) AS orders(order_id, customer, total)
+    ORDER BY order_id DESC
+  library: table
+  display: {}
+```
+
 #### Map properties
 
 Available configuration for `map` chart:
@@ -349,6 +585,24 @@ Available configuration for `map` chart:
 | `display.latitude_column`   | `string`  | Name of the latitude column (default: `latitude`)                                   |
 | `display.longitude_column`  | `string`  | Name of the latitude column (default: `longitude`)                                  |
 | `display.show_latlng_popup` | `boolean` | Whether or not to display latitude and longitude values in popup (default: `false`) |
+
+```yaml
+warehouse-locations:
+  title: Warehouse locations
+  db: demo
+  query: |
+    SELECT name, latitude, longitude
+    FROM (VALUES
+      ('Paris', 48.8566, 2.3522),
+      ('Lyon', 45.7640, 4.8357),
+      ('Marseille', 43.2965, 5.3698)
+    ) AS warehouses(name, latitude, longitude)
+  library: map
+  display:
+    latitude_column: latitude # optional
+    longitude_column: longitude # optional
+    show_latlng_popup: false # optional
+```
 
 **Warning**: do not try to load more than a thousand rows for a map at the risk of
 slugginess and being unreadable. Make sensible use of the `LIMIT` clause to reduce

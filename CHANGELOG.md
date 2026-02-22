@@ -18,6 +18,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 - Update demo dashboard "job-offers-stats" with shorthand chart types
 - Use `invoke` for task management, replacing direct `uv run` commands
+- Rework README usage documentation with complete per-chart YAML snippets and inline SQL examples
 
 ## [0.8.0] - 2025-11-18
 ### Added
