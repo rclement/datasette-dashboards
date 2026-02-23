@@ -48,7 +48,7 @@ jobs:
     needs: test
     if: ${{ !cancelled() }}
     permissions:
-      contents: write
+      contents: read
       issues: write
       pull-requests: write
     env:
