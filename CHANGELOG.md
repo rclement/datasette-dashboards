@@ -20,6 +20,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Use `invoke` for task management, replacing direct `uv run` commands
 - Rework README usage documentation with complete per-chart YAML snippets and inline SQL examples
 
+### Internal
+- Replace Codecov integration with native GitHub Actions coverage reporting in pull requests
+
 ## [0.8.0] - 2025-11-18
 ### Added
 - Support for Python 3.14
