@@ -34,14 +34,96 @@ jobs:
           uv run invoke lint
           uv run invoke typing
       - name: Run tests
-        run: |
-          uv run invoke test
-          uv run coverage xml
-      - name: Publish code coverage to Codecov
-        uses: codecov/codecov-action@v5
+        run: uv run invoke test
+      - name: Upload coverage artifacts
+        if: ${{ matrix.python-version == '3.14' }}
+        uses: actions/upload-artifact@v6
         with:
-          token: ${{ secrets.CODECOV_TOKEN }}
-          files: ./coverage.xml
+          name: coverage
+          path: .coverage
+          include-hidden-files: true
+
+  coverage:
+    runs-on: ubuntu-latest
+    needs: test
+    if: ${{ !cancelled() }}
+    permissions:
+      contents: write
+      issues: write
+      pull-requests: write
+    env:
+      CODECOV_MD_FILE: "coverage.md"
+      CODECOV_REPORT_TITLE: "Code coverage report"
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+      - name: Install uv
+        uses: astral-sh/setup-uv@v7
+        with:
+          python-version: "3.14"
+          enable-cache: true
+          cache-dependency-glob: "uv.lock"
+      - name: Install dependencies
+        run: uv sync --all-extras --dev
+      - uses: actions/download-artifact@v7
+        with:
+          name: coverage
+      - name: Generate Markdown code coverage report
+        run: |
+          echo "# ${CODECOV_REPORT_TITLE}" >> "${CODECOV_MD_FILE}"
+          uv run coverage report --show-missing --format=markdown >> "${CODECOV_MD_FILE}"
+      - name: Compute diff coverage with target branch
+        if: ${{ github.event_name == 'pull_request' }}
+        env:
+          TARGET_BRANCH: origin/${{ github.event.pull_request.base.ref }}
+          DIFFCOV_MD_FILE: "diff-coverage.md"
+        run: |
+          uv run coverage xml
+          uv run --with diff_cover diff-cover --compare-branch ${TARGET_BRANCH} --diff-range-notation '..' --ignore-staged --ignore-unstaged --markdown-report "${DIFFCOV_MD_FILE}" coverage.xml
+          cat "${DIFFCOV_MD_FILE}" >> "${CODECOV_MD_FILE}"
+      - name: Export code coverage report to job summary
+        run: cat "${CODECOV_MD_FILE}" >> "${GITHUB_STEP_SUMMARY}"
+      - name: Add or update code coverage comment to pull request
+        uses: actions/github-script@v8
+        if: ${{ github.event_name == 'pull_request' }}
+        with:
+          script: |
+            const fs = require('fs')
+
+            const body = fs.readFileSync(`${process.env.CODECOV_MD_FILE}`, 'utf-8')
+
+            const comments = await github.paginate(
+              github.rest.issues.listComments,
+              {
+                issue_number: context.issue.number,
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+              }
+            )
+            const matches = comments.filter(
+              comment => comment.body && comment.body.includes(`${process.env.CODECOV_REPORT_TITLE}`)
+            )
+            const comment = matches[0]
+
+            if (comment) {
+              const commentId = comment.id.toString()
+              console.log(`updating existing comment comment_id=${commentId}`)
+              github.rest.issues.updateComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                comment_id: commentId,
+                body: body,
+              })
+            } else {
+              console.log('adding new comment')
+              github.rest.issues.createComment({
+                issue_number: context.issue.number,
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                body: body,
+              })
+            }
 
   build:
     runs-on: ubuntu-latest
@@ -203,4 +285,3 @@ jobs:
             --project=${{ secrets.VERCEL_PROJECT }} \
             --token=${{ secrets.VERCEL_TOKEN }} \
             --vercel-json=demo/vercel.json
-
