@@ -107,9 +107,9 @@ jobs:
             const comment = matches[0]
 
             if (comment) {
-              const commentId = comment.id.toString()
+              const commentId = comment.id
               console.log(`updating existing comment: comment_id=${commentId}`)
-              github.rest.issues.updateComment({
+              await github.rest.issues.updateComment({
                 owner: context.repo.owner,
                 repo: context.repo.repo,
                 comment_id: commentId,
@@ -117,7 +117,7 @@ jobs:
               })
             } else {
               console.log('adding new comment')
-              github.rest.issues.createComment({
+              await github.rest.issues.createComment({
                 issue_number: context.issue.number,
                 owner: context.repo.owner,
                 repo: context.repo.repo,
