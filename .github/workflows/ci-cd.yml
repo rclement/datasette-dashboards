@@ -108,7 +108,7 @@ jobs:
 
             if (comment) {
               const commentId = comment.id.toString()
-              console.log(`updating existing comment comment_id=${commentId}`)
+              console.log(`updating existing comment: comment_id=${commentId}`)
               github.rest.issues.updateComment({
                 owner: context.repo.owner,
                 repo: context.repo.repo,
