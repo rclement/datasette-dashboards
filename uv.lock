@@ -361,7 +361,7 @@ dev = [
     { name = "pytest-asyncio", specifier = "==1.4.0" },
     { name = "pytest-cov", specifier = "==7.1.0" },
     { name = "ruff", specifier = "==0.15.17" },
-    { name = "sqlite-utils", specifier = "==3.39" },
+    { name = "sqlite-utils", specifier = "==4.1.1" },
 ]
 
 [[package]]
@@ -1071,7 +1071,7 @@ wheels = [
 
 [[package]]
 name = "sqlite-utils"
-version = "3.39"
+version = "4.1.1"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "click" },
@@ -1082,9 +1082,9 @@ dependencies = [
     { name = "sqlite-fts4" },
     { name = "tabulate" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/b3/e3/6b1106349e2576c18409b27bd3b16f193b1cf38220d98ad22aa454c5e075/sqlite_utils-3.39.tar.gz", hash = "sha256:bfa2eac29b3e3eb5c9647283797527febcf4efd4a9bbb31d979a14a11ef9dbcd", size = 215324, upload-time = "2025-11-24T18:45:49.91Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/83/c1/fa8563039ec30b5cc6a532271e8cf90da37e4c649a3ad80b49fb6a39023e/sqlite_utils-4.1.1.tar.gz", hash = "sha256:cf97e620b3940cd541cae9117cc24af961a6da426189fdb662f20f1950ba1f49", size = 289827, upload-time = "2026-07-12T21:01:41.627Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/51/33/7e01d2f6b8c778529dfae9045c4f46b33ba145c3d401fa95b07f599e7403/sqlite_utils-3.39-py3-none-any.whl", hash = "sha256:349c099c0cd60d4ee9139a24d5c9cb64af3906c3e90832fcbbd74da49333374d", size = 68451, upload-time = "2025-11-24T18:45:48.366Z" },
+    { url = "https://files.pythonhosted.org/packages/2b/3a/273fb49a326d0fc11d043574e0ea2ff2fb20e32a0e8f74147bad39ea9877/sqlite_utils-4.1.1-py3-none-any.whl", hash = "sha256:b52fd3d58b2778aacb35a074323aac49a924a323f98ee74027e590b08d1e6f32", size = 89319, upload-time = "2026-07-12T21:01:40.571Z" },
 ]
 
 [[package]]
