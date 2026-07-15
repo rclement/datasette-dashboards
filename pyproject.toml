@@ -45,7 +45,7 @@ Changelog = "https://github.com/rclement/datasette-dashboards/blob/main/CHANGELO
 
 [dependency-groups]
 dev = [
-    "datasette-block-robots==1.1",
+    "datasette-block-robots==1.1.1",
     "datasette-cluster-map==0.18.2",
     "datasette-publish-vercel==0.14.2",
     "datasette-vega==0.6.2",
