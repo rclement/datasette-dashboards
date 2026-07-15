@@ -292,14 +292,14 @@ wheels = [
 
 [[package]]
 name = "datasette-block-robots"
-version = "1.1"
+version = "1.1.1"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "datasette" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/00/9b/983c94277d304381ee875500e8146e3d3c1456e01cd584c81e3bbcccf1c7/datasette-block-robots-1.1.tar.gz", hash = "sha256:e679fc43c5694194a6e393902bc9e06d611563f4947a8ad7ac3127877f0a9f74", size = 4122, upload-time = "2022-08-30T16:26:48.152Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/83/0a/7fbdeede85c26f62895fce25d5d6c61880a3cefd1ffc676f184a23441cbc/datasette_block_robots-1.1.1.tar.gz", hash = "sha256:1c7726249968574f9b8951f17c8563470d4a0f60dab33f42aa6e125a4141172a", size = 4292, upload-time = "2026-07-14T23:57:00.686Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/7d/99/189fc74fc96a2c223fbc384962df0d68ca8b260457bf23e63402b82eb8aa/datasette_block_robots-1.1-py3-none-any.whl", hash = "sha256:ea1e4046fd1aab1db13db09ea89dba95714aabf034f464cff92f2b6f0a123ef8", size = 4375, upload-time = "2022-08-30T16:26:46.049Z" },
+    { url = "https://files.pythonhosted.org/packages/f2/8e/f2b519b5c8e855f2c948716693ead4ff0e799e0bf7ebd42710ceb41bc08e/datasette_block_robots-1.1.1-py3-none-any.whl", hash = "sha256:6da61bf349ec6f192b5895b20ec663fa544ac072f05d59595a5e0a694df709e6", size = 4086, upload-time = "2026-07-14T23:56:59.507Z" },
 ]
 
 [[package]]
@@ -350,7 +350,7 @@ requires-dist = [
 
 [package.metadata.requires-dev]
 dev = [
-    { name = "datasette-block-robots", specifier = "==1.1" },
+    { name = "datasette-block-robots", specifier = "==1.1.1" },
     { name = "datasette-cluster-map", specifier = "==0.18.2" },
     { name = "datasette-publish-vercel", specifier = "==0.14.2" },
     { name = "datasette-vega", specifier = "==0.6.2" },
