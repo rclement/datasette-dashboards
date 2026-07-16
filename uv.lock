@@ -354,7 +354,7 @@ dev = [
     { name = "datasette-cluster-map", specifier = "==0.18.2" },
     { name = "datasette-publish-vercel", specifier = "==0.14.2" },
     { name = "datasette-vega", specifier = "==0.6.2" },
-    { name = "faker", specifier = "==40.23.0" },
+    { name = "faker", specifier = "==40.31.0" },
     { name = "invoke", specifier = "==3.0.3" },
     { name = "mypy", specifier = "==2.3.0" },
     { name = "pytest", specifier = "==9.0.3" },
@@ -427,14 +427,14 @@ wheels = [
 
 [[package]]
 name = "faker"
-version = "40.23.0"
+version = "40.31.0"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "tzdata", marker = "sys_platform == 'win32'" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/f3/d6/fc071e5754815d9058e12ab549cc88e90f8f4ecf4dc33b6b750cdf4b622d/faker-40.23.0.tar.gz", hash = "sha256:f135e563f1f95f19346bb680bc2e43570bc43b7893e566023746f51f32c69dfc", size = 1972975, upload-time = "2026-06-10T20:53:21.611Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/74/e1/adf05724d5838fa9fe2ada64bf390bbf37b77e3714189ae9f17a2c6d0470/faker-40.31.0.tar.gz", hash = "sha256:af163a937aec99dca5abaeb94dd5008c51c26c6e9af1a26c8db4b3c4e7ca4403", size = 2024136, upload-time = "2026-07-14T15:33:32.045Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/64/5f/824e6fb3e9d63408151dc9173994fa65bde620a67dde3a59354f5aecd497/faker-40.23.0-py3-none-any.whl", hash = "sha256:775922453e54afa42eaf60eac478fa3a969357f224d09a8022b93e3ad88f18ae", size = 2013046, upload-time = "2026-06-10T20:53:19.226Z" },
+    { url = "https://files.pythonhosted.org/packages/e0/f5/e427b19d79e241a51ce6fcd69a47e7a9ca791a8bc3da00d91d5be05e1456/faker-40.31.0-py3-none-any.whl", hash = "sha256:bedc97c292a48a6a1bbe471a9076d7395a196421ede1cedde99d5719f6b91027", size = 2061930, upload-time = "2026-07-14T15:33:29.004Z" },
 ]
 
 [[package]]
