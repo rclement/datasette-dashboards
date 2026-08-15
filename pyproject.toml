@@ -51,7 +51,7 @@ dev = [
     "datasette-vega==0.6.2",
     "faker==40.32.0",
     "invoke==3.0.3",
-    "mypy==2.3.0",
+    "mypy==2.3.1",
     "pytest==9.1.1",
     "pytest-asyncio==1.4.0",
     "pytest-cov==7.1.0",
