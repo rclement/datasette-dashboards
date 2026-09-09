@@ -1,8 +1,8 @@
 import copy
 import typing as t
-import pytest
-
 from pathlib import Path
+
+import pytest
 from datasette.app import Datasette
 
 
@@ -25,8 +25,8 @@ async def test_dashboard_chart(datasette: Datasette) -> None:
 @pytest.mark.asyncio
 async def test_dashboard_chart_unknown_dashboard(datasette: Datasette) -> None:
     dashboards = datasette._metadata["plugins"]["datasette-dashboards"]
-    dashboard = list(dashboards.values())[0]
-    chart_slug = list(dashboard["charts"].items())[0][0]
+    dashboard = next(iter(dashboards.values()))
+    chart_slug = next(iter(dashboard["charts"].items()))[0]
 
     response = await datasette.client.get(
         f"/-/dashboards/unknown-dashboard/{chart_slug}"
@@ -37,7 +37,7 @@ async def test_dashboard_chart_unknown_dashboard(datasette: Datasette) -> None:
 @pytest.mark.asyncio
 async def test_dashboard_chart_unknown_chart(datasette: Datasette) -> None:
     dashboards = datasette._metadata["plugins"]["datasette-dashboards"]
-    slug = list(dashboards.keys())[0]
+    slug = next(iter(dashboards.keys()))
 
     response = await datasette.client.get(f"/-/dashboards/{slug}/unknown-chart")
     assert response.status_code == 404
@@ -57,7 +57,7 @@ async def test_dashboard_chart_parameters(datasette: Datasette) -> None:
 
 @pytest.mark.asyncio
 async def test_dashboard_chart_parameters_bracket_field(
-    datasette_db: Path, datasette_metadata: t.Dict[str, t.Any]
+    datasette_db: Path, datasette_metadata: dict[str, t.Any]
 ) -> None:
     metadata = copy.deepcopy(datasette_metadata)
     metadata["plugins"]["datasette-dashboards"]["job-dashboard"]["charts"][
@@ -91,7 +91,7 @@ async def test_dashboard_chart_parameters_empty(datasette: Datasette) -> None:
 
 @pytest.mark.asyncio
 async def test_dashboard_chart_no_filters(
-    datasette_db: Path, datasette_metadata: t.Dict[str, t.Any]
+    datasette_db: Path, datasette_metadata: dict[str, t.Any]
 ) -> None:
     metadata = copy.deepcopy(datasette_metadata)
     metadata["plugins"]["datasette-dashboards"]["job-dashboard"].pop("filters")
@@ -103,7 +103,7 @@ async def test_dashboard_chart_no_filters(
 
 @pytest.mark.asyncio
 async def test_dashboard_chart_misconfigured_chart_type(
-    datasette_db: Path, datasette_metadata: t.Dict[str, t.Any]
+    datasette_db: Path, datasette_metadata: dict[str, t.Any]
 ) -> None:
     metadata = copy.deepcopy(datasette_metadata)
     metadata["plugins"]["datasette-dashboards"]["job-dashboard"]["charts"][

@@ -4,10 +4,9 @@ import pytest
 
 from datasette_dashboards.chart_types import (
     CHART_TYPES,
-    convert_chart_type,
     _normalize_field,
+    convert_chart_type,
 )
-
 
 # --- _normalize_field ---
 

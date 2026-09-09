@@ -13,7 +13,7 @@ _DEFAULT_TYPES: dict[str, dict[str, str]] = {
 
 
 def _normalize_field(
-    value: t.Union[str, dict[str, t.Any]], default_type: str
+    value: str | dict[str, t.Any], default_type: str
 ) -> dict[str, t.Any]:
     """Normalize a field spec to a Vega-Lite encoding channel definition.
 

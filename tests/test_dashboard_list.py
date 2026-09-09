@@ -1,8 +1,8 @@
 import copy
 import typing as t
-import pytest
-
 from pathlib import Path
+
+import pytest
 from datasette.app import Datasette
 
 
@@ -23,7 +23,7 @@ async def test_dashboard_list_index(datasette: Datasette) -> None:
 
 @pytest.mark.asyncio
 async def test_dashboard_list_index_empty(
-    datasette_db: Path, datasette_metadata: t.Dict[str, t.Any]
+    datasette_db: Path, datasette_metadata: dict[str, t.Any]
 ) -> None:
     metadata = copy.deepcopy(datasette_metadata)
     del metadata["plugins"]
@@ -51,8 +51,8 @@ async def test_dashboard_list_index_empty(
 )
 async def test_dashboard_list_permissions(
     datasette_db: Path,
-    datasette_metadata: t.Dict[str, t.Any],
-    metadata: t.Dict[str, t.Any],
+    datasette_metadata: dict[str, t.Any],
+    metadata: dict[str, t.Any],
     authenticated: bool,
     expected_status: int,
 ) -> None:

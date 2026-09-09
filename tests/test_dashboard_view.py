@@ -1,8 +1,8 @@
 import copy
 import typing as t
-import pytest
-
 from pathlib import Path
+
+import pytest
 from datasette.app import Datasette
 
 
@@ -68,7 +68,7 @@ async def test_dashboard_views(datasette: Datasette) -> None:
 
 @pytest.mark.asyncio
 async def test_dashboard_view_layout(
-    datasette_db: Path, datasette_metadata: t.Dict[str, t.Any]
+    datasette_db: Path, datasette_metadata: dict[str, t.Any]
 ) -> None:
     metadata = copy.deepcopy(datasette_metadata)
     metadata["plugins"]["datasette-dashboards"]["job-dashboard"]["layout"] = [
@@ -151,7 +151,7 @@ async def test_dashboard_view_parameters_empty(datasette: Datasette) -> None:
 
 @pytest.mark.asyncio
 async def test_dashboard_filter_select_autocomplete(
-    datasette_db: Path, datasette_metadata: t.Dict[str, t.Any]
+    datasette_db: Path, datasette_metadata: dict[str, t.Any]
 ) -> None:
     filter_key = "select_filter"
     filter_options = [f"Option {i}" for i in range(1, 102)]
@@ -184,7 +184,7 @@ async def test_dashboard_view_unknown(datasette: Datasette) -> None:
 
 @pytest.mark.asyncio
 async def test_dashboard_view_unknown_chart_db(
-    datasette_db: Path, datasette_metadata: t.Dict[str, t.Any]
+    datasette_db: Path, datasette_metadata: dict[str, t.Any]
 ) -> None:
     metadata = copy.deepcopy(datasette_metadata)
     metadata["plugins"]["datasette-dashboards"]["job-dashboard"]["charts"][
@@ -198,7 +198,7 @@ async def test_dashboard_view_unknown_chart_db(
 
 @pytest.mark.asyncio
 async def test_dashboard_view_no_filters(
-    datasette_db: Path, datasette_metadata: t.Dict[str, t.Any]
+    datasette_db: Path, datasette_metadata: dict[str, t.Any]
 ) -> None:
     metadata = copy.deepcopy(datasette_metadata)
     metadata["plugins"]["datasette-dashboards"]["job-dashboard"].pop("filters")
@@ -210,7 +210,7 @@ async def test_dashboard_view_no_filters(
 
 @pytest.mark.asyncio
 async def test_dashboard_view_no_charts(
-    datasette_db: Path, datasette_metadata: t.Dict[str, t.Any]
+    datasette_db: Path, datasette_metadata: dict[str, t.Any]
 ) -> None:
     metadata = copy.deepcopy(datasette_metadata)
     metadata["plugins"]["datasette-dashboards"]["job-dashboard"].pop("charts")
@@ -224,7 +224,7 @@ async def test_dashboard_view_no_charts(
 
 @pytest.mark.asyncio
 async def test_dashboard_view_allow_fullscreen(
-    datasette_db: Path, datasette_metadata: t.Dict[str, t.Any]
+    datasette_db: Path, datasette_metadata: dict[str, t.Any]
 ) -> None:
     metadata = copy.deepcopy(datasette_metadata)
     metadata["plugins"]["datasette-dashboards"]["job-dashboard"]["settings"][
@@ -245,7 +245,7 @@ async def test_dashboard_view_allow_fullscreen(
 
 @pytest.mark.asyncio
 async def test_dashboard_view_enable_autorefresh(
-    datasette_db: Path, datasette_metadata: t.Dict[str, t.Any]
+    datasette_db: Path, datasette_metadata: dict[str, t.Any]
 ) -> None:
     metadata = copy.deepcopy(datasette_metadata)
     metadata["plugins"]["datasette-dashboards"]["job-dashboard"]["settings"][
@@ -284,8 +284,8 @@ async def test_dashboard_view_enable_autorefresh(
 )
 async def test_dashboard_view_permissions(
     datasette_db: Path,
-    datasette_metadata: t.Dict[str, t.Any],
-    metadata: t.Dict[str, t.Any],
+    datasette_metadata: dict[str, t.Any],
+    metadata: dict[str, t.Any],
     authenticated: bool,
     expected_status: int,
 ) -> None:
@@ -297,7 +297,7 @@ async def test_dashboard_view_permissions(
     if authenticated:
         cookies["ds_actor"] = datasette.sign({"a": {"id": "user"}}, "actor")
 
-    slug = list(datasette_metadata["plugins"]["datasette-dashboards"].keys())[0]
+    slug = next(iter(datasette_metadata["plugins"]["datasette-dashboards"].keys()))
     response = await datasette.client.get(
         f"/-/dashboards/{slug}", cookies=cookies, follow_redirects=True
     )
@@ -306,7 +306,7 @@ async def test_dashboard_view_permissions(
 
 @pytest.mark.asyncio
 async def test_dashboard_view_misconfigured_chart_type(
-    datasette_db: Path, datasette_metadata: t.Dict[str, t.Any]
+    datasette_db: Path, datasette_metadata: dict[str, t.Any]
 ) -> None:
     metadata = copy.deepcopy(datasette_metadata)
     metadata["plugins"]["datasette-dashboards"]["job-dashboard"]["charts"][
