@@ -1,5 +1,4 @@
 import pytest
-
 from datasette.app import Datasette
 
 
@@ -18,6 +17,6 @@ async def test_dashboard_embed(datasette: Datasette) -> None:
 @pytest.mark.asyncio
 async def test_dashboard_embed_filters_default_redirect(datasette: Datasette) -> None:
     dashboards = datasette._metadata["plugins"]["datasette-dashboards"]
-    slug = list(dashboards.keys())[0]
+    slug = next(iter(dashboards.keys()))
     response = await datasette.client.get(f"/-/dashboards/{slug}/embed")
     assert response.status_code == 302

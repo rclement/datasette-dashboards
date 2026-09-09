@@ -26,7 +26,11 @@ def replace_opts_in_query(query: str, options: dict[str, str]) -> str:
         to_replace.append(
             {
                 "opt": opt_group,
-                "replacement": opt_group.strip("[[]]") if opt_keep else "",
+                "replacement": (
+                    opt_group.removeprefix("[[").removesuffix("]]")
+                    if opt_keep
+                    else ""
+                ),
             }
         )
 
@@ -77,16 +81,16 @@ async def fill_dynamic_filters(
 
 def get_dashboard_filters_keys(
     request: Request, dashboard: dict[str, t.Any]
-) -> t.Set[str]:
+) -> set[str]:
     filters_keys = dashboard["filters"].keys()
     return set(filters_keys) & set(request.args.keys())
 
 
-def get_dashboard_filters(request: Request, opts_keys: t.Set[str]) -> dict[str, str]:
+def get_dashboard_filters(request: Request, opts_keys: set[str]) -> dict[str, str]:
     return {key: request.args[key] for key in opts_keys}
 
 
-def generate_dashboard_filters_qs(request: Request, opts_keys: t.Set[str]) -> str:
+def generate_dashboard_filters_qs(request: Request, opts_keys: set[str]) -> str:
     return urllib.parse.urlencode({key: request.args[key] for key in opts_keys})
 
 
@@ -125,7 +129,7 @@ async def _dashboard_view(
     dashboard["charts"] = dashboard.get("charts", {})
 
     settings = dashboard.get("settings", {})
-    dbs = set([chart["db"] for chart in dashboard["charts"].values() if "db" in chart])
+    dbs = {chart["db"] for chart in dashboard["charts"].values() if "db" in chart}
     for db in dbs:
         try:
             database = datasette.get_database(db)

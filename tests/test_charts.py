@@ -1,9 +1,8 @@
 import copy
 import typing as t
+from pathlib import Path
 
 import pytest
-
-from pathlib import Path
 from datasette.app import Datasette
 
 
@@ -80,7 +79,7 @@ async def test_line_chart_encoding_fields(datasette: Datasette) -> None:
 
 @pytest.mark.asyncio
 async def test_bar_chart_horizontal(
-    datasette_db: Path, datasette_metadata: t.Dict[str, t.Any]
+    datasette_db: Path, datasette_metadata: dict[str, t.Any]
 ) -> None:
     metadata = copy.deepcopy(datasette_metadata)
     metadata["plugins"]["datasette-dashboards"]["job-dashboard"]["charts"][
@@ -108,7 +107,7 @@ async def test_bar_chart_horizontal(
 
 @pytest.mark.asyncio
 async def test_scatter_chart_with_color_and_size(
-    datasette_db: Path, datasette_metadata: t.Dict[str, t.Any]
+    datasette_db: Path, datasette_metadata: dict[str, t.Any]
 ) -> None:
     metadata = copy.deepcopy(datasette_metadata)
     metadata["plugins"]["datasette-dashboards"]["job-dashboard"]["charts"][
@@ -138,7 +137,7 @@ async def test_scatter_chart_with_color_and_size(
 
 @pytest.mark.asyncio
 async def test_line_chart_with_dict_field_spec(
-    datasette_db: Path, datasette_metadata: t.Dict[str, t.Any]
+    datasette_db: Path, datasette_metadata: dict[str, t.Any]
 ) -> None:
     metadata = copy.deepcopy(datasette_metadata)
     metadata["plugins"]["datasette-dashboards"]["job-dashboard"]["charts"][

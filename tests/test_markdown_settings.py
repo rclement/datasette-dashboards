@@ -1,8 +1,7 @@
-import pytest
-
 import typing as t
 from pathlib import Path
 
+import pytest
 from datasette.app import Datasette
 
 
@@ -11,7 +10,7 @@ def lstriplines(s: str) -> str:
 
 
 @pytest.fixture()
-def datasette_md_metadata(datasette_db: Path) -> t.Dict[str, t.Any]:
+def datasette_md_metadata(datasette_db: Path) -> dict[str, t.Any]:
     metadata = {
         "plugins": {
             "datasette-dashboards": {
@@ -51,7 +50,7 @@ chart_slug = "analysis-note"
 
 @pytest.mark.asyncio
 async def test_md_settings_defaults(
-    datasette_db: Path, datasette_md_metadata: t.Dict[str, t.Any]
+    datasette_db: Path, datasette_md_metadata: dict[str, t.Any]
 ) -> None:
     """
     The default settings for markdown should allow tables to be generated,
@@ -62,7 +61,7 @@ async def test_md_settings_defaults(
     datasette = Datasette([str(datasette_db)], metadata=datasette_md_metadata)
     dashboards = datasette._metadata["plugins"]["datasette-dashboards"]
     chart = dashboards[dashboard_slug]["charts"][chart_slug]
-    assert "settings" not in chart.keys()
+    assert "settings" not in chart
     response = await datasette.client.get(
         f"/-/dashboards/{dashboard_slug}/{chart_slug}/embed"
     )
@@ -77,7 +76,7 @@ async def test_md_settings_defaults(
 
 @pytest.mark.asyncio
 async def test_md_settings_extensions(
-    datasette_db: Path, datasette_md_metadata: t.Dict[str, t.Any]
+    datasette_db: Path, datasette_md_metadata: dict[str, t.Any]
 ) -> None:
     """
     The default settings for markdown should allow tables to be generated,
@@ -95,7 +94,7 @@ async def test_md_settings_extensions(
     datasette = Datasette([str(datasette_db)], metadata=datasette_md_metadata)
     dashboards = datasette._metadata["plugins"]["datasette-dashboards"]
     chart = dashboards[dashboard_slug]["charts"][chart_slug]
-    assert "settings" in chart.keys()
+    assert "settings" in chart
     response = await datasette.client.get(
         f"/-/dashboards/{dashboard_slug}/{chart_slug}/embed"
     )
@@ -109,7 +108,7 @@ async def test_md_settings_extensions(
 
 @pytest.mark.asyncio
 async def test_md_settings_attrs(
-    datasette_db: Path, datasette_md_metadata: t.Dict[str, t.Any]
+    datasette_db: Path, datasette_md_metadata: dict[str, t.Any]
 ) -> None:
     """
     The default settings for markdown should allow tables to be generated,
@@ -124,7 +123,7 @@ async def test_md_settings_attrs(
     datasette = Datasette([str(datasette_db)], metadata=datasette_md_metadata)
     dashboards = datasette._metadata["plugins"]["datasette-dashboards"]
     chart = dashboards[dashboard_slug]["charts"][chart_slug]
-    assert "settings" in chart.keys()
+    assert "settings" in chart
     response = await datasette.client.get(
         f"/-/dashboards/{dashboard_slug}/{chart_slug}/embed"
     )
