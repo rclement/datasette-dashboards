@@ -13,6 +13,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Interactive legend highlighting for line, bar, area, scatter, and pie charts
 - New demo dashboard for charts types showcasing
 
+### Removed
+- BREAKING: drop support for Python 3.10 (end-of-life)
+
 ### Fixed
 - Remove dependency `datasette-sqlite-http` for demo
 
