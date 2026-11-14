@@ -306,15 +306,15 @@ wheels = [
 
 [[package]]
 name = "datasette-cluster-map"
-version = "0.18.2"
+version = "0.19"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "datasette" },
     { name = "datasette-leaflet" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/e6/73/82fbe3d6f3202a724dc686550c4e1ea373e601f29d0add0df03383d6819a/datasette_cluster_map-0.18.2.tar.gz", hash = "sha256:6ae34faf0f2e3198cbfdc06faaf65ac43a4e3be02d916e4d69dd5e25abcc8b28", size = 38463, upload-time = "2024-06-13T23:07:07.912Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/28/13/e6cc65d249a1f0f25342db1bda8899066664d38066c90254f1375ca4e11b/datasette_cluster_map-0.19.tar.gz", hash = "sha256:0e54158564d314782c371dc2095189c825933cc357b7ba737f044d80f8e91fdf", size = 33353, upload-time = "2026-11-13T23:03:48.092Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/57/55/e62144a08b469f7467525171e89c868a684db3026b80d6130592024ed816/datasette_cluster_map-0.18.2-py3-none-any.whl", hash = "sha256:8074cdd42a7c1c4e95d52a3c5b0029eb7e5fe978498855d1ec804adadfd2b041", size = 35054, upload-time = "2024-06-13T23:07:06.145Z" },
+    { url = "https://files.pythonhosted.org/packages/3d/eb/56e17318486f9b45051414ae014f93279695a93ac40752273ac3fb035b20/datasette_cluster_map-0.19-py3-none-any.whl", hash = "sha256:e70ce208322b176f6b28126ff19bb7f551c5834176fa8a4c4390fc3e71a4d379", size = 31715, upload-time = "2026-11-13T23:03:46.726Z" },
 ]
 
 [[package]]
@@ -353,7 +353,7 @@ requires-dist = [
 [package.metadata.requires-dev]
 dev = [
     { name = "datasette-block-robots", specifier = "==1.1.1" },
-    { name = "datasette-cluster-map", specifier = "==0.18.2" },
+    { name = "datasette-cluster-map", specifier = "==0.19" },
     { name = "datasette-publish-vercel", specifier = "==0.14.2" },
     { name = "datasette-vega", specifier = "==0.6.2" },
     { name = "faker", specifier = "==40.43.0" },
@@ -368,14 +368,14 @@ dev = [
 
 [[package]]
 name = "datasette-leaflet"
-version = "0.2.2"
+version = "0.3"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "datasette" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/88/6e/444b1ded1cd8f71cd86f4461c06ee88be2bb0682b0d54aa942c323f91411/datasette-leaflet-0.2.2.tar.gz", hash = "sha256:8fd4e634304be392ae6f7de770d4f22b95a37caecd676a35faeb6200da9423bc", size = 113285, upload-time = "2021-02-01T22:21:21.93Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/73/28/338cefc12c9e4d1c95f52073b26998824a78c4682cbfd25b9fb4991d92a6/datasette_leaflet-0.3.tar.gz", hash = "sha256:81fc3112e2c49f77c8b2c1a2a57abc64a6b7127594e8eddcb23f0f4e1b1e5175", size = 177120, upload-time = "2026-11-13T22:31:53.703Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/d0/df/61e8a7d601a2c4992f7e9f38a6b983a9f9b873fbeebe4248090eea4b5d87/datasette_leaflet-0.2.2-py3-none-any.whl", hash = "sha256:fd88c25666e7680b25b4c6e5546bd02c9f5836bbc0fee61042dbb6b93d4139f0", size = 112532, upload-time = "2021-02-01T22:21:20.787Z" },
+    { url = "https://files.pythonhosted.org/packages/f8/7f/22b396ec152755bb8ebbc0db200481ee50438640cd1563359a2910a78285/datasette_leaflet-0.3-py3-none-any.whl", hash = "sha256:f09304ccdf59d4d936cfdaa56fd6d3d9f45d3a5691120e9ad9e30067ee590281", size = 173039, upload-time = "2026-11-13T22:31:52.182Z" },
 ]
 
 [[package]]
