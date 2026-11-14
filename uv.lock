@@ -355,7 +355,7 @@ dev = [
     { name = "datasette-block-robots", specifier = "==1.1.1" },
     { name = "datasette-cluster-map", specifier = "==0.18.2" },
     { name = "datasette-publish-vercel", specifier = "==0.14.2" },
-    { name = "datasette-vega", specifier = "==0.6.2" },
+    { name = "datasette-vega", specifier = "==0.7" },
     { name = "faker", specifier = "==40.43.0" },
     { name = "invoke", specifier = "==3.0.3" },
     { name = "mypy", specifier = "==2.4.0" },
@@ -406,13 +406,14 @@ wheels = [
 
 [[package]]
 name = "datasette-vega"
-version = "0.6.2"
+version = "0.7"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "datasette" },
 ]
+sdist = { url = "https://files.pythonhosted.org/packages/ee/d7/0d72b1ff72b2b3a628a9631d3cbb7330c7f4f0c5a97e17e5c86c8170e666/datasette_vega-0.7.tar.gz", hash = "sha256:1efbc4bbac60e4dd6246b555df4e5f109dcb0874588631c8a7c963f15beacbdd", size = 351834, upload-time = "2026-11-14T17:10:13.629Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/d0/9e/7496dfa4f7e2ce93a036fe9920dcbd71c7297783d2337fe85f1fef9f6786/datasette_vega-0.6.2-py3-none-any.whl", hash = "sha256:6aca6a40f0b244d6d05548bfff94a99f0ef96bd5b89ade241f0d389f7a01a063", size = 1837953, upload-time = "2018-07-29T00:17:20.791Z" },
+    { url = "https://files.pythonhosted.org/packages/c1/03/87456a0fcc475c51d0a3a3ecbe0acb0c816be9a3c289fecf96504a7d8d42/datasette_vega-0.7-py3-none-any.whl", hash = "sha256:a7a845a0e0e1719dd01e13236b0279d2207369ca3ea8f9a7d5f67694b15c2072", size = 352352, upload-time = "2026-11-14T17:10:11.892Z" },
 ]
 
 [[package]]
