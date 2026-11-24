@@ -1,3 +1,4 @@
+import json
 import re
 import typing as t
 import urllib.parse
@@ -27,9 +28,7 @@ def replace_opts_in_query(query: str, options: dict[str, str]) -> str:
             {
                 "opt": opt_group,
                 "replacement": (
-                    opt_group.removeprefix("[[").removesuffix("]]")
-                    if opt_keep
-                    else ""
+                    opt_group.removeprefix("[[").removesuffix("]]") if opt_keep else ""
                 ),
             }
         )
@@ -86,12 +85,66 @@ def get_dashboard_filters_keys(
     return set(filters_keys) & set(request.args.keys())
 
 
-def get_dashboard_filters(request: Request, opts_keys: set[str]) -> dict[str, str]:
-    return {key: request.args[key] for key in opts_keys}
+def is_multiple_filter(dashboard: dict[str, t.Any], key: str) -> bool:
+    flt = dashboard.get("filters", {}).get(key, {})
+    return flt.get("type") == "select" and bool(flt.get("multiple"))
 
 
-def generate_dashboard_filters_qs(request: Request, opts_keys: set[str]) -> str:
-    return urllib.parse.urlencode({key: request.args[key] for key in opts_keys})
+def get_multiple_filter_values(request: Request, key: str) -> list[str]:
+    values: list[str] = list(request.args.getlist(key))
+    if len(values) == 1 and values[0].startswith("["):
+        # Already serialized as a JSON array (e.g. in chart links)
+        try:
+            parsed = json.loads(values[0])
+        except ValueError:
+            return values
+        if isinstance(parsed, list):
+            return [str(v) for v in parsed]
+    return values
+
+
+def get_dashboard_filters(
+    request: Request,
+    opts_keys: set[str],
+    dashboard: dict[str, t.Any] | None = None,
+) -> dict[str, str]:
+    # SQLite cannot bind a list to a named parameter, so the values of a
+    # `multiple` filter are passed as a JSON array, to be used in SQL with
+    # `IN (SELECT value FROM json_each(:name))`
+    dashboard = dashboard or {}
+    return {
+        key: (
+            json.dumps(get_multiple_filter_values(request, key))
+            if is_multiple_filter(dashboard, key)
+            else request.args[key]
+        )
+        for key in opts_keys
+    }
+
+
+def get_multiple_filters_selection(
+    dashboard: dict[str, t.Any], query_parameters: dict[str, str]
+) -> dict[str, list[str]]:
+    selection: dict[str, list[str]] = {}
+    for key, flt in dashboard["filters"].items():
+        if not is_multiple_filter(dashboard, key):
+            continue
+        if key in query_parameters:
+            selection[key] = json.loads(query_parameters[key])
+        else:
+            default = flt.get("default", [])
+            selection[key] = [
+                str(v) for v in (default if isinstance(default, list) else [default])
+            ]
+    return selection
+
+
+def generate_dashboard_filters_qs(
+    request: Request,
+    opts_keys: set[str],
+    dashboard: dict[str, t.Any] | None = None,
+) -> str:
+    return urllib.parse.urlencode(get_dashboard_filters(request, opts_keys, dashboard))
 
 
 def fill_chart_query_options(chart: dict[str, t.Any], options: dict[str, str]) -> None:
@@ -138,15 +191,15 @@ async def _dashboard_view(
         await check_permission_execute_sql(request, datasette, database.name)
 
     options_keys = get_dashboard_filters_keys(request, dashboard)
-    query_parameters = get_dashboard_filters(request, options_keys)
-    query_string = generate_dashboard_filters_qs(request, options_keys)
+    query_parameters = get_dashboard_filters(request, options_keys, dashboard)
+    query_string = generate_dashboard_filters_qs(request, options_keys, dashboard)
     await fill_dynamic_filters(datasette, dashboard, query_parameters)
 
     default_filters = {
         k: v["default"] for k, v in dashboard["filters"].items() if v.get("default")
     }
     if len(query_parameters.keys()) == 0 and len(default_filters) > 0:
-        qs = urllib.parse.urlencode(default_filters)
+        qs = urllib.parse.urlencode(default_filters, doseq=True)
         response = Response.redirect(f"{request.path}?{qs}")
         for k, v in request.cookies.items():
             response.set_cookie(k, v)
@@ -175,6 +228,9 @@ async def _dashboard_view(
                 ),
                 "slug": slug,
                 "query_parameters": query_parameters,
+                "multiple_selection": get_multiple_filters_selection(
+                    dashboard, query_parameters
+                ),
                 "query_string": query_string,
                 "dashboard": render_dashboard,
                 "embed": embed,
@@ -221,8 +277,8 @@ async def _dashboard_chart(
         await check_permission_execute_sql(request, datasette, database.name)
 
     options_keys = get_dashboard_filters_keys(request, dashboard)
-    query_parameters = get_dashboard_filters(request, options_keys)
-    query_string = generate_dashboard_filters_qs(request, options_keys)
+    query_parameters = get_dashboard_filters(request, options_keys, dashboard)
+    query_string = generate_dashboard_filters_qs(request, options_keys, dashboard)
 
     try:
         chart = convert_chart_type(chart)

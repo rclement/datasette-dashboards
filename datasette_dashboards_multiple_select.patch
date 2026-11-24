@@ -1,0 +1,442 @@
+diff --git a/CHANGELOG.md b/CHANGELOG.md
+index a0a5a24..4831341 100644
+--- a/CHANGELOG.md
++++ b/CHANGELOG.md
+@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
+ 
+ ### Added
+ - Support for Python 3.15
++- Multiple selection for `select` filters (`multiple: true`), passed to queries as a JSON array
+ - Shorthand chart types: `line`, `bar`, `area`, `scatter`, `pie` (Vega-Lite powered)
+ - Shorthand chart types: `choropleth` and `wordcloud` (Vega powered)
+ - Interactive legend highlighting for line, bar, area, scatter, and pie charts
+diff --git a/README.md b/README.md
+index 58a7c9e..8a78285 100644
+--- a/README.md
++++ b/README.md
+@@ -125,17 +125,18 @@ Dashboard settings:
+ 
+ Dashboard filters:
+ 
+-| Property  | Type               | Description                                      |
+-| --------- | ------------------ | ------------------------------------------------ |
+-| `name`    | `string`           | Filter display name                              |
+-| `type`    | `string`           | Filter type (`text`, `date`, `number`, `select`) |
+-| `default` | `string`, `number` | (optional) Filter default value                  |
+-| `min`     | `number`           | (optional) Filter minimum value                  |
+-| `max`     | `number`           | (optional) Filter maximum value                  |
+-| `step`    | `number`           | (optional) Filter stepping value                 |
+-| `options` | `list`             | (optional) Select filter options list            |
+-| `db`      | `string`           | (optional) Dynamic select filter database        |
+-| `query`   | `string`           | (optional) Dynamic select filter query           |
++| Property   | Type                      | Description                                                       |
++| ---------- | ------------------------- | ----------------------------------------------------------------- |
++| `name`     | `string`                  | Filter display name                                               |
++| `type`     | `string`                  | Filter type (`text`, `date`, `number`, `select`)                  |
++| `default`  | `string`, `number`, `list` | (optional) Filter default value (a `list` for `multiple` filters) |
++| `min`      | `number`                  | (optional) Filter minimum value                                   |
++| `max`      | `number`                  | (optional) Filter maximum value                                   |
++| `step`     | `number`                  | (optional) Filter stepping value                                  |
++| `options`  | `list`                    | (optional) Select filter options list                             |
++| `multiple` | `boolean`                 | (optional) Allow selecting multiple values (`select` filter only) |
++| `db`       | `string`                  | (optional) Dynamic select filter database                         |
++| `query`    | `string`                  | (optional) Dynamic select filter query                            |
+ 
+ Common chart properties for all chart types:
+ 
+@@ -157,9 +158,29 @@ SELECT * FROM mytable [[ WHERE col >= :my_filter ]]
+ SELECT * FROM mytable WHERE TRUE [[ AND col1 = :my_filter_1 ]] [[ AND col2 = :my_filter_2 ]]
+ ```
+ 
++To allow selecting several values in a `select` filter, set `multiple: true`:
++
++```yaml
++filters:
++  source:
++    name: Source
++    type: select
++    multiple: true
++    options: [Source 1, Source 2, Source 3]
++    default: [Source 1, Source 2]
++```
++
++SQLite cannot bind a list to a named parameter, so the selected values are passed
++to the query as a JSON array. Use `json_each` to match against them:
++
++```sql
++SELECT * FROM mytable [[ WHERE col IN (SELECT value FROM json_each(:source)) ]]
++```
++
+ **Important notes:**
+ 
+-- When a `select` filter has more than 100 options, the dropdown list will be automatically converted to a text filter with autocompletion
++- When a `select` filter has more than 100 options, the dropdown list will be automatically converted to a text filter with autocompletion (this does not apply to `multiple` filters, which always use a multiple selection list)
++- When no value is selected in a `multiple` filter, the optional `[[ ... ]]` part of the query is not applied
+ 
+ #### Chart types
+ 
+diff --git a/datasette_dashboards/__init__.py b/datasette_dashboards/__init__.py
+index 0e6e47a..c250e4a 100644
+--- a/datasette_dashboards/__init__.py
++++ b/datasette_dashboards/__init__.py
+@@ -1,3 +1,4 @@
++import json
+ import re
+ import typing as t
+ import urllib.parse
+@@ -27,9 +28,7 @@ def replace_opts_in_query(query: str, options: dict[str, str]) -> str:
+             {
+                 "opt": opt_group,
+                 "replacement": (
+-                    opt_group.removeprefix("[[").removesuffix("]]")
+-                    if opt_keep
+-                    else ""
++                    opt_group.removeprefix("[[").removesuffix("]]") if opt_keep else ""
+                 ),
+             }
+         )
+@@ -86,12 +85,66 @@ def get_dashboard_filters_keys(
+     return set(filters_keys) & set(request.args.keys())
+ 
+ 
+-def get_dashboard_filters(request: Request, opts_keys: set[str]) -> dict[str, str]:
+-    return {key: request.args[key] for key in opts_keys}
++def is_multiple_filter(dashboard: dict[str, t.Any], key: str) -> bool:
++    flt = dashboard.get("filters", {}).get(key, {})
++    return flt.get("type") == "select" and bool(flt.get("multiple"))
+ 
+ 
+-def generate_dashboard_filters_qs(request: Request, opts_keys: set[str]) -> str:
+-    return urllib.parse.urlencode({key: request.args[key] for key in opts_keys})
++def get_multiple_filter_values(request: Request, key: str) -> list[str]:
++    values: list[str] = list(request.args.getlist(key))
++    if len(values) == 1 and values[0].startswith("["):
++        # Already serialized as a JSON array (e.g. in chart links)
++        try:
++            parsed = json.loads(values[0])
++        except ValueError:
++            return values
++        if isinstance(parsed, list):
++            return [str(v) for v in parsed]
++    return values
++
++
++def get_dashboard_filters(
++    request: Request,
++    opts_keys: set[str],
++    dashboard: dict[str, t.Any] | None = None,
++) -> dict[str, str]:
++    # SQLite cannot bind a list to a named parameter, so the values of a
++    # `multiple` filter are passed as a JSON array, to be used in SQL with
++    # `IN (SELECT value FROM json_each(:name))`
++    dashboard = dashboard or {}
++    return {
++        key: (
++            json.dumps(get_multiple_filter_values(request, key))
++            if is_multiple_filter(dashboard, key)
++            else request.args[key]
++        )
++        for key in opts_keys
++    }
++
++
++def get_multiple_filters_selection(
++    dashboard: dict[str, t.Any], query_parameters: dict[str, str]
++) -> dict[str, list[str]]:
++    selection: dict[str, list[str]] = {}
++    for key, flt in dashboard["filters"].items():
++        if not is_multiple_filter(dashboard, key):
++            continue
++        if key in query_parameters:
++            selection[key] = json.loads(query_parameters[key])
++        else:
++            default = flt.get("default", [])
++            selection[key] = [
++                str(v) for v in (default if isinstance(default, list) else [default])
++            ]
++    return selection
++
++
++def generate_dashboard_filters_qs(
++    request: Request,
++    opts_keys: set[str],
++    dashboard: dict[str, t.Any] | None = None,
++) -> str:
++    return urllib.parse.urlencode(get_dashboard_filters(request, opts_keys, dashboard))
+ 
+ 
+ def fill_chart_query_options(chart: dict[str, t.Any], options: dict[str, str]) -> None:
+@@ -138,15 +191,15 @@ async def _dashboard_view(
+         await check_permission_execute_sql(request, datasette, database.name)
+ 
+     options_keys = get_dashboard_filters_keys(request, dashboard)
+-    query_parameters = get_dashboard_filters(request, options_keys)
+-    query_string = generate_dashboard_filters_qs(request, options_keys)
++    query_parameters = get_dashboard_filters(request, options_keys, dashboard)
++    query_string = generate_dashboard_filters_qs(request, options_keys, dashboard)
+     await fill_dynamic_filters(datasette, dashboard, query_parameters)
+ 
+     default_filters = {
+         k: v["default"] for k, v in dashboard["filters"].items() if v.get("default")
+     }
+     if len(query_parameters.keys()) == 0 and len(default_filters) > 0:
+-        qs = urllib.parse.urlencode(default_filters)
++        qs = urllib.parse.urlencode(default_filters, doseq=True)
+         response = Response.redirect(f"{request.path}?{qs}")
+         for k, v in request.cookies.items():
+             response.set_cookie(k, v)
+@@ -175,6 +228,9 @@ async def _dashboard_view(
+                 ),
+                 "slug": slug,
+                 "query_parameters": query_parameters,
++                "multiple_selection": get_multiple_filters_selection(
++                    dashboard, query_parameters
++                ),
+                 "query_string": query_string,
+                 "dashboard": render_dashboard,
+                 "embed": embed,
+@@ -221,8 +277,8 @@ async def _dashboard_chart(
+         await check_permission_execute_sql(request, datasette, database.name)
+ 
+     options_keys = get_dashboard_filters_keys(request, dashboard)
+-    query_parameters = get_dashboard_filters(request, options_keys)
+-    query_string = generate_dashboard_filters_qs(request, options_keys)
++    query_parameters = get_dashboard_filters(request, options_keys, dashboard)
++    query_string = generate_dashboard_filters_qs(request, options_keys, dashboard)
+ 
+     try:
+         chart = convert_chart_type(chart)
+diff --git a/datasette_dashboards/templates/dashboard_view.html b/datasette_dashboards/templates/dashboard_view.html
+index 04d4760..ca8ff95 100644
+--- a/datasette_dashboards/templates/dashboard_view.html
++++ b/datasette_dashboards/templates/dashboard_view.html
+@@ -76,7 +76,13 @@
+           <fieldset>
+             <legend>{{ dfilter.name }}</legend>
+             {% if dfilter_type == 'select' %}
+-              {% if dfilter.options | length > 100 %}
++              {% if dfilter.multiple %}
++              <select id="{{ key }}" name="{{ key }}" multiple>
++                {% for option in dfilter.options %}
++                <option value="{{ option }}" {% if option | string in multiple_selection[key] %}selected{% endif %}>{{ option }}</option>
++                {% endfor %}
++              </select>
++              {% elif dfilter.options | length > 100 %}
+               <input id="{{ key }}" name="{{ key }}" type="text" list="{{ key }}-list" value="{% if key in query_parameters.keys() %}{{ query_parameters[key] }}{% else %}{{ dfilter.default }}{% endif %}">
+               <datalist id="{{ key }}-list">
+                 {% for option in dfilter.options %}
+diff --git a/tests/conftest.py b/tests/conftest.py
+index d9ee7e7..303e394 100644
+--- a/tests/conftest.py
++++ b/tests/conftest.py
+@@ -1,3 +1,4 @@
++import copy
+ import typing as t
+ from pathlib import Path
+ 
+@@ -237,3 +238,28 @@ def datasette_metadata() -> dict[str, t.Any]:
+ @pytest.fixture(scope="session")
+ def datasette(datasette_db: Path, datasette_metadata: dict[str, t.Any]) -> Datasette:
+     return Datasette([str(datasette_db)], metadata=datasette_metadata)
++
++
++@pytest.fixture
++def datasette_multiple_filter(
++    datasette_db: Path, datasette_metadata: dict[str, t.Any]
++) -> t.Callable[..., Datasette]:
++    def factory(default: t.Any = None) -> Datasette:
++        metadata = copy.deepcopy(datasette_metadata)
++        dashboard = metadata["plugins"]["datasette-dashboards"]["job-dashboard"]
++        flt: dict[str, t.Any] = {
++            "name": "Multiple Filter",
++            "type": "select",
++            "multiple": True,
++            "options": ["Option 1", "Option 2", "Option 3"],
++        }
++        if default is not None:
++            flt["default"] = default
++        dashboard["filters"]["multiple_filter"] = flt
++        dashboard["charts"]["offers-count"]["query"] = (
++            "SELECT count(*) as count FROM jobs WHERE TRUE "
++            "[[ AND source IN (SELECT value FROM json_each(:multiple_filter)) ]]"
++        )
++        return Datasette([str(datasette_db)], metadata=metadata)
++
++    return factory
+diff --git a/tests/test_dashboard_chart.py b/tests/test_dashboard_chart.py
+index e6aa2a4..69705d3 100644
+--- a/tests/test_dashboard_chart.py
++++ b/tests/test_dashboard_chart.py
+@@ -1,5 +1,7 @@
+ import copy
++import json
+ import typing as t
++import urllib.parse
+ from pathlib import Path
+ 
+ import pytest
+@@ -121,3 +123,30 @@ async def test_dashboard_chart_misconfigured_chart_type(
+     assert response.status_code == 404
+     assert "bad-chart" in response.text
+     assert "missing required field" in response.text
++
++
++@pytest.mark.asyncio
++async def test_dashboard_chart_filter_multiple_select(
++    datasette_multiple_filter: t.Callable[..., Datasette],
++) -> None:
++    datasette = datasette_multiple_filter()
++    json_qs = urllib.parse.urlencode(
++        {"multiple_filter": json.dumps(["Option 1", "Option 2"])}
++    )
++
++    # Repeated parameters (as submitted by the dashboard form)
++    repeated_qs = urllib.parse.urlencode(
++        [("multiple_filter", "Option 1"), ("multiple_filter", "Option 2")]
++    )
++    response = await datasette.client.get(
++        f"/-/dashboards/job-dashboard/offers-count?{repeated_qs}"
++    )
++    assert response.status_code == 200
++    assert json_qs in response.text
++
++    # Already serialized JSON array (as found in links from the dashboard)
++    response = await datasette.client.get(
++        f"/-/dashboards/job-dashboard/offers-count?{json_qs}"
++    )
++    assert response.status_code == 200
++    assert json_qs in response.text
+diff --git a/tests/test_dashboard_view.py b/tests/test_dashboard_view.py
+index c6fae78..d85210b 100644
+--- a/tests/test_dashboard_view.py
++++ b/tests/test_dashboard_view.py
+@@ -1,5 +1,7 @@
+ import copy
++import json
+ import typing as t
++import urllib.parse
+ from pathlib import Path
+ 
+ import pytest
+@@ -176,6 +178,121 @@ async def test_dashboard_filter_select_autocomplete(
+         assert f'<option value="{option}">{option}</option>' in response.text
+ 
+ 
++@pytest.mark.asyncio
++async def test_dashboard_filter_multiple_select(
++    datasette_multiple_filter: t.Callable[..., Datasette],
++) -> None:
++    datasette = datasette_multiple_filter()
++    qs = urllib.parse.urlencode(
++        [("multiple_filter", "Option 1"), ("multiple_filter", "Option 3")]
++    )
++
++    response = await datasette.client.get(f"/-/dashboards/job-dashboard?{qs}")
++    assert response.status_code == 200
++
++    assert "<legend>Multiple Filter</legend>" in response.text
++    assert (
++        '<select id="multiple_filter" name="multiple_filter" multiple>' in response.text
++    )
++    assert '<option value="Option 1" selected>Option 1</option>' in response.text
++    assert '<option value="Option 2" >Option 2</option>' in response.text
++    assert '<option value="Option 3" selected>Option 3</option>' in response.text
++
++
++@pytest.mark.asyncio
++async def test_dashboard_filter_multiple_select_query_parameters(
++    datasette_multiple_filter: t.Callable[..., Datasette],
++) -> None:
++    datasette = datasette_multiple_filter()
++    qs = urllib.parse.urlencode(
++        [("multiple_filter", "Option 1"), ("multiple_filter", "Option 3")]
++    )
++
++    response = await datasette.client.get(f"/-/dashboards/job-dashboard?{qs}")
++    assert response.status_code == 200
++
++    # Values are given to the charts as a JSON array, as SQLite cannot bind a list
++    json_qs = urllib.parse.urlencode(
++        {"multiple_filter": json.dumps(["Option 1", "Option 3"])}
++    )
++    assert json_qs in response.text
++    assert (
++        "SELECT count(*) as count FROM jobs WHERE TRUE  "
++        "AND source IN (SELECT value FROM json_each(:multiple_filter))"
++    ) in response.text
++
++
++@pytest.mark.asyncio
++async def test_dashboard_filter_multiple_select_single_value(
++    datasette_multiple_filter: t.Callable[..., Datasette],
++) -> None:
++    datasette = datasette_multiple_filter()
++
++    response = await datasette.client.get(
++        "/-/dashboards/job-dashboard?multiple_filter=Option+2"
++    )
++    assert response.status_code == 200
++    assert '<option value="Option 1" >Option 1</option>' in response.text
++    assert '<option value="Option 2" selected>Option 2</option>' in response.text
++    assert '<option value="Option 3" >Option 3</option>' in response.text
++
++
++@pytest.mark.asyncio
++async def test_dashboard_filter_multiple_select_default(
++    datasette_multiple_filter: t.Callable[..., Datasette],
++) -> None:
++    datasette = datasette_multiple_filter(default=["Option 1", "Option 2"])
++
++    response = await datasette.client.get("/-/dashboards/job-dashboard")
++    assert response.status_code == 302
++    location = urllib.parse.parse_qs(
++        urllib.parse.urlparse(response.headers["location"]).query
++    )
++    assert location["multiple_filter"] == ["Option 1", "Option 2"]
++
++    response = await datasette.client.get(
++        "/-/dashboards/job-dashboard", follow_redirects=True
++    )
++    assert response.status_code == 200
++    assert '<option value="Option 1" selected>Option 1</option>' in response.text
++    assert '<option value="Option 2" selected>Option 2</option>' in response.text
++    assert '<option value="Option 3" >Option 3</option>' in response.text
++
++
++@pytest.mark.asyncio
++async def test_dashboard_filter_multiple_select_sql(
++    datasette_multiple_filter: t.Callable[..., Datasette],
++) -> None:
++    datasette = datasette_multiple_filter()
++    sources = [
++        row[0]
++        for row in await datasette.execute(
++            "test", "SELECT DISTINCT source FROM jobs ORDER BY source LIMIT 2"
++        )
++    ]
++    expected = (
++        await datasette.execute(
++            "test",
++            "SELECT count(*) FROM jobs WHERE source IN (SELECT value FROM json_each(:s))",
++            {"s": json.dumps(sources)},
++        )
++    ).single_value()
++    assert expected >= len(sources)
++
++    # The query string given to charts must be usable with the Datasette JSON API
++    response = await datasette.client.get(
++        "/test.json",
++        params={
++            "sql": "SELECT count(*) AS count FROM jobs WHERE source IN "
++            "(SELECT value FROM json_each(:multiple_filter))",
++            "multiple_filter": json.dumps(sources),
++            "_shape": "array",
++        },
++    )
++    assert response.status_code == 200
++    assert response.json() == [{"count": expected}]
++
++
+ @pytest.mark.asyncio
+ async def test_dashboard_view_unknown(datasette: Datasette) -> None:
+     response = await datasette.client.get("/-/dashboards/unknown-dashboard")

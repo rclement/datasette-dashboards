@@ -1,5 +1,7 @@
 import copy
+import json
 import typing as t
+import urllib.parse
 from pathlib import Path
 
 import pytest
@@ -174,6 +176,121 @@ async def test_dashboard_filter_select_autocomplete(
     assert f'<datalist id="{filter_key}-list">' in response.text
     for option in filter_options:
         assert f'<option value="{option}">{option}</option>' in response.text
+
+
+@pytest.mark.asyncio
+async def test_dashboard_filter_multiple_select(
+    datasette_multiple_filter: t.Callable[..., Datasette],
+) -> None:
+    datasette = datasette_multiple_filter()
+    qs = urllib.parse.urlencode(
+        [("multiple_filter", "Option 1"), ("multiple_filter", "Option 3")]
+    )
+
+    response = await datasette.client.get(f"/-/dashboards/job-dashboard?{qs}")
+    assert response.status_code == 200
+
+    assert "<legend>Multiple Filter</legend>" in response.text
+    assert (
+        '<select id="multiple_filter" name="multiple_filter" multiple>' in response.text
+    )
+    assert '<option value="Option 1" selected>Option 1</option>' in response.text
+    assert '<option value="Option 2" >Option 2</option>' in response.text
+    assert '<option value="Option 3" selected>Option 3</option>' in response.text
+
+
+@pytest.mark.asyncio
+async def test_dashboard_filter_multiple_select_query_parameters(
+    datasette_multiple_filter: t.Callable[..., Datasette],
+) -> None:
+    datasette = datasette_multiple_filter()
+    qs = urllib.parse.urlencode(
+        [("multiple_filter", "Option 1"), ("multiple_filter", "Option 3")]
+    )
+
+    response = await datasette.client.get(f"/-/dashboards/job-dashboard?{qs}")
+    assert response.status_code == 200
+
+    # Values are given to the charts as a JSON array, as SQLite cannot bind a list
+    json_qs = urllib.parse.urlencode(
+        {"multiple_filter": json.dumps(["Option 1", "Option 3"])}
+    )
+    assert json_qs in response.text
+    assert (
+        "SELECT count(*) as count FROM jobs WHERE TRUE  "
+        "AND source IN (SELECT value FROM json_each(:multiple_filter))"
+    ) in response.text
+
+
+@pytest.mark.asyncio
+async def test_dashboard_filter_multiple_select_single_value(
+    datasette_multiple_filter: t.Callable[..., Datasette],
+) -> None:
+    datasette = datasette_multiple_filter()
+
+    response = await datasette.client.get(
+        "/-/dashboards/job-dashboard?multiple_filter=Option+2"
+    )
+    assert response.status_code == 200
+    assert '<option value="Option 1" >Option 1</option>' in response.text
+    assert '<option value="Option 2" selected>Option 2</option>' in response.text
+    assert '<option value="Option 3" >Option 3</option>' in response.text
+
+
+@pytest.mark.asyncio
+async def test_dashboard_filter_multiple_select_default(
+    datasette_multiple_filter: t.Callable[..., Datasette],
+) -> None:
+    datasette = datasette_multiple_filter(default=["Option 1", "Option 2"])
+
+    response = await datasette.client.get("/-/dashboards/job-dashboard")
+    assert response.status_code == 302
+    location = urllib.parse.parse_qs(
+        urllib.parse.urlparse(response.headers["location"]).query
+    )
+    assert location["multiple_filter"] == ["Option 1", "Option 2"]
+
+    response = await datasette.client.get(
+        "/-/dashboards/job-dashboard", follow_redirects=True
+    )
+    assert response.status_code == 200
+    assert '<option value="Option 1" selected>Option 1</option>' in response.text
+    assert '<option value="Option 2" selected>Option 2</option>' in response.text
+    assert '<option value="Option 3" >Option 3</option>' in response.text
+
+
+@pytest.mark.asyncio
+async def test_dashboard_filter_multiple_select_sql(
+    datasette_multiple_filter: t.Callable[..., Datasette],
+) -> None:
+    datasette = datasette_multiple_filter()
+    sources = [
+        row[0]
+        for row in await datasette.execute(
+            "test", "SELECT DISTINCT source FROM jobs ORDER BY source LIMIT 2"
+        )
+    ]
+    expected = (
+        await datasette.execute(
+            "test",
+            "SELECT count(*) FROM jobs WHERE source IN (SELECT value FROM json_each(:s))",
+            {"s": json.dumps(sources)},
+        )
+    ).single_value()
+    assert expected >= len(sources)
+
+    # The query string given to charts must be usable with the Datasette JSON API
+    response = await datasette.client.get(
+        "/test.json",
+        params={
+            "sql": "SELECT count(*) AS count FROM jobs WHERE source IN "
+            "(SELECT value FROM json_each(:multiple_filter))",
+            "multiple_filter": json.dumps(sources),
+            "_shape": "array",
+        },
+    )
+    assert response.status_code == 200
+    assert response.json() == [{"count": expected}]
 
 
 @pytest.mark.asyncio

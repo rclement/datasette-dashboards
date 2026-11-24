@@ -1,3 +1,4 @@
+import copy
 import typing as t
 from pathlib import Path
 
@@ -237,3 +238,28 @@ def datasette_metadata() -> dict[str, t.Any]:
 @pytest.fixture(scope="session")
 def datasette(datasette_db: Path, datasette_metadata: dict[str, t.Any]) -> Datasette:
     return Datasette([str(datasette_db)], metadata=datasette_metadata)
+
+
+@pytest.fixture
+def datasette_multiple_filter(
+    datasette_db: Path, datasette_metadata: dict[str, t.Any]
+) -> t.Callable[..., Datasette]:
+    def factory(default: t.Any = None) -> Datasette:
+        metadata = copy.deepcopy(datasette_metadata)
+        dashboard = metadata["plugins"]["datasette-dashboards"]["job-dashboard"]
+        flt: dict[str, t.Any] = {
+            "name": "Multiple Filter",
+            "type": "select",
+            "multiple": True,
+            "options": ["Option 1", "Option 2", "Option 3"],
+        }
+        if default is not None:
+            flt["default"] = default
+        dashboard["filters"]["multiple_filter"] = flt
+        dashboard["charts"]["offers-count"]["query"] = (
+            "SELECT count(*) as count FROM jobs WHERE TRUE "
+            "[[ AND source IN (SELECT value FROM json_each(:multiple_filter)) ]]"
+        )
+        return Datasette([str(datasette_db)], metadata=metadata)
+
+    return factory
