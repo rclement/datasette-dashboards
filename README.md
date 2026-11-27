@@ -125,17 +125,18 @@ Dashboard settings:
 
 Dashboard filters:
 
-| Property  | Type               | Description                                      |
-| --------- | ------------------ | ------------------------------------------------ |
-| `name`    | `string`           | Filter display name                              |
-| `type`    | `string`           | Filter type (`text`, `date`, `number`, `select`) |
-| `default` | `string`, `number` | (optional) Filter default value                  |
-| `min`     | `number`           | (optional) Filter minimum value                  |
-| `max`     | `number`           | (optional) Filter maximum value                  |
-| `step`    | `number`           | (optional) Filter stepping value                 |
-| `options` | `list`             | (optional) Select filter options list            |
-| `db`      | `string`           | (optional) Dynamic select filter database        |
-| `query`   | `string`           | (optional) Dynamic select filter query           |
+| Property   | Type                      | Description                                                       |
+| ---------- | ------------------------- | ----------------------------------------------------------------- |
+| `name`     | `string`                  | Filter display name                                               |
+| `type`     | `string`                  | Filter type (`text`, `date`, `number`, `select`)                  |
+| `default`  | `string`, `number`, `list` | (optional) Filter default value (a `list` for `multiple` filters) |
+| `min`      | `number`                  | (optional) Filter minimum value                                   |
+| `max`      | `number`                  | (optional) Filter maximum value                                   |
+| `step`     | `number`                  | (optional) Filter stepping value                                  |
+| `options`  | `list`                    | (optional) Select filter options list                             |
+| `multiple` | `boolean`                 | (optional) Allow selecting multiple values (`select` filter only) |
+| `db`       | `string`                  | (optional) Dynamic select filter database                         |
+| `query`    | `string`                  | (optional) Dynamic select filter query                            |
 
 Common chart properties for all chart types:
 
@@ -157,9 +158,29 @@ SELECT * FROM mytable [[ WHERE col >= :my_filter ]]
 SELECT * FROM mytable WHERE TRUE [[ AND col1 = :my_filter_1 ]] [[ AND col2 = :my_filter_2 ]]
 ```
 
+To allow selecting several values in a `select` filter, set `multiple: true`:
+
+```yaml
+filters:
+  source:
+    name: Source
+    type: select
+    multiple: true
+    options: [Source 1, Source 2, Source 3]
+    default: [Source 1, Source 2]
+```
+
+SQLite cannot bind a list to a named parameter, so the selected values are passed
+to the query as a JSON array. Use `json_each` to match against them:
+
+```sql
+SELECT * FROM mytable [[ WHERE col IN (SELECT value FROM json_each(:source)) ]]
+```
+
 **Important notes:**
 
-- When a `select` filter has more than 100 options, the dropdown list will be automatically converted to a text filter with autocompletion
+- When a `select` filter has more than 100 options, the dropdown list will be automatically converted to a text filter with autocompletion (this does not apply to `multiple` filters, which always use a multiple selection list)
+- When no value is selected in a `multiple` filter, the optional `[[ ... ]]` part of the query is not applied
 
 #### Chart types
 

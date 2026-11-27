@@ -1,5 +1,7 @@
 import copy
+import json
 import typing as t
+import urllib.parse
 from pathlib import Path
 
 import pytest
@@ -121,3 +123,30 @@ async def test_dashboard_chart_misconfigured_chart_type(
     assert response.status_code == 404
     assert "bad-chart" in response.text
     assert "missing required field" in response.text
+
+
+@pytest.mark.asyncio
+async def test_dashboard_chart_filter_multiple_select(
+    datasette_multiple_filter: t.Callable[..., Datasette],
+) -> None:
+    datasette = datasette_multiple_filter()
+    json_qs = urllib.parse.urlencode(
+        {"multiple_filter": json.dumps(["Option 1", "Option 2"])}
+    )
+
+    # Repeated parameters (as submitted by the dashboard form)
+    repeated_qs = urllib.parse.urlencode(
+        [("multiple_filter", "Option 1"), ("multiple_filter", "Option 2")]
+    )
+    response = await datasette.client.get(
+        f"/-/dashboards/job-dashboard/offers-count?{repeated_qs}"
+    )
+    assert response.status_code == 200
+    assert json_qs in response.text
+
+    # Already serialized JSON array (as found in links from the dashboard)
+    response = await datasette.client.get(
+        f"/-/dashboards/job-dashboard/offers-count?{json_qs}"
+    )
+    assert response.status_code == 200
+    assert json_qs in response.text

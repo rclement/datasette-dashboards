@@ -76,7 +76,13 @@
           <fieldset>
             <legend>{{ dfilter.name }}</legend>
             {% if dfilter_type == 'select' %}
-              {% if dfilter.options | length > 100 %}
+              {% if dfilter.multiple %}
+              <select id="{{ key }}" name="{{ key }}" multiple>
+                {% for option in dfilter.options %}
+                <option value="{{ option }}" {% if option | string in multiple_selection[key] %}selected{% endif %}>{{ option }}</option>
+                {% endfor %}
+              </select>
+              {% elif dfilter.options | length > 100 %}
               <input id="{{ key }}" name="{{ key }}" type="text" list="{{ key }}-list" value="{% if key in query_parameters.keys() %}{{ query_parameters[key] }}{% else %}{{ dfilter.default }}{% endif %}">
               <datalist id="{{ key }}-list">
                 {% for option in dfilter.options %}
